@@ -1,19 +1,18 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,16 +22,14 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
-import top.itning.yunshuclassschedule.ui.fragment.ThisWeekFragment;
-import top.itning.yunshuclassschedule.ui.fragment.TodayFragment;
+import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
+import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 
 /**
  * 主活动
@@ -42,8 +39,8 @@ import top.itning.yunshuclassschedule.ui.fragment.TodayFragment;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
 
-    private List<String> titleList;
-    private List<Fragment> fragmentList;
+    private FragmentManager supportFragmentManager;
+    private SparseArray<Fragment> fragmentSparseArray;
     private long firstPressedTime;
     private static final int EXIT_DELAY = 2000;
     private static final SimpleDateFormat ACTION_BAR_TITLE_FORMAT = new SimpleDateFormat("MM月dd日 E", Locale.CHINESE);
@@ -54,10 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.tl)
-    TabLayout tl;
-    @BindView(R.id.vp)
-    ViewPager vp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +67,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * 初始化数据
      */
     private void initData() {
-        titleList = new ArrayList<>();
-        titleList.add("今天");
-        titleList.add("本周");
-        fragmentList = new ArrayList<>();
-        fragmentList.add(new TodayFragment());
-        fragmentList.add(new ThisWeekFragment());
+        fragmentSparseArray = new SparseArray<>();
+        fragmentSparseArray.put(R.id.nav_class_schedule, new ClassScheduleFragment());
+        fragmentSparseArray.put(R.id.nav_check_score, new CheckScoreFragment());
     }
 
     /**
@@ -97,27 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //默认选中第一项
         navView.getMenu().getItem(0).setChecked(true);
         navView.setNavigationItemSelectedListener(this);
-        //预加载
-        vp.setOffscreenPageLimit(fragmentList.size());
-        vp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 
-            @Override
-            public int getCount() {
-                return fragmentList.size();
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-                return fragmentList.get(position);
-            }
-
-            @Nullable
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return titleList.get(position);
-            }
-        });
-        tl.setupWithViewPager(vp);
+        supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
+                .commit();
     }
 
     /**
@@ -187,11 +163,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //导航抽屉回调
         switch (item.getItemId()) {
             case R.id.nav_class_schedule: {
-                Toast.makeText(this, "课程表", Toast.LENGTH_LONG).show();
+                setFragment(R.id.nav_class_schedule);
                 break;
             }
             case R.id.nav_check_score: {
-                Toast.makeText(this, "查成绩", Toast.LENGTH_LONG).show();
+                setFragment(R.id.nav_check_score);
                 break;
             }
             case R.id.nav_settings: {
@@ -207,5 +183,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * 设置Fragment
+     *
+     * @param id id
+     */
+    private void setFragment(@IdRes int id) {
+        Fragment fragment = fragmentSparseArray.get(id);
+        Fragment f = supportFragmentManager.findFragmentById(R.id.frame_container);
+        if (f != fragment) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .commit();
+        }
     }
 }
