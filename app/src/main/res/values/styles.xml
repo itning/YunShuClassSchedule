@@ -17,4 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="week_first_column">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/schedule_item_padding</item>
+        <item name="android:textColor">@android:color/tertiary_text_dark</item>
+    </style>
+
 </resources>

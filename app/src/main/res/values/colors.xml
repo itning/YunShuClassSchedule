@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="Icon_half_oringe">#ffa500</color>
+    <color name="Icon_half_purple">#800080</color>
+    <color name="Icon_half_yellow">#ffff00</color>
+    <color name="Icon_half_green">#008000</color>
+    <color name="Icon_half_red">#FF0000</color>
+    <color name="Icon_half_blue">#0000ff</color>
+    <color name="Icon_half_cyan">#00ffff</color>
 </resources>
