@@ -167,13 +167,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //菜单回调
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_course_error: {
+                Toast.makeText(this, "课程错误", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            case R.id.action_feedback: {
+                Toast.makeText(this, "反馈建议", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
