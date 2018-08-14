@@ -5,6 +5,6 @@
     <string name="nav_header_title">云舒课表</string>
     <string name="nav_header_subtitle">itning.top</string>
     <string name="nav_header_desc">头像</string>
-    <string name="action_course_error">课程错误</string>
+    <string name="action_course_error">课程有误</string>
     <string name="action_feedback">反馈建议</string>
 </resources>

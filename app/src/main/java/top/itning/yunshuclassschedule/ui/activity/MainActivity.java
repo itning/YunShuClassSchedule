@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
+        //默认选中第一项
+        navView.getMenu().getItem(0).setChecked(true);
         navView.setNavigationItemSelectedListener(this);
         //预加载
         vp.setOffscreenPageLimit(fragmentList.size());
@@ -184,20 +185,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //导航抽屉回调
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_class_schedule: {
+                Toast.makeText(this, "课程表", Toast.LENGTH_LONG).show();
+                break;
+            }
+            case R.id.nav_check_score: {
+                Toast.makeText(this, "查成绩", Toast.LENGTH_LONG).show();
+                break;
+            }
+            case R.id.nav_settings: {
+                Toast.makeText(this, "设置", Toast.LENGTH_LONG).show();
+                break;
+            }
+            case R.id.nav_about: {
+                Toast.makeText(this, "关于", Toast.LENGTH_LONG).show();
+                break;
+            }
+            default:
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
