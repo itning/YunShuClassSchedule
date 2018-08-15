@@ -31,6 +31,10 @@
         <service
             android:name=".service.DownloadService"
             android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.CommonService"
+            android:enabled="true"
             android:exported="true"></service>
     </application>
 

@@ -27,6 +27,12 @@ public class HttpUtils {
                 .build();
     }
 
+    public static Retrofit getRetrofit(OkHttpClient client) {
+        return BUILDER
+                .client(client)
+                .build();
+    }
+
     public static Retrofit getRetrofit(String baseUrl) {
         return BUILDER
                 .baseUrl(baseUrl)

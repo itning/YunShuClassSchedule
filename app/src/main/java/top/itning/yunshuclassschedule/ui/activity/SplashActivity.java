@@ -39,6 +39,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
 import top.itning.yunshuclassschedule.http.CheckClassScheduleVersion;
 import top.itning.yunshuclassschedule.http.DownloadClassSchedule;
+import top.itning.yunshuclassschedule.service.CommonService;
 import top.itning.yunshuclassschedule.service.DownloadService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
@@ -61,6 +62,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        startService(new Intent(this, CommonService.class));
         if (NetWorkUtils.isNetworkConnected(this)) {
             startTime = System.currentTimeMillis();
             checkAppUpdate();
@@ -168,10 +170,6 @@ public class SplashActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
-            case HTTP_ERROR: {
-                Toast.makeText(this, eventEntity.getMsg(), Toast.LENGTH_LONG).show();
-                break;
-            }
             case ENTER_HOME_ACTIVITY: {
                 new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get() - (System.currentTimeMillis() - startTime));
                 break;
@@ -268,7 +266,7 @@ public class SplashActivity extends AppCompatActivity {
                     .setCancelable(false).setPositiveButton("确定", null).show();
             return;
         }
-        EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_DOWNLOAD_UPDATE_APK, appUpdate.getDownloadUrl()));
+        EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_DOWNLOAD_UPDATE_APK, appUpdate.getDownloadUrl(), appUpdate.getVersionCode()));
         enterMainActivity();
     }
 
