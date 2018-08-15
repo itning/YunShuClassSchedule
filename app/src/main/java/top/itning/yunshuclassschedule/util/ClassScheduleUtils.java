@@ -31,10 +31,26 @@ public class ClassScheduleUtils {
 
     }
 
+    /**
+     * 颜色数组
+     */
     private static int[] colorArray = new int[7];
+    /**
+     * 存储课程颜色
+     */
     private static SparseIntArray sparseArray = new SparseIntArray();
+    /**
+     * 课程计数
+     */
     private static int scheduleCount = 0;
 
+    /**
+     * 加载课程视图
+     *
+     * @param gridLayout {@link GridLayout}
+     * @param context    {@link Context}
+     * @param activity   {@link Activity}
+     */
     public static void loadingView(@NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
         ClassSchedule classSchedule = new ClassSchedule();
         classSchedule.setId("2016010103");
@@ -62,6 +78,14 @@ public class ClassScheduleUtils {
         }
     }
 
+    /**
+     * 设置单元格内容
+     *
+     * @param text            课程字符串
+     * @param backgroundColor 背景颜色
+     * @param context         {@link Context}
+     * @return {@link View}
+     */
     @CheckResult
     private static View setClass(String text, @ColorInt int backgroundColor, @NonNull Context context) {
         CardView cardView = new CardView(context);
@@ -76,12 +100,26 @@ public class ClassScheduleUtils {
         return cardView;
     }
 
+    /**
+     * 设置空课
+     *
+     * @param context {@link Context}
+     * @return {@link View}
+     */
     @CheckResult
     private static View setNull(@NonNull Context context) {
         return new TextView(context);
     }
 
 
+    /**
+     * 设置单元格样式
+     *
+     * @param row    行
+     * @param column 列
+     * @param size   {@link Point}
+     * @return {@link GridLayout.LayoutParams}
+     */
     @CheckResult
     private static GridLayout.LayoutParams setParams(int row, int column, Point size) {
         //设置它的行和列
@@ -96,6 +134,11 @@ public class ClassScheduleUtils {
         return params;
     }
 
+    /**
+     * 初始化颜色数组
+     *
+     * @param context {@link Context}
+     */
     private static void initColorArray(@NonNull Context context) {
         colorArray[0] = ContextCompat.getColor(context, R.color.class_color_1);
         colorArray[1] = ContextCompat.getColor(context, R.color.class_color_2);
@@ -106,6 +149,13 @@ public class ClassScheduleUtils {
         colorArray[6] = ContextCompat.getColor(context, R.color.class_color_7);
     }
 
+    /**
+     * 获取填充颜色<br/>
+     * 相同课程确保同一种颜色
+     *
+     * @param text 课程字符串
+     * @return 颜色
+     */
     @ColorInt
     @CheckResult
     private static int getColor(String text) {
@@ -122,6 +172,12 @@ public class ClassScheduleUtils {
         }
     }
 
+    /**
+     * 获取文字
+     *
+     * @param text 课程字符串
+     * @return 格式化课程字符串
+     */
     @CheckResult
     private static String getText(String text) {
         String[] strings = text.split("@");
