@@ -35,11 +35,27 @@ public class ConstantPool {
         /**
          * 下载课程表信息错误
          */
-        DOWNLOAD_CLASS_SCHEDULE_ERROR(0x001),
+        HTTP_ERROR(0x001),
         /**
          * 进入主活动
          */
-        ENTER_HOME_ACTIVITY(0x002);
+        ENTER_HOME_ACTIVITY(0x002),
+        /**
+         * 开始检查APP是否有更新
+         */
+        START_CHECK_APP_UPDATE(0x003),
+        /**
+         * 外置存储权限请求码
+         */
+        WRITE_EXTERNAL_STORAGE_REQUEST_CODE(0x004),
+        /**
+         * 设置权限页面请求码
+         */
+        APP_SETTING_REQUEST_CODE(0x005),
+        /**
+         * 开始下载升级文件
+         */
+        START_DOWNLOAD_UPDATE_APK(0X006);
 
         private int value;
 

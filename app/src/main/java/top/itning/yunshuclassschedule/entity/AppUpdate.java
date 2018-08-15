@@ -11,7 +11,7 @@ public class AppUpdate implements Serializable {
     /**
      * 版本号
      */
-    private String versionCode;
+    private int versionCode;
     /**
      * 版本名
      */
@@ -25,11 +25,11 @@ public class AppUpdate implements Serializable {
      */
     private String downloadUrl;
 
-    public String getVersionCode() {
+    public int getVersionCode() {
         return versionCode;
     }
 
-    public void setVersionCode(String versionCode) {
+    public void setVersionCode(int versionCode) {
         this.versionCode = versionCode;
     }
 
