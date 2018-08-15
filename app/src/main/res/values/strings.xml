@@ -7,4 +7,5 @@
     <string name="nav_header_desc">头像</string>
     <string name="action_course_error">课程有误</string>
     <string name="action_feedback">反馈建议</string>
+    <string name="action_set_text_size">更改字体</string>
 </resources>

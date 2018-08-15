@@ -145,6 +145,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         //菜单回调
         switch (item.getItemId()) {
+            case R.id.action_set_text_size:{
+                Toast.makeText(this, "更改字体", Toast.LENGTH_LONG).show();
+                return true;
+            }
             case R.id.action_course_error: {
                 Toast.makeText(this, "课程错误", Toast.LENGTH_LONG).show();
                 return true;

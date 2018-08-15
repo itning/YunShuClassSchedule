@@ -2,25 +2,24 @@ package top.itning.yunshuclassschedule.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
-import android.support.annotation.ColorRes;
+import android.support.annotation.CheckResult;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
+import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
-
-import static android.net.wifi.WifiConfiguration.Status.strings;
 
 /**
  * 课程表工具类
@@ -32,17 +31,22 @@ public class ClassScheduleUtils {
 
     }
 
+    private static int[] colorArray = new int[7];
+    private static SparseIntArray sparseArray = new SparseIntArray();
+    private static int scheduleCount = 0;
+
     public static void loadingView(@NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
         ClassSchedule classSchedule = new ClassSchedule();
         classSchedule.setId("2016010103");
         classSchedule.setClassArray(new String[][]{
-                {"马克思哲学基本原理概论@A101@哈哈", "软件工程@A101@哈哈", "软件工程@A101@哈哈", "", "", "", ""},
-                {"", "", "软件工程@A101@哈哈", "软件工程@A101@哈哈", "软件工程@A101@哈哈", "", ""},
-                {"软件工程@A101@哈哈", "", "软件工程@A101@哈哈", "", "", "", ""},
-                {"软件工程@A101@哈哈", "", "", "软件工程@A101@哈哈", "软件工程@A101@哈哈", "", ""},
-                {"", "软件工程@A101@哈哈", "", "软件工程@A101@哈哈", "软件工程@A101@哈哈", "", ""},
+                {"计算机网络技术@B313@山镇会", "软件工程@B211@六心理", "概率论与数理统计@A102@赵微然", "WEB程序设计@B218@于洪", "", "", ""},
+                {"轮滑@篮球场1@孙熏陶", "", "马克思主义基本原理概论@A401@孙建伟", "软件工程@B211@六心理", "概率论与数理统计@A102@赵微然", "", ""},
+                {"四六级英语@A201@李鑫", "形式与政策@A401@余冬梅", "四六级英语@A201@李鑫", "数据库原理与应用@B216@高璐", "WEB程序设计@B218@于洪", "", ""},
+                {"", "", "数据库原理与应用@B216@高璐", "马克思主义基本原理概论@A401@孙建伟", "计算机网络技术@B313@山镇会", "", ""},
+                {"", "", "", "", "", "", ""},
         });
 
+        initColorArray(context);
         Display display = Objects.requireNonNull(activity).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -50,48 +54,77 @@ public class ClassScheduleUtils {
         for (int i = 0; i < classArray.length; i++) {
             for (int j = 0; j < classArray[i].length; j++) {
                 if ("".equals(classArray[i][j])) {
-                    TextView textView = new TextView(context);
-                    //设置它的行和列
-                    GridLayout.Spec rowSpec = GridLayout.spec(i + 1);
-                    GridLayout.Spec columnSpec = GridLayout.spec(j + 1);
-                    GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
-                    params.setGravity(Gravity.FILL);
-                    params.setMargins(1, 1, 1, 1);
-                    //设置宽高
-                    params.height = size.y / 6;
-                    params.width = size.x / 8 - 5;
-                    gridLayout.addView(textView, params);
+                    gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
                 } else {
-                    String[] strings = classArray[i][j].split("@");
-                    if (strings.length != 3) {
-                        throw new IllegalArgumentException("数组分隔不正确,确保是@分隔符.->" + classArray[i][j]);
-                    }
-                    set(strings[0] + "@" + strings[1] + "\n" + strings[2], i + 1, j + 1, size, gridLayout, R.color.colorAccent, context);
+                    gridLayout.addView(setClass(getText(classArray[i][j]), getColor(classArray[i][j]), context), setParams(i + 1, j + 1, size));
                 }
             }
         }
     }
 
-    private static void set(String text, int row, int column, Point size, @NonNull GridLayout gridLayout, @ColorRes int backgroundColor, @NonNull Context context) {
+    @CheckResult
+    private static View setClass(String text, @ColorInt int backgroundColor, @NonNull Context context) {
         CardView cardView = new CardView(context);
-        cardView.setCardElevation(12);
-        cardView.setTranslationZ(12);
-
+        cardView.setCardBackgroundColor(Color.TRANSPARENT);
         TextView textView = new TextView(context);
         textView.setTextColor(ContextCompat.getColor(context, android.R.color.white));
         textView.setPadding(5, 5, 5, 5);
         textView.setText(text);
-        textView.setBackgroundColor(ContextCompat.getColor(context, backgroundColor));
+        textView.setBackgroundColor(backgroundColor);
+        textView.setTextSize(12);
+        cardView.addView(textView);
+        return cardView;
+    }
+
+    @CheckResult
+    private static View setNull(@NonNull Context context) {
+        return new TextView(context);
+    }
+
+
+    @CheckResult
+    private static GridLayout.LayoutParams setParams(int row, int column, Point size) {
         //设置它的行和列
-        GridLayout.Spec rowSpec = GridLayout.spec(row);
-        GridLayout.Spec columnSpec = GridLayout.spec(column);
+        GridLayout.Spec rowSpec = GridLayout.spec(row, 1.0f);
+        GridLayout.Spec columnSpec = GridLayout.spec(column, 1.0f);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, columnSpec);
         params.setGravity(Gravity.FILL);
-        params.setMargins(1, 1, 1, 1);
+        params.setMargins(2, 2, 2, 2);
         //设置宽高
         params.height = size.y / 6;
         params.width = size.x / 8 - 5;
-        cardView.addView(textView);
-        gridLayout.addView(cardView, params);
+        return params;
+    }
+
+    private static void initColorArray(@NonNull Context context) {
+        colorArray[0] = ContextCompat.getColor(context, R.color.class_color_1);
+        colorArray[1] = ContextCompat.getColor(context, R.color.class_color_2);
+        colorArray[2] = ContextCompat.getColor(context, R.color.class_color_3);
+        colorArray[3] = ContextCompat.getColor(context, R.color.class_color_4);
+        colorArray[4] = ContextCompat.getColor(context, R.color.class_color_5);
+        colorArray[5] = ContextCompat.getColor(context, R.color.class_color_6);
+        colorArray[6] = ContextCompat.getColor(context, R.color.class_color_7);
+    }
+
+    @ColorInt
+    @CheckResult
+    private static int getColor(String text) {
+        int hashCode = text.hashCode();
+        int i = sparseArray.get(hashCode);
+        if (i != 0) {
+            //重复课程
+            return i;
+        } else {
+            int color = colorArray[scheduleCount % colorArray.length];
+            sparseArray.put(hashCode, color);
+            scheduleCount++;
+            return color;
+        }
+    }
+
+    @CheckResult
+    private static String getText(String text) {
+        String[] strings = text.split("@");
+        return strings[0] + "@" + strings[1] + "\n" + strings[2];
     }
 }

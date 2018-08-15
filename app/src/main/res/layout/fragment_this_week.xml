@@ -2,7 +2,8 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/this_week_background">
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/schedule_gridlayout"
@@ -50,7 +51,7 @@
             app:layout_gravity="center_vertical" />
 
         <TextView
-            android:text="周一"
+            android:text="星期一"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="1"
             app:layout_columnWeight="1"
@@ -58,7 +59,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="周二"
+            android:text="星期二"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="2"
             app:layout_columnWeight="1"
@@ -66,7 +67,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="周三"
+            android:text="星期三"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="3"
             app:layout_columnWeight="1"
@@ -74,28 +75,28 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="周四"
+            android:text="星期四"
             app:layout_column="4"
             app:layout_columnWeight="1"
             app:layout_gravity="center"
             app:layout_row="0" />
 
         <TextView
-            android:text="周五"
+            android:text="星期五"
             app:layout_column="5"
             app:layout_columnWeight="1"
             app:layout_gravity="center"
             app:layout_row="0" />
 
         <TextView
-            android:text="周六"
+            android:text="星期六"
             app:layout_column="6"
             app:layout_columnWeight="1"
             app:layout_gravity="center"
             app:layout_row="0" />
 
         <TextView
-            android:text="周日"
+            android:text="星期日"
             app:layout_column="7"
             app:layout_columnWeight="1"
             app:layout_gravity="center"
