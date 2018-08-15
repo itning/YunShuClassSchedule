@@ -19,13 +19,13 @@ import android.widget.TextView;
 import java.util.Objects;
 
 import top.itning.yunshuclassschedule.R;
-import top.itning.yunshuclassschedule.entity.ClassSchedule;
 
 /**
  * 课程表工具类
  *
  * @author itning
  */
+@SuppressWarnings("unused")
 public class ClassScheduleUtils {
     private ClassScheduleUtils() {
 
@@ -47,26 +47,16 @@ public class ClassScheduleUtils {
     /**
      * 加载课程视图
      *
+     * @param classArray 课程数组:{@link top.itning.yunshuclassschedule.entity.ClassSchedule}
      * @param gridLayout {@link GridLayout}
      * @param context    {@link Context}
      * @param activity   {@link Activity}
      */
-    public static void loadingView(@NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
-        ClassSchedule classSchedule = new ClassSchedule();
-        classSchedule.setId("2016010103");
-        classSchedule.setClassArray(new String[][]{
-                {"计算机网络技术@B313@山镇会", "软件工程@B211@六心理", "概率论与数理统计@A102@赵微然", "WEB程序设计@B218@于洪", "", "", ""},
-                {"轮滑@篮球场1@孙熏陶", "", "马克思主义基本原理概论@A401@孙建伟", "软件工程@B211@六心理", "概率论与数理统计@A102@赵微然", "", ""},
-                {"四六级英语@A201@李鑫", "形式与政策@A401@余冬梅", "四六级英语@A201@李鑫", "数据库原理与应用@B216@高璐", "WEB程序设计@B218@于洪", "", ""},
-                {"", "", "数据库原理与应用@B216@高璐", "马克思主义基本原理概论@A401@孙建伟", "计算机网络技术@B313@山镇会", "", ""},
-                {"", "", "", "", "", "", ""},
-        });
-
+    public static void loadingView(String[][] classArray, @NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
         initColorArray(context);
         Display display = Objects.requireNonNull(activity).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        String[][] classArray = classSchedule.getClassArray();
         for (int i = 0; i < classArray.length; i++) {
             for (int j = 0; j < classArray[i].length; j++) {
                 if ("".equals(classArray[i][j])) {
