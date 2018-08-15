@@ -1,7 +1,10 @@
 package top.itning.yunshuclassschedule.http;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 
 /**
@@ -16,5 +19,5 @@ public interface DownloadClassSchedule {
      * @return {@link ClassSchedule}
      */
     @GET("classSchedule/download")
-    Call<ClassSchedule> download();
+    Call<List<ClassSchedule>> download(@Query("classId") String classId);
 }

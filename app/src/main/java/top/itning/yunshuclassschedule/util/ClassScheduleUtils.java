@@ -16,9 +16,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Objects;
 
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.entity.ClassSchedule;
 
 /**
  * 课程表工具类
@@ -47,24 +49,23 @@ public class ClassScheduleUtils {
     /**
      * 加载课程视图
      *
-     * @param classArray 课程数组:{@link top.itning.yunshuclassschedule.entity.ClassSchedule}
-     * @param gridLayout {@link GridLayout}
-     * @param context    {@link Context}
-     * @param activity   {@link Activity}
+     * @param classScheduleList 课程
+     * @param gridLayout        {@link GridLayout}
+     * @param context           {@link Context}
+     * @param activity          {@link Activity}
      */
-    public static void loadingView(String[][] classArray, @NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
+    public static void loadingView(List<ClassSchedule> classScheduleList, @NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
         initColorArray(context);
         Display display = Objects.requireNonNull(activity).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        for (int i = 0; i < classArray.length; i++) {
-            for (int j = 0; j < classArray[i].length; j++) {
-                if ("".equals(classArray[i][j])) {
-                    gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
-                } else {
-                    gridLayout.addView(setClass(getText(classArray[i][j]), getColor(classArray[i][j]), context), setParams(i + 1, j + 1, size));
-                }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 7; j++) {
+                gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
             }
+        }
+        for (ClassSchedule classSchedule : classScheduleList) {
+            gridLayout.addView(setClass(classSchedule.getName(), getColor(classSchedule.getName()), context), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
         }
     }
 
