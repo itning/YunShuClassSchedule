@@ -1,5 +1,7 @@
 package top.itning.yunshuclassschedule.util.download.progress;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -35,7 +37,7 @@ public class ProgressRequestBody extends RequestBody {
     }
 
     @Override
-    public void writeTo(BufferedSink sink) throws IOException {
+    public void writeTo(@NonNull BufferedSink sink) throws IOException {
         if (bufferedSink == null) {
 
             bufferedSink = Okio.buffer(sink(sink));
@@ -53,7 +55,7 @@ public class ProgressRequestBody extends RequestBody {
             long contentLength = 0L;
 
             @Override
-            public void write(Buffer source, long byteCount) throws IOException {
+            public void write(@NonNull Buffer source, long byteCount) throws IOException {
                 super.write(source, byteCount);
                 if (contentLength == 0) {
                     contentLength = contentLength();

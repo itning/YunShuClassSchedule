@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -28,7 +27,7 @@ import top.itning.yunshuclassschedule.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.DownloadApk;
 import top.itning.yunshuclassschedule.util.HttpUtils;
-import top.itning.yunshuclassschedule.util.download.progress.DownloadProgressHandler;
+import top.itning.yunshuclassschedule.util.download.progress.AbstractDownloadProgressHandler;
 import top.itning.yunshuclassschedule.util.download.progress.ProgressHelper;
 
 /**
@@ -74,7 +73,7 @@ public class DownloadService extends Service {
 
     private void startDownload(@NonNull String url, @NonNull String fileName) {
         OkHttpClient.Builder builder = ProgressHelper.addProgress(null);
-        ProgressHelper.setProgressHandler(new DownloadProgressHandler() {
+        ProgressHelper.setProgressHandler(new AbstractDownloadProgressHandler() {
             @Override
             protected void onProgress(long bytesRead, long contentLength, boolean done) {
                 Log.e("是否在主线程中运行", String.valueOf(Looper.getMainLooper() == Looper.myLooper()));

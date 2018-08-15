@@ -1,4 +1,6 @@
 package top.itning.yunshuclassschedule.util.download.progress;
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -45,7 +47,7 @@ public class ProgressResponseBody extends ResponseBody {
             long totalBytesRead = 0L;
 
             @Override
-            public long read(Buffer sink, long byteCount) throws IOException {
+            public long read(@NonNull Buffer sink, long byteCount) throws IOException {
                 long bytesRead = super.read(sink, byteCount);
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
                 progressListener.onProgress(totalBytesRead, responseBody.contentLength(), bytesRead == -1);
