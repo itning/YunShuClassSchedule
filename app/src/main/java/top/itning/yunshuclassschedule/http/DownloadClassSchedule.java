@@ -9,7 +9,7 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
  *
  * @author itning
  */
-public interface DownloadClassSchedule extends BaseHttp {
+public interface DownloadClassSchedule {
     /**
      * 检查课程表版本
      *

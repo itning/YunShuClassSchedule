@@ -1,6 +1,8 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -25,6 +27,10 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }, 2000);
     }
 
     /**
@@ -36,5 +42,16 @@ public class SplashActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Integer what) {
         Log.d(TAG, what + "");
+    }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

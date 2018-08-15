@@ -8,7 +8,7 @@ import retrofit2.http.GET;
  *
  * @author itning
  */
-public interface CheckClassScheduleVersion extends BaseHttp{
+public interface CheckClassScheduleVersion{
     /**
      * 检查课程表版本
      *

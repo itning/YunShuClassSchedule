@@ -9,7 +9,7 @@ import top.itning.yunshuclassschedule.entity.AppUpdate;
  *
  * @author itning
  */
-public interface CheckAppUpdate extends BaseHttp{
+public interface CheckAppUpdate{
     /**
      * 检查APP版本
      *
