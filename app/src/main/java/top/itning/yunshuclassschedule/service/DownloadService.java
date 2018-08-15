@@ -27,8 +27,6 @@ import retrofit2.Response;
 import top.itning.yunshuclassschedule.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.DownloadApk;
-import top.itning.yunshuclassschedule.ui.activity.SplashActivity;
-import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
 import top.itning.yunshuclassschedule.util.download.progress.AbstractProgressHandler;
 import top.itning.yunshuclassschedule.util.download.progress.ProgressHelper;
