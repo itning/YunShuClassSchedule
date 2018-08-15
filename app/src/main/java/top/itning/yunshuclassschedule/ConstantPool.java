@@ -55,7 +55,11 @@ public class ConstantPool {
         /**
          * 开始下载升级文件
          */
-        START_DOWNLOAD_UPDATE_APK(0X006);
+        START_DOWNLOAD_UPDATE_APK(0x006),
+        /**
+         * 安装APK
+         */
+        INSTALL_APK(0x007);
 
         private int value;
 

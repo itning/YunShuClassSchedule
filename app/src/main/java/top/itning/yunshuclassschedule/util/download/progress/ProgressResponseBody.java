@@ -1,4 +1,5 @@
 package top.itning.yunshuclassschedule.util.download.progress;
+
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
@@ -12,14 +13,15 @@ import okio.Okio;
 import okio.Source;
 
 /**
- * Created by ljd on 3/29/16.
+ * @author ljd
+ * @date 3/29/16
  */
 public class ProgressResponseBody extends ResponseBody {
     private final ResponseBody responseBody;
     private final ProgressListener progressListener;
     private BufferedSource bufferedSource;
 
-    public ProgressResponseBody(ResponseBody responseBody, ProgressListener progressListener) {
+    ProgressResponseBody(ResponseBody responseBody, ProgressListener progressListener) {
         this.responseBody = responseBody;
         this.progressListener = progressListener;
     }

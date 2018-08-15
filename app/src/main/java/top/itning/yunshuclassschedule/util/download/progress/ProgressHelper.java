@@ -1,16 +1,14 @@
 package top.itning.yunshuclassschedule.util.download.progress;
 
-import android.util.Log;
-
 import okhttp3.OkHttpClient;
 
 /**
- * Created by ljd on 4/12/16.
+ * @author ljd
+ * @date 4/12/16
  */
 public class ProgressHelper {
 
-    private static ProgressBean progressBean = new ProgressBean();
-    private static ProgressHandler mProgressHandler;
+    private static AbstractProgressHandler mProgressHandler;
 
     public static OkHttpClient.Builder addProgress(OkHttpClient.Builder builder) {
 
@@ -20,16 +18,11 @@ public class ProgressHelper {
 
         //该方法在子线程中运行
         final ProgressListener progressListener = (progress, total, done) -> {
-            Log.d("progress:", String.format("%d%% done\n", (100 * progress) / total));
             if (mProgressHandler == null) {
                 return;
             }
 
-            progressBean.setBytesRead(progress);
-            progressBean.setContentLength(total);
-            progressBean.setDone(done);
-            mProgressHandler.sendMessage(progressBean);
-
+            mProgressHandler.onProgress(progress, total, done);
         };
 
         //添加拦截器，自定义ResponseBody，添加下载进度
@@ -44,7 +37,7 @@ public class ProgressHelper {
         return builder;
     }
 
-    public static void setProgressHandler(ProgressHandler progressHandler) {
+    public static void setProgressHandler(AbstractProgressHandler progressHandler) {
         mProgressHandler = progressHandler;
     }
 }

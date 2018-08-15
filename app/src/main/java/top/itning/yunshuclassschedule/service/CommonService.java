@@ -1,8 +1,15 @@
 package top.itning.yunshuclassschedule.service;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -52,5 +59,20 @@ public class CommonService extends Service {
             }
             default:
         }
+    }
+
+    /**
+     * 创建通知渠道
+     *
+     * @param channelId   渠道ID
+     * @param channelName 渠道名
+     * @param importance  重要程度 {@link NotificationManager}
+     */
+    @TargetApi(Build.VERSION_CODES.O)
+    private void createNotificationChannel(@NonNull String channelId, @NonNull String channelName, int importance) {
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        assert notificationManager != null;
+        notificationManager.createNotificationChannel(channel);
     }
 }

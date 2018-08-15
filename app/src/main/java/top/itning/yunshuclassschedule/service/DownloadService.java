@@ -1,11 +1,13 @@
 package top.itning.yunshuclassschedule.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.IBinder;
-import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -18,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,8 +27,10 @@ import retrofit2.Response;
 import top.itning.yunshuclassschedule.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.DownloadApk;
+import top.itning.yunshuclassschedule.ui.activity.SplashActivity;
+import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
-import top.itning.yunshuclassschedule.util.download.progress.AbstractDownloadProgressHandler;
+import top.itning.yunshuclassschedule.util.download.progress.AbstractProgressHandler;
 import top.itning.yunshuclassschedule.util.download.progress.ProgressHelper;
 
 /**
@@ -37,6 +40,7 @@ import top.itning.yunshuclassschedule.util.download.progress.ProgressHelper;
  */
 public class DownloadService extends Service {
     private static final String TAG = "DownloadService";
+    private String apkName;
 
     @Override
     public void onCreate() {
@@ -64,7 +68,8 @@ public class DownloadService extends Service {
         switch (eventEntity.getId()) {
             case START_DOWNLOAD_UPDATE_APK: {
                 Log.d(TAG, "开始下载");
-                startDownload(eventEntity.getMsg(), eventEntity.getData() + ".apk");
+                apkName = eventEntity.getData() + ".apk";
+                startDownload(eventEntity.getMsg(), apkName);
                 break;
             }
             default:
@@ -72,18 +77,25 @@ public class DownloadService extends Service {
     }
 
     private void startDownload(@NonNull String url, @NonNull String fileName) {
-        OkHttpClient.Builder builder = ProgressHelper.addProgress(null);
-        ProgressHelper.setProgressHandler(new AbstractDownloadProgressHandler() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setContentTitle("正在下载更新文件")
+                .setContentText("连接服务器")
+                .setSmallIcon(this.getApplicationInfo().icon)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setProgress(100, 0, true);
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
+        assert notificationManager != null;
+        notificationManager.notify(1, notification);
+
+        ProgressHelper.setProgressHandler(new AbstractProgressHandler() {
             @Override
             protected void onProgress(long bytesRead, long contentLength, boolean done) {
-                Log.e("是否在主线程中运行", String.valueOf(Looper.getMainLooper() == Looper.myLooper()));
-                Log.e("onProgress", String.format("%d%% done\n", (100 * bytesRead) / contentLength));
-                Log.e("done", "--->" + String.valueOf(done));
-                Log.d(TAG, (int) (contentLength / 1024) + "");
-                Log.d(TAG, ((int) (bytesRead / 1024)) + "");
+                updateProgress(bytesRead, contentLength, done, builder, notificationManager);
             }
         });
-        HttpUtils.getRetrofit(builder.build()).create(DownloadApk.class).download(url).enqueue(new Callback<ResponseBody>() {
+        HttpUtils.getRetrofit(ProgressHelper.addProgress(null).build()).create(DownloadApk.class).download(url).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 try {
@@ -110,8 +122,43 @@ public class DownloadService extends Service {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Notification build = builder
+                        .setContentTitle("下载失败")
+                        .setContentText("请稍后再试")
+                        .setProgress(100, 0, false)
+                        .build();
+                build.flags = Notification.FLAG_AUTO_CANCEL;
+                notificationManager.notify(1, build);
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载失败:" + t.toString()));
             }
         });
+    }
+
+
+    private void updateProgress(long bytesRead, long contentLength, boolean done, NotificationCompat.Builder builder, NotificationManager notificationManager) {
+        int now = ((int) (bytesRead / 1024));
+        int all = ((int) (contentLength / 1024));
+        Notification build;
+        if (done) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            build = builder.setContentTitle("下载完成")
+                    .setContentText(now + "/" + all)
+                    .build();
+            build.flags = Notification.FLAG_AUTO_CANCEL;
+            notificationManager.notify(1, build);
+            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.INSTALL_APK, apkName));
+        } else {
+            build = builder
+                    .setContentTitle("正在下载更新文件 " + (100 * bytesRead) / contentLength + "%")
+                    .setContentText(now + "/" + all)
+                    .setProgress(all, now, false)
+                    .build();
+            build.flags = Notification.FLAG_ONGOING_EVENT;
+            notificationManager.notify(1, build);
+        }
     }
 }

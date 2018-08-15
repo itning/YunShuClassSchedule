@@ -1,6 +1,7 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,8 +30,10 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
+import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 
 /**
  * 主活动
@@ -107,6 +111,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, what + "");
     }
 
+    /**
+     * 消息事件
+     *
+     * @param eventEntity what
+     */
+    @SuppressWarnings("unused")
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onMessageEvent(EventEntity eventEntity) {
+        switch (eventEntity.getId()) {
+            case INSTALL_APK: {
+                ApkInstallUtils.installApk(new File(Environment.getExternalStorageDirectory(), eventEntity.getMsg()), this, true, true);
+                break;
+            }
+            default:
+        }
+    }
+
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
@@ -145,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         //菜单回调
         switch (item.getItemId()) {
-            case R.id.action_set_text_size:{
+            case R.id.action_set_text_size: {
                 Toast.makeText(this, "更改字体", Toast.LENGTH_LONG).show();
                 return true;
             }
