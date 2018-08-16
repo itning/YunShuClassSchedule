@@ -1,9 +1,8 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -15,21 +14,22 @@ import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 
 /**
- * 引导页
+ * 登陆
  *
  * @author itning
  */
-public class GuideActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final String TAG = "GuideActivity";
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guide);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        new Handler().postDelayed(this::enterMainActivity, 2000);
+
+        //TODO 谁开启给谁返回数据-result
     }
 
     @Override
@@ -43,11 +43,6 @@ public class GuideActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    @Override
-    public void onBackPressed() {
-        //do nothing
-    }
-
     /**
      * 消息事件
      *
@@ -59,11 +54,10 @@ public class GuideActivity extends BaseActivity {
         Log.d(TAG, what + "");
     }
 
-    /**
-     * 进入主Activity
-     */
-    private void enterMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            default:
+        }
     }
 }

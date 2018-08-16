@@ -1,4 +1,4 @@
-package top.itning.yunshuclassschedule;
+package top.itning.yunshuclassschedule.common;
 
 /**
  * 常量池

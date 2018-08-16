@@ -24,7 +24,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import top.itning.yunshuclassschedule.ConstantPool;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.DownloadApk;
 import top.itning.yunshuclassschedule.util.HttpUtils;

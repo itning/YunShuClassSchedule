@@ -14,7 +14,6 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,9 +27,10 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import top.itning.yunshuclassschedule.BaseApplication;
-import top.itning.yunshuclassschedule.ConstantPool;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.common.App;
+import top.itning.yunshuclassschedule.common.BaseActivity;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.AppUpdate;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
@@ -39,7 +39,6 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
 import top.itning.yunshuclassschedule.http.CheckClassScheduleVersion;
 import top.itning.yunshuclassschedule.http.DownloadClassSchedule;
-import top.itning.yunshuclassschedule.service.CommonService;
 import top.itning.yunshuclassschedule.service.DownloadService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
@@ -50,7 +49,7 @@ import top.itning.yunshuclassschedule.util.NetWorkUtils;
  *
  * @author itning
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
     private static final String TAG = "SplashActivity";
 
     private static long startTime;
@@ -63,7 +62,6 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        startService(new Intent(this, CommonService.class));
         sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
         if (NetWorkUtils.isNetworkConnected(this)) {
             startTime = System.currentTimeMillis();
@@ -118,7 +116,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (response.code() == ConstantPool.Int.RESPONSE_SUCCESS_CODE.get()) {
                     List<ClassSchedule> classScheduleList = response.body();
                     if (classScheduleList != null) {
-                        DaoSession daoSession = ((BaseApplication) getApplication()).getDaoSession();
+                        DaoSession daoSession = ((App) getApplication()).getDaoSession();
                         ClassScheduleDao classScheduleDao = daoSession.getClassScheduleDao();
                         for (ClassSchedule classSchedule : classScheduleList) {
                             classScheduleDao.save(classSchedule);
@@ -176,12 +174,7 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * 消息事件
-     *
-     * @param eventEntity event
-     */
-    @SuppressWarnings("unused")
+    @Override
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {

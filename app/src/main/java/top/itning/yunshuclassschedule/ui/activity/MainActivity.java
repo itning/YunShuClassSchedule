@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
@@ -29,8 +28,9 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import top.itning.yunshuclassschedule.ConstantPool;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.common.BaseActivity;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
@@ -41,7 +41,7 @@ import top.itning.yunshuclassschedule.util.ApkInstallUtils;
  *
  * @author itning
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
 
     private FragmentManager supportFragmentManager;
@@ -111,12 +111,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, what + "");
     }
 
-    /**
-     * 消息事件
-     *
-     * @param eventEntity what
-     */
-    @SuppressWarnings("unused")
+
+    @Override
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {

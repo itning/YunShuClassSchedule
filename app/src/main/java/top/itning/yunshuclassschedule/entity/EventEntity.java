@@ -1,6 +1,6 @@
 package top.itning.yunshuclassschedule.entity;
 
-import top.itning.yunshuclassschedule.ConstantPool;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 
 public class EventEntity {
     private ConstantPool.Int id;
