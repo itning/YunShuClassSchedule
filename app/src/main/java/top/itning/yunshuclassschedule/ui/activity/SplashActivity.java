@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.code() == ConstantPool.Int.RESPONSE_SUCCESS_CODE.get()) {
-                    SharedPreferences sharedPreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
                     String version = response.body();
                     if (!sharedPreferences.getString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "").equals(version)) {
                         sharedPreferences.edit().putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), version).apply();

@@ -8,6 +8,10 @@ public class ConstantPool {
          */
         DB_NAME("class-schedule.db"),
         /**
+         * sharedPreferences 文件名
+         */
+        SHARED_PREFERENCES_FILENAME("class-schedule"),
+        /**
          * 课程表版本KEY
          */
         APP_CLASS_SCHEDULE_VERSION("APP_CLASS_SCHEDULE_VERSION");

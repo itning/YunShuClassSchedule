@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class ClassSchedule {
     /**
-     * 课程编号
+     * 课程编号 班级+周+节
      */
     @Id
     private String id;
@@ -39,7 +39,7 @@ public class ClassSchedule {
 
     @Generated(hash = 317900149)
     public ClassSchedule(String id, int week, int section, String name,
-            String location, String teacher) {
+                         String location, String teacher) {
         this.id = id;
         this.week = week;
         this.section = section;
