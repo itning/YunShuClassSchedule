@@ -110,8 +110,9 @@ public class ClassScheduleService extends Service {
                     if (classScheduleList != null) {
                         DaoSession daoSession = ((App) getApplication()).getDaoSession();
                         ClassScheduleDao classScheduleDao = daoSession.getClassScheduleDao();
+                        classScheduleDao.deleteAll();
                         for (ClassSchedule classSchedule : classScheduleList) {
-                            classScheduleDao.save(classSchedule);
+                            classScheduleDao.insert(classSchedule);
                         }
                     }
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));

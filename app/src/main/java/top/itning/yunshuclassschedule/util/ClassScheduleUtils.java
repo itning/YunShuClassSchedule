@@ -64,8 +64,10 @@ public class ClassScheduleUtils {
                 gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
             }
         }
-        for (ClassSchedule classSchedule : classScheduleList) {
-            gridLayout.addView(setClass(classSchedule.getName(), getColor(classSchedule.getName()), context), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
+        if (classScheduleList != null) {
+            for (ClassSchedule classSchedule : classScheduleList) {
+                gridLayout.addView(setClass(classSchedule.getName(), getColor(classSchedule.getName()), context), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
+            }
         }
     }
 
