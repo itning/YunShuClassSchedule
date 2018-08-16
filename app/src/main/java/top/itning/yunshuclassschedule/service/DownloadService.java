@@ -96,25 +96,36 @@ public class DownloadService extends Service {
         HttpUtils.getRetrofit(ProgressHelper.addProgress(null).build()).create(DownloadApk.class).download(url).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                try {
-                    ResponseBody responseBody = response.body();
-                    if (responseBody != null) {
-                        InputStream is = responseBody.byteStream();
-                        File file = new File(Environment.getExternalStorageDirectory(), fileName);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        BufferedInputStream bis = new BufferedInputStream(is);
-                        byte[] buffer = new byte[1024];
-                        int len;
-                        while ((len = bis.read(buffer)) != -1) {
-                            fos.write(buffer, 0, len);
-                            fos.flush();
+                if (response.code() == ConstantPool.Int.RESPONSE_SUCCESS_CODE.get()) {
+                    try {
+                        ResponseBody responseBody = response.body();
+                        if (responseBody != null) {
+                            InputStream is = responseBody.byteStream();
+                            File file = new File(Environment.getExternalStorageDirectory(), fileName);
+                            FileOutputStream fos = new FileOutputStream(file);
+                            BufferedInputStream bis = new BufferedInputStream(is);
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = bis.read(buffer)) != -1) {
+                                fos.write(buffer, 0, len);
+                                fos.flush();
+                            }
+                            fos.close();
+                            bis.close();
+                            is.close();
                         }
-                        fos.close();
-                        bis.close();
-                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } else {
+                    Notification build = builder
+                            .setContentTitle("下载失败")
+                            .setContentText("请稍后再试")
+                            .setProgress(100, 0, false)
+                            .build();
+                    build.flags = Notification.FLAG_AUTO_CANCEL;
+                    notificationManager.notify(1, build);
+                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载失败:" + response.code()));
                 }
             }
 
@@ -138,8 +149,9 @@ public class DownloadService extends Service {
         int all = ((int) (contentLength / 1024));
         Notification build;
         if (done) {
+            //休眠 否则 不显示
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -148,6 +160,7 @@ public class DownloadService extends Service {
                     .build();
             build.flags = Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(1, build);
+            //To MainActivity EventBus
             EventBus.getDefault().post(new EventEntity(ConstantPool.Int.INSTALL_APK, apkName));
         } else {
             build = builder
