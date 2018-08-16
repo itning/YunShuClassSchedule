@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,14 +60,14 @@ public class TodayFragment extends Fragment {
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
-
-        holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
-
-        holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
         List<ClassSchedule> list = daoSession.getClassScheduleDao().queryBuilder().where(ClassScheduleDao.Properties.Week.eq("1")).list();
+        //LinearLayout背景颜色
+        holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
+        //RecyclerView初始化
+        holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         holder.rv.setAdapter(new TodayRecyclerViewAdapter(list, getContext()));
-
+        //设置LinearLayout的高度为总大小-RecyclerView的子项大小
         holder.rv.post(() -> view.post(() -> {
             int i = holder.rv.getHeight() / list.size();
             ViewGroup.LayoutParams lp;
@@ -76,7 +75,7 @@ public class TodayFragment extends Fragment {
             lp.height = view.getHeight() - i;
             holder.ll.setLayoutParams(lp);
         }));
-
+        //NestedScrollView滑动监听
         RecyclerView.Adapter adapter = holder.rv.getAdapter();
         AtomicBoolean top = new AtomicBoolean(true);
         holder.nsv.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
