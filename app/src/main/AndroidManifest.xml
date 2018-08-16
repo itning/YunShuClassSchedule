@@ -31,7 +31,9 @@
         <activity
             android:name=".ui.activity.GuideActivity"
             android:theme="@style/AppTheme.FullScreen" />
-        <activity android:name=".ui.activity.LoginActivity" android:label="@string/login_name" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:label="@string/login_name" />
 
         <service
             android:name=".service.DownloadService"
@@ -41,6 +43,10 @@
             android:name=".service.CommonService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".service.ClassScheduleService"
+            android:enabled="true"
+            android:exported="true"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

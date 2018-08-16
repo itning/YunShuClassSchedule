@@ -23,7 +23,19 @@ public class ConstantPool {
         /**
          * 第一次进入app
          */
-        FIRST_IN_APP("first_in_app");
+        FIRST_IN_APP("first_in_app"),
+        /**
+         * 登陆用户名
+         */
+        USER_USERNAME("user_username"),
+        /**
+         * 登陆密码
+         */
+        USER_PASSWORD("user_password"),
+        /**
+         * 用户所在班级
+         */
+        USER_CLASS_ID("user_class_id");
 
         private String value;
 
@@ -76,7 +88,15 @@ public class ConstantPool {
         /**
          * 退出间隔延迟
          */
-        EXIT_DELAY(2000);
+        EXIT_DELAY(2000),
+        /**
+         * 开始检查课程表更新
+         */
+        START_CHECK_CLASS_SCHEDULE_UPDATE(0x008),
+        /**
+         * 结束检查课程表更新(数据已更新)
+         */
+        END_CHECK_CLASS_SCHEDULE_UPDATE(0x009);
 
         private int value;
 

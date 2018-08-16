@@ -1,6 +1,8 @@
 package top.itning.yunshuclassschedule.common;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.Log;
 
@@ -21,17 +23,18 @@ public class App extends Application {
     private static final String TAG = "App";
 
     private DaoSession daoSession;
+    public static SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
         // 程序创建的时候执行
-        Log.d(TAG, "onCreate");
         //EventBus add Index
         EventBus.builder().addIndex(new AppActivityIndex()).installDefaultEventBus();
 
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ConstantPool.Str.DB_NAME.get());
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+        sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
         super.onCreate();
     }
 

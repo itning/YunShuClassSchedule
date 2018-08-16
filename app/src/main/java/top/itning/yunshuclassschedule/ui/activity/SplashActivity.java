@@ -1,9 +1,7 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,8 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,14 +28,9 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.AppUpdate;
-import top.itning.yunshuclassschedule.entity.ClassSchedule;
-import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
-import top.itning.yunshuclassschedule.entity.DaoSession;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
-import top.itning.yunshuclassschedule.http.CheckClassScheduleVersion;
-import top.itning.yunshuclassschedule.http.DownloadClassSchedule;
-import top.itning.yunshuclassschedule.service.DownloadService;
+import top.itning.yunshuclassschedule.service.ClassScheduleService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
 import top.itning.yunshuclassschedule.util.NetWorkUtils;
@@ -54,7 +45,6 @@ public class SplashActivity extends BaseActivity {
 
     private static long startTime;
     private AppUpdate appUpdate;
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,80 +52,18 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
         if (NetWorkUtils.isNetworkConnected(this)) {
             startTime = System.currentTimeMillis();
             checkAppUpdate();
-            checkClassScheduleUpdate();
+            if (!App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
+                //非第一次进入,才进行课程表数据更新检查
+                //event to ClassScheduleService
+                EventBus.getDefault().postSticky(new EventEntity(ConstantPool.Int.START_CHECK_CLASS_SCHEDULE_UPDATE));
+            }
         } else {
             Toast.makeText(this, "没有网络", Toast.LENGTH_LONG).show();
             new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get());
         }
-    }
-
-    /**
-     * 检查课程表数据更新
-     */
-    private void checkClassScheduleUpdate() {
-        HttpUtils.getRetrofit().create(CheckClassScheduleVersion.class).checkVersion("2016010103").enqueue(new retrofit2.Callback<String>() {
-
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.code() == ConstantPool.Int.RESPONSE_SUCCESS_CODE.get()) {
-                    String version = response.body();
-                    //判断课程表数据版本与服务器是否一致
-                    if (!sharedPreferences.getString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "").equals(version)) {
-                        //不一致,更新版本,下载新数据
-                        sharedPreferences.edit().putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), version).apply();
-                        downloadClassSchedule();
-                    }
-                } else {
-                    Log.e(TAG, "检查课表错误" + response.code());
-                    //event to commonService
-                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "服务器连接失败:" + response.code()));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "检查课表错误", t);
-                //event to commonService
-                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "服务器连接失败:" + t.toString()));
-            }
-        });
-    }
-
-    /**
-     * 下载课程表
-     */
-    private void downloadClassSchedule() {
-        HttpUtils.getRetrofit().create(DownloadClassSchedule.class).download("2016010103").enqueue(new retrofit2.Callback<List<ClassSchedule>>() {
-
-            @Override
-            public void onResponse(@NonNull Call<List<ClassSchedule>> call, @NonNull Response<List<ClassSchedule>> response) {
-                if (response.code() == ConstantPool.Int.RESPONSE_SUCCESS_CODE.get()) {
-                    List<ClassSchedule> classScheduleList = response.body();
-                    if (classScheduleList != null) {
-                        DaoSession daoSession = ((App) getApplication()).getDaoSession();
-                        ClassScheduleDao classScheduleDao = daoSession.getClassScheduleDao();
-                        for (ClassSchedule classSchedule : classScheduleList) {
-                            classScheduleDao.save(classSchedule);
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "下载课表错误:" + response.code());
-                    //event to commonService
-                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载课表错误:" + response.code()));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<ClassSchedule>> call, @NonNull Throwable t) {
-                Log.e(TAG, "下载课表错误", t);
-                //event to commonService
-                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载课表错误:" + t.toString()));
-            }
-        });
     }
 
     /**
@@ -164,10 +92,11 @@ public class SplashActivity extends BaseActivity {
      */
     private void enterMainActivity() {
         Intent intent;
-        if (sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
-            sharedPreferences.edit().putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false).apply();
+        if (App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
+            //第一次进入APP
             intent = new Intent(this, GuideActivity.class);
         } else {
+            //非第一次,肯定已经登陆
             intent = new Intent(this, MainActivity.class);
         }
         startActivity(intent);
@@ -185,7 +114,6 @@ public class SplashActivity extends BaseActivity {
             case START_CHECK_APP_UPDATE: {
                 if (ApkInstallUtils.getPackageVersionCode(this) != appUpdate.getVersionCode()) {
                     //需要升级
-                    startService(new Intent(this, DownloadService.class));
                     applicationUpdate();
                 } else {
                     new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get() - (System.currentTimeMillis() - startTime));

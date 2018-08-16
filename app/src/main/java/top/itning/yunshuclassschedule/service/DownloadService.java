@@ -55,11 +55,6 @@ public class DownloadService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    /**
-     * 消息事件
-     *
-     * @param eventEntity what
-     */
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(EventEntity eventEntity) {

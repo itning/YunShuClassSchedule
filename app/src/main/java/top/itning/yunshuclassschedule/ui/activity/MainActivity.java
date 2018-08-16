@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             if (System.currentTimeMillis() - firstPressedTime < ConstantPool.Int.EXIT_DELAY.get()) {
                 moveTaskToBack(false);
             } else {
-                Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
                 firstPressedTime = System.currentTimeMillis();
             }
         }

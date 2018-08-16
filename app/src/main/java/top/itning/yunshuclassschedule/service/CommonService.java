@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,11 +40,6 @@ public class CommonService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    /**
-     * 消息事件
-     *
-     * @param eventEntity what
-     */
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
