@@ -71,7 +71,7 @@ public class DownloadService extends Service {
 
     private void startDownload(@NonNull String url, @NonNull String fileName) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"download")
                 .setContentTitle("正在下载更新文件")
                 .setContentText("连接服务器")
                 .setSmallIcon(this.getApplicationInfo().icon)
@@ -156,7 +156,7 @@ public class DownloadService extends Service {
             build.flags = Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(1, build);
             //To MainActivity EventBus
-            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.INSTALL_APK, apkName));
+            EventBus.getDefault().postSticky(new EventEntity(ConstantPool.Int.INSTALL_APK, apkName));
         } else {
             build = builder
                     .setContentTitle("正在下载更新文件 " + (100 * bytesRead) / contentLength + "%")

@@ -113,10 +113,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     @Override
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case INSTALL_APK: {
+                EventBus.getDefault().removeStickyEvent(eventEntity);
                 ApkInstallUtils.installApk(new File(Environment.getExternalStorageDirectory(), eventEntity.getMsg()), this, true, true);
                 break;
             }

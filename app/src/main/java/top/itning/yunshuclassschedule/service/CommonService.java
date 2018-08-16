@@ -28,6 +28,17 @@ public class CommonService extends Service {
     @Override
     public void onCreate() {
         EventBus.getDefault().register(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "download";
+            String channelName = "下载通知";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            createNotificationChannel(channelId, channelName, importance);
+
+            channelId = "class";
+            channelName = "课程提醒";
+            importance = NotificationManager.IMPORTANCE_HIGH;
+            createNotificationChannel(channelId, channelName, importance);
+        }
     }
 
     @Override
