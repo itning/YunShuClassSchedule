@@ -55,6 +55,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private static long startTime;
     private AppUpdate appUpdate;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         startService(new Intent(this, CommonService.class));
+        sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
         if (NetWorkUtils.isNetworkConnected(this)) {
             startTime = System.currentTimeMillis();
             checkAppUpdate();
@@ -82,14 +84,16 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.code() == ConstantPool.Int.RESPONSE_SUCCESS_CODE.get()) {
-                    SharedPreferences sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
                     String version = response.body();
+                    //判断课程表数据版本与服务器是否一致
                     if (!sharedPreferences.getString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "").equals(version)) {
+                        //不一致,更新版本,下载新数据
                         sharedPreferences.edit().putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), version).apply();
                         downloadClassSchedule();
                     }
                 } else {
                     Log.e(TAG, "检查课表错误" + response.code());
+                    //event to commonService
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "服务器连接失败:" + response.code()));
                 }
             }
@@ -97,6 +101,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e(TAG, "检查课表错误", t);
+                //event to commonService
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "服务器连接失败:" + t.toString()));
             }
         });
@@ -121,6 +126,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 } else {
                     Log.e(TAG, "下载课表错误:" + response.code());
+                    //event to commonService
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载课表错误:" + response.code()));
                 }
             }
@@ -128,6 +134,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<List<ClassSchedule>> call, @NonNull Throwable t) {
                 Log.e(TAG, "下载课表错误", t);
+                //event to commonService
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载课表错误:" + t.toString()));
             }
         });
@@ -147,6 +154,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<AppUpdate> call, @NonNull Throwable t) {
                 Log.e(TAG, "更新失败", t);
+                //event to commonService
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "更新错误:" + t.toString()));
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.ENTER_HOME_ACTIVITY));
             }
@@ -157,7 +165,14 @@ public class SplashActivity extends AppCompatActivity {
      * 进入主Activity
      */
     private void enterMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+        Intent intent;
+        if (sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
+            sharedPreferences.edit().putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false).apply();
+            intent = new Intent(this, GuideActivity.class);
+        } else {
+            intent = new Intent(this, MainActivity.class);
+        }
+        startActivity(intent);
         finish();
     }
 

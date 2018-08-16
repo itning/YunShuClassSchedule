@@ -1,5 +1,10 @@
 package top.itning.yunshuclassschedule;
 
+/**
+ * 常量池
+ *
+ * @author itning
+ */
 public class ConstantPool {
 
     public enum Str {
@@ -14,7 +19,11 @@ public class ConstantPool {
         /**
          * 课程表版本KEY
          */
-        APP_CLASS_SCHEDULE_VERSION("APP_CLASS_SCHEDULE_VERSION");
+        APP_CLASS_SCHEDULE_VERSION("APP_CLASS_SCHEDULE_VERSION"),
+        /**
+         * 第一次进入app
+         */
+        FIRST_IN_APP("first_in_app");
 
         private String value;
 

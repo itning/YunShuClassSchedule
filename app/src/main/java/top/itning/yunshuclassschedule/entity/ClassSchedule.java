@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class ClassSchedule {
     /**
-     * 课程编号 班级+周+节
+     * 课程编号 班级-周-节
      */
     @Id
     private String id;

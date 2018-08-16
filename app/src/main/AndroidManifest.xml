@@ -28,6 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:theme="@style/AppTheme.FullScreen" />
 
         <service
             android:name=".service.DownloadService"
