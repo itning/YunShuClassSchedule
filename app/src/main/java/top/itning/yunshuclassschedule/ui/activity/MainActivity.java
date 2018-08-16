@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.itning.yunshuclassschedule.ConstantPool;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentManager supportFragmentManager;
     private SparseArray<Fragment> fragmentSparseArray;
     private long firstPressedTime;
-    private static final int EXIT_DELAY = 2000;
     private static final SimpleDateFormat ACTION_BAR_TITLE_FORMAT = new SimpleDateFormat("MM月dd日 E", Locale.CHINESE);
 
     @BindView(R.id.toolbar)
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (System.currentTimeMillis() - firstPressedTime < EXIT_DELAY) {
+            if (System.currentTimeMillis() - firstPressedTime < ConstantPool.Int.EXIT_DELAY.get()) {
                 moveTaskToBack(false);
             } else {
                 Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();

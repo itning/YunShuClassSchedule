@@ -259,11 +259,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * 开始下载应用程序
+     */
     private void upgradeApplication() {
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             new AlertDialog.Builder(this).setTitle("升级失败")
                     .setMessage("没找到外置存储")
-                    .setCancelable(false).setPositiveButton("确定", null).show();
+                    .setCancelable(false).setPositiveButton("确定", (dialog, which) -> enterMainActivity()).show();
             return;
         }
         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_DOWNLOAD_UPDATE_APK, appUpdate.getDownloadUrl(), appUpdate.getVersionCode()));

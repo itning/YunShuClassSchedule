@@ -59,7 +59,11 @@ public class ConstantPool {
         /**
          * 安装APK
          */
-        INSTALL_APK(0x007);
+        INSTALL_APK(0x007),
+        /**
+         * 退出间隔延迟
+         */
+        EXIT_DELAY(2000);
 
         private int value;
 
