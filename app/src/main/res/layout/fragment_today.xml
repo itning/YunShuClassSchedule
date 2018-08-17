@@ -14,12 +14,73 @@
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:background="@color/colorPrimary">
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <RelativeLayout
+                android:id="@+id/rl"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="测试" />
+                android:gravity="center_vertical"
+                tools:ignore="UselessParent"
+                tools:layout_height="300dp">
+
+                <TextView
+                    android:id="@+id/tv_remind_remind"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_above="@id/tv_remind_name"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="下节课"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:autoSizeTextType="uniform"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:id="@+id/tv_remind_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_above="@id/tv_remind_location"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="数据库原理与应用"
+                    android:textColor="@android:color/white"
+                    android:textSize="30sp"
+                    app:autoSizeTextType="uniform"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:id="@+id/tv_remind_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_above="@id/tv_remind_time"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="A301"
+                    android:textColor="@android:color/white"
+                    android:textSize="35sp"
+                    app:autoSizeTextType="uniform"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:id="@+id/tv_remind_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="距离上课还有14分钟"
+                    android:textColor="@android:color/white"
+                    android:textSize="80sp"
+                    app:autoSizeTextType="uniform"
+                    tools:ignore="MissingPrefix" />
+            </RelativeLayout>
+
+
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
