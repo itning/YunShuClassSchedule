@@ -98,12 +98,15 @@ public class TodayFragment extends Fragment {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
                 //时间改变时,更新进度
-                Display display = ((WindowManager) Objects.requireNonNull(Objects.requireNonNull(getContext()).getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                ViewGroup.LayoutParams layoutParams = todayRecyclerViewAdapter.getViewProgress().getLayoutParams();
-                layoutParams.width = DateUtils.getNowProgress(size.x);
-                todayRecyclerViewAdapter.getViewProgress().setLayoutParams(layoutParams);
+                View viewProgress = todayRecyclerViewAdapter.getViewProgress();
+                if (viewProgress != null) {
+                    Display display = ((WindowManager) Objects.requireNonNull(Objects.requireNonNull(getContext()).getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    ViewGroup.LayoutParams layoutParams = viewProgress.getLayoutParams();
+                    layoutParams.width = DateUtils.getNowProgress(size.x);
+                    viewProgress.setLayoutParams(layoutParams);
+                }
                 //检查课程改变
                 if (lastClass != DateUtils.getWhichClassNow()) {
                     Log.d(TAG, "time changed,need update class schedule");
