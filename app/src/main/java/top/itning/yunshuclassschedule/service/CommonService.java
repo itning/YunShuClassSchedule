@@ -31,6 +31,10 @@ public class CommonService extends Service {
         EventBus.getDefault().register(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
+        //设置了系统时区
+        filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        //设置了系统时间
+        filter.addAction(Intent.ACTION_TIME_CHANGED);
         registerReceiver(new TimeTickReceiver(), filter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -87,9 +87,10 @@ public class TodayFragment extends Fragment {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
+                //时间改变时
+                Log.e(TAG, classScheduleList.size() + "");
                 if (lastClass != DateUtils.getWhichClassNow()) {
                     lastClass = DateUtils.getWhichClassNow();
-                    Log.e(TAG, classScheduleList.size() + "");
                     classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
                     ViewHolder holder = (ViewHolder) view.getTag();
                     RecyclerView.Adapter adapter = holder.rv.getAdapter();
@@ -159,14 +160,5 @@ public class TodayFragment extends Fragment {
 
         });
         return this.view;
-    }
-
-    @Override
-    public void onStart() {
-
-        ViewHolder holder = (ViewHolder) view.getTag();
-        boolean inDateInterval = DateUtils.isInDateInterval("10:05", "11:35");
-        Log.e(TAG, "onStart-" + inDateInterval + " --" + DateUtils.getWeek());
-        super.onStart();
     }
 }
