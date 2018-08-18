@@ -94,7 +94,7 @@ public class TodayFragment extends Fragment {
             case TIME_TICK_CHANGE: {
                 //时间改变时
                 if (lastClass != DateUtils.getWhichClassNow()) {
-                    Log.d(TAG, "时间改变,需要更新课程");
+                    Log.d(TAG, "time changed,need update class schedule");
                     lastClass = DateUtils.getWhichClassNow();
                     classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
                     ViewHolder holder = (ViewHolder) view.getTag();
