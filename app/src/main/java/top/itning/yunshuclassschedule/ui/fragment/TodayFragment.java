@@ -62,10 +62,29 @@ public class TodayFragment extends Fragment {
      * 上次正在上的课程
      */
     private int lastClass = DateUtils.getWhichClassNow();
+    /**
+     * 向上滑动的临界值
+     */
+    public static final int SLIDE_UP_THRESHOLD = 20;
+    /**
+     * {@link TodayRecyclerViewAdapter}
+     */
     private TodayRecyclerViewAdapter todayRecyclerViewAdapter;
+    /**
+     * 滑动时移动的坐标
+     */
     private int finalIndex;
+    /**
+     * 标记是否已经Stop
+     */
     private boolean stop;
+    /**
+     * 当Start时是否需要移动元素
+     */
     private boolean needMoved;
+    /**
+     * 当前正在上的课
+     */
     private int whichClassNow;
 
     static class ViewHolder {
@@ -193,7 +212,7 @@ public class TodayFragment extends Fragment {
             if (whichClassNow == -1) {
                 return;
             }
-            if (scrollY <= 20 && !top.get()) {
+            if (scrollY <= SLIDE_UP_THRESHOLD && !top.get()) {
                 top.set(true);
                 adapter.notifyItemMoved(finalIndex, 0);
             } else if (top.get() && scrollY == (holder.rv.getHeight() - holder.rv.getHeight() / classScheduleList.size())) {
