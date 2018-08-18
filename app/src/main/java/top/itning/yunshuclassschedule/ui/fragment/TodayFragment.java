@@ -377,8 +377,9 @@ public class TodayFragment extends Fragment {
             if (!top.get() && whichClassNow != -1) {
                 if (stop) {
                     needMoved = true;
+                } else {
+                    new Handler().postDelayed(() -> adapter.notifyItemMoved(0, finalIndex), 1000);
                 }
-                new Handler().postDelayed(() -> adapter.notifyItemMoved(0, finalIndex), 1000);
                 top.set(false);
             }
         }
