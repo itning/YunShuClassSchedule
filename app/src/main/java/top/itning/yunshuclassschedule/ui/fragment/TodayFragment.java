@@ -271,24 +271,27 @@ public class TodayFragment extends Fragment {
                     String[] timeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
                     line1 = "下节课";
                     if (DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
-                        //正在上课
+                        //正在上课 非最后一节课
                         int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[1]);
-                        if (classSchedule.getSection() == classScheduleList.get(classScheduleList.size() - 1).getSection()) {
+                        for (ClassSchedule c : classScheduleList) {
+                            if (c.getSection() == classSchedule.getSection()) {
+                                //当前循环的和正在上的一样
+                                continue;
+                            }
+                            String start = DateUtils.getTimeList().get(c.getSection() - 1).split("-")[0];
+                            if (DateUtils.DF.parse(timeArray[0]).getTime() < DateUtils.DF.parse(start).getTime()) {
+                                line2 = c.getName();
+                                line3 = c.getLocation();
+                                line4 = "还有" + restOfTheTime + "分钟下课";
+                                break;
+                            }
+                        }
+                        //循环结束,没有下节课
+                        if ("".equals(line4)) {
                             //最后一节课 正在上
                             line1 = "";
                             line2 = "这是最后一节课";
                             line3 = "还有" + restOfTheTime + "分钟下课";
-                        } else {
-                            //非最后一节课,获取下节课
-                            for (ClassSchedule c : classScheduleList) {
-                                String start = DateUtils.getTimeList().get(c.getSection() - 1).split("-")[0];
-                                if (DateUtils.DF.parse(timeArray[0]).getTime() < DateUtils.DF.parse(start).getTime()) {
-                                    line2 = c.getName();
-                                    line3 = c.getLocation();
-                                    break;
-                                }
-                            }
-                            line4 = "还有" + restOfTheTime + "分钟下课";
                         }
                     } else {
                         //即将上课
