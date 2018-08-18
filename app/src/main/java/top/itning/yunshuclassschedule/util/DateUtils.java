@@ -1,5 +1,6 @@
 package top.itning.yunshuclassschedule.util;
 
+import android.support.annotation.CheckResult;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -19,7 +20,7 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
  */
 public class DateUtils {
     private static final String TAG = "DateUtils";
-    private static final SimpleDateFormat DF = new SimpleDateFormat("HH:mm", Locale.CHINESE);
+    public static final SimpleDateFormat DF = new SimpleDateFormat("HH:mm", Locale.CHINESE);
     private static final List<String> TIME_LIST = new ArrayList<>();
     private static final Calendar CAL = Calendar.getInstance();
 
@@ -41,6 +42,7 @@ public class DateUtils {
      * @param classScheduleList 课程集合
      * @return 当前进度
      */
+    @CheckResult
     public static int getNowProgress(int max, List<ClassSchedule> classScheduleList) {
         boolean have = false;
         for (ClassSchedule c : classScheduleList) {
@@ -78,6 +80,7 @@ public class DateUtils {
      *
      * @return 第几节课, 没有返回-1,注意返回从0开始
      */
+    @CheckResult
     public static int getWhichClassNow() {
         int i = 0;
         String endTimeStr = null;
@@ -101,6 +104,7 @@ public class DateUtils {
      *
      * @return 集合
      */
+    @CheckResult
     public static List<String> getTimeList() {
         return TIME_LIST;
     }
@@ -110,6 +114,7 @@ public class DateUtils {
      *
      * @return 1~7
      */
+    @CheckResult
     public static int getWeek() {
         CAL.setTime(new Date());
         int i = CAL.get(Calendar.DAY_OF_WEEK);
@@ -123,13 +128,36 @@ public class DateUtils {
     }
 
     /**
+     * 返回现在到给定时间相差的分钟数
+     *
+     * @param endTime 结束时间
+     * @return 相差分钟数
+     */
+    @CheckResult
+    public static int getTheRestOfTheTime(String endTime) {
+        try {
+            long end = DF.parse(endTime).getTime();
+            long now = DF.parse(DF.format(new Date())).getTime();
+            int minutes = (int) ((end - now) / (1000 * 60));
+            if (minutes < 0) {
+                return 0;
+            }
+            return minutes;
+        } catch (ParseException e) {
+            Log.e(TAG, "parse exception ", e);
+            return 0;
+        }
+    }
+
+    /**
      * 检查当前时间是否在给定的开始结束时间内
      *
      * @param start 开始时间
      * @param end   结束时间
      * @return 在返回true
      */
-    private static boolean isInDateInterval(String start, String end) {
+    @CheckResult
+    public static boolean isInDateInterval(String start, String end) {
         try {
             return belongCalendar(DF.parse(DF.format(new Date())), DF.parse(start), DF.parse(end));
         } catch (ParseException e) {
@@ -148,6 +176,7 @@ public class DateUtils {
      * @param endTime   结束
      * @return 是返回True
      */
+    @CheckResult
     private static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
         return nowTime.getTime() >= beginTime.getTime() && nowTime.getTime() < endTime.getTime();
     }
