@@ -244,17 +244,17 @@ public class TodayFragment extends Fragment {
      * @param holder {@link ViewHolder}
      */
     private void setPanelText(ViewHolder holder) {
-        String line1 = "", line2 = "", line3 = "", line4 = "";
-        if (classScheduleList != null && !classScheduleList.isEmpty()) {
-            int whichClassNow = DateUtils.getWhichClassNow();
-            ClassSchedule classSchedule = classScheduleList.get(0);
-            if (whichClassNow == -1) {
-                ClassSchedule lastCs = classScheduleList.get(classScheduleList.size() - 1);
-                String[] timeArray = DateUtils.getTimeList().get(lastCs.getSection() - 1).split("-");
-                if (!DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
-                    //一节课没上判定
-                    String[] firstTimeArray = DateUtils.getTimeList().get(0).split("-");
-                    try {
+        try {
+            String line1 = "", line2 = "", line3 = "", line4 = "";
+            if (classScheduleList != null && !classScheduleList.isEmpty()) {
+                int whichClassNow = DateUtils.getWhichClassNow();
+                ClassSchedule classSchedule = classScheduleList.get(0);
+                if (whichClassNow == -1) {
+                    ClassSchedule lastCs = classScheduleList.get(classScheduleList.size() - 1);
+                    String[] timeArray = DateUtils.getTimeList().get(lastCs.getSection() - 1).split("-");
+                    if (!DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
+                        //一节课没上判定
+                        String[] firstTimeArray = DateUtils.getTimeList().get(0).split("-");
                         if (DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime() <= DateUtils.DF.parse(firstTimeArray[0]).getTime()) {
                             int restOfTheTime = DateUtils.getTheRestOfTheTime(firstTimeArray[0]);
                             line1 = "下节课";
@@ -265,53 +265,58 @@ public class TodayFragment extends Fragment {
                             line2 = "今天课全都上完了";
                             line3 = "(๑•̀ㅂ•́)و✧";
                         }
-                    } catch (ParseException e) {
-                        Log.e(TAG, "pasrse exception ", e);
-                    }
-                }
-            } else {
-                //两种情况:正在上课,即将上课
-                String[] timeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
-                line1 = "下节课";
-                if (DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
-                    //正在上课
-                    int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[1]);
-                    if (classSchedule.getSection() == classScheduleList.size()) {
-                        //最后一节课 正在上
-                        line1 = "";
-                        line2 = "这是最后一节课";
-                        line3 = "还有" + restOfTheTime + "分钟下课";
-                    } else {
-                        //非最后一节课,获取下节课
-                        ClassSchedule nextClassSchedule = classScheduleList.get(classSchedule.getSection());
-                        line2 = nextClassSchedule.getName();
-                        line3 = nextClassSchedule.getLocation();
-                        line4 = "还有" + restOfTheTime + "分钟下课";
                     }
                 } else {
-                    //即将上课
-                    int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[0]);
-                    line2 = classSchedule.getName();
-                    line3 = classSchedule.getLocation();
-                    line4 = "还有" + restOfTheTime + "分钟上课";
+                    //两种情况:正在上课,即将上课
+                    String[] timeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
+                    line1 = "下节课";
+                    if (DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
+                        //正在上课
+                        int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[1]);
+                        if (classSchedule.getSection() == classScheduleList.get(classScheduleList.size() - 1).getSection()) {
+                            //最后一节课 正在上
+                            line1 = "";
+                            line2 = "这是最后一节课";
+                            line3 = "还有" + restOfTheTime + "分钟下课";
+                        } else {
+                            //非最后一节课,获取下节课
+                            for (ClassSchedule c : classScheduleList) {
+                                String start = DateUtils.getTimeList().get(c.getSection() - 1).split("-")[0];
+                                if (DateUtils.DF.parse(timeArray[0]).getTime() < DateUtils.DF.parse(start).getTime()) {
+                                    line2 = c.getName();
+                                    line3 = c.getLocation();
+                                    break;
+                                }
+                            }
+                            line4 = "还有" + restOfTheTime + "分钟下课";
+                        }
+                    } else {
+                        //即将上课
+                        int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[0]);
+                        line2 = classSchedule.getName();
+                        line3 = classSchedule.getLocation();
+                        line4 = "还有" + restOfTheTime + "分钟上课";
+                    }
+                }
+            } else {
+                DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
+                if (daoSession.getClassScheduleDao().count() == 0) {
+                    line1 = "Oh! Shit!";
+                    line2 = "没有课程数据";
+                    line3 = "检查网络状态稍后再试";
+                    line4 = "(ಥ﹏ಥ)";
+                } else {
+                    line3 = "今天没有课";
+                    line4 = "ヾ(≧∇≦*)ゝ";
                 }
             }
-        } else {
-            DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
-            if (daoSession.getClassScheduleDao().count() == 0) {
-                line1 = "Oh! Shit!";
-                line2 = "没有课程数据";
-                line3 = "检查网络状态稍后再试";
-                line4 = "(ಥ﹏ಥ)";
-            } else {
-                line3 = "今天没有课";
-                line4 = "ヾ(≧∇≦*)ゝ";
-            }
+            holder.tvRemindRemind.setText(line1);
+            holder.tvRemindName.setText(line2);
+            holder.tvRemindLocation.setText(line3);
+            holder.tvRemindTime.setText(line4);
+        } catch (ParseException e) {
+            Log.e(TAG, "pasrse exception ", e);
         }
-        holder.tvRemindRemind.setText(line1);
-        holder.tvRemindName.setText(line2);
-        holder.tvRemindLocation.setText(line3);
-        holder.tvRemindTime.setText(line4);
     }
 
     /**
