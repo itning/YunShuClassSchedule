@@ -180,10 +180,16 @@ public class ClassScheduleUtils {
         return strings[0] + "@" + strings[1] + "\n" + strings[2];
     }
 
+    /**
+     * 重新将给定的课程集合排序<br/>
+     * 排序规则:当前正在上的课,课程节数
+     *
+     * @param classScheduleList 课程集合
+     * @return 已排序课程集合
+     */
     @CheckResult
     public static List<ClassSchedule> orderListBySection(List<ClassSchedule> classScheduleList) {
         int order = 1;
-
         int whichClassNow = DateUtils.getWhichClassNow();
         if (whichClassNow != -1) {
             for (int i = 0; i < classScheduleList.size(); i++) {

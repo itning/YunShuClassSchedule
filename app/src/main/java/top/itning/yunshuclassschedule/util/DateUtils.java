@@ -76,7 +76,14 @@ public class DateUtils {
 
     }
 
-    public static boolean isInDateInterval(String start, String end) {
+    /**
+     * 检查当前时间是否在给定的开始结束时间内
+     *
+     * @param start 开始时间
+     * @param end   结束时间
+     * @return 在返回true
+     */
+    private static boolean isInDateInterval(String start, String end) {
         try {
             return belongCalendar(DF.parse(DF.format(new Date())), DF.parse(start), DF.parse(end));
         } catch (ParseException e) {
