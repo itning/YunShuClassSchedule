@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,19 @@ import top.itning.yunshuclassschedule.R;
  * @author itning
  */
 public class ClassScheduleFragment extends Fragment {
+    private static final String TAG = "ClassScheduleFragment";
+
+    /**
+     * Bind View
+     */
     private View view;
+    /**
+     * 标题集合
+     */
     private List<String> titleList;
+    /**
+     * 片段集合
+     */
     private List<Fragment> fragmentList;
 
     {
@@ -60,6 +72,7 @@ public class ClassScheduleFragment extends Fragment {
             view.setTag(holder);
         }
         if (holder.vp.getAdapter() == null) {
+            Log.d(TAG, "adapter is null,now loading adapter");
             //预加载
             holder.vp.setOffscreenPageLimit(fragmentList.size());
             holder.vp.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {

@@ -27,18 +27,33 @@ import top.itning.yunshuclassschedule.ui.view.RoundBackChange;
 import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
+ * 今天课程列表适配器
+ *
  * @author itning
  */
 public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
     private static final String TAG = "TodayRecyclerAdapter";
+    /**
+     * 列表数据集合
+     */
     private List<ClassSchedule> scheduleList;
+    /**
+     * 颜色数组
+     */
     private int[] colorArray = new int[7];
+    /**
+     * {@link Context}
+     */
     private Context context;
+    /**
+     * 随机好的颜色集合
+     */
     private final ArrayList<Integer> showColorList;
 
-    public TodayRecyclerViewAdapter(@NonNull List<ClassSchedule> scheduleList, Context context) {
+    public TodayRecyclerViewAdapter(@NonNull List<ClassSchedule> scheduleList, @NonNull Context context) {
         this.context = context;
         this.scheduleList = scheduleList;
+        //数组赋值
         colorArray[0] = ContextCompat.getColor(context, R.color.class_color_1);
         colorArray[1] = ContextCompat.getColor(context, R.color.class_color_2);
         colorArray[2] = ContextCompat.getColor(context, R.color.class_color_3);
@@ -46,7 +61,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         colorArray[4] = ContextCompat.getColor(context, R.color.class_color_5);
         colorArray[5] = ContextCompat.getColor(context, R.color.class_color_6);
         colorArray[6] = ContextCompat.getColor(context, R.color.class_color_7);
-
+        //随机颜色集合构建
         Random random = new Random();
         showColorList = new ArrayList<>();
         do {
@@ -60,31 +75,33 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder");
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_class_rv, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder pos->" + position);
         ClassSchedule classSchedule = scheduleList.get(position);
         ViewHolder viewHolder = (ViewHolder) holder;
         viewHolder.tvName.setText(classSchedule.getName());
         viewHolder.tvLocation.setText(classSchedule.getLocation());
         viewHolder.tvTime.setText(DateUtils.getTimeList().get(classSchedule.getSection() - 1));
         viewHolder.round.setBackColor(colorArray[showColorList.get(position)]);
-
+        //显示设置可见性
         viewHolder.flNo.setVisibility(View.VISIBLE);
         viewHolder.viewBottom.setVisibility(View.INVISIBLE);
         viewHolder.viewTop.setVisibility(View.INVISIBLE);
         viewHolder.viewLeft.setVisibility(View.INVISIBLE);
         viewHolder.viewProgress.setVisibility(View.INVISIBLE);
         if (DateUtils.getWhichClassNow() != -1 && position == 0) {
+            //是当前正在或要上的课程
             viewHolder.flNo.setVisibility(View.INVISIBLE);
             viewHolder.viewBottom.setVisibility(View.VISIBLE);
             viewHolder.viewTop.setVisibility(View.VISIBLE);
             viewHolder.viewLeft.setVisibility(View.VISIBLE);
             viewHolder.viewProgress.setVisibility(View.VISIBLE);
-
-
+            //TODO 获取进度大小
             Display display = ((WindowManager) Objects.requireNonNull(context.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);

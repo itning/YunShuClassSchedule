@@ -21,11 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -50,8 +46,17 @@ public class TodayFragment extends Fragment {
     private static final String TAG = "TodayFragment";
 
     private View view;
+    /**
+     * 课程集合
+     */
     private List<ClassSchedule> classScheduleList;
+    /**
+     * 是否滑动到顶部
+     */
     private AtomicBoolean top;
+    /**
+     * 上次正在上的课程
+     */
     private int lastClass = DateUtils.getWhichClassNow();
 
     static class ViewHolder {
@@ -88,8 +93,8 @@ public class TodayFragment extends Fragment {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
                 //时间改变时
-                Log.e(TAG, classScheduleList.size() + "");
                 if (lastClass != DateUtils.getWhichClassNow()) {
+                    Log.d(TAG, "时间改变,需要更新课程");
                     lastClass = DateUtils.getWhichClassNow();
                     classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
                     ViewHolder holder = (ViewHolder) view.getTag();
