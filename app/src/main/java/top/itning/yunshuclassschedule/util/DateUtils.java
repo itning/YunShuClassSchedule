@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import top.itning.yunshuclassschedule.entity.ClassSchedule;
+
 /**
  * 时间工具
  *
@@ -35,10 +37,20 @@ public class DateUtils {
     /**
      * 获取上课进度
      *
-     * @param max 最大进度
+     * @param max               最大进度
+     * @param classScheduleList 课程集合
      * @return 当前进度
      */
-    public static int getNowProgress(int max) {
+    public static int getNowProgress(int max, List<ClassSchedule> classScheduleList) {
+        boolean have = false;
+        for (ClassSchedule c : classScheduleList) {
+            if (c.getSection() == getWhichClassNow() + 1) {
+                have = true;
+            }
+        }
+        if (!have) {
+            return 0;
+        }
         try {
             String[] classItemArray = TIME_LIST.get(getWhichClassNow()).split("-");
             String start = classItemArray[0];

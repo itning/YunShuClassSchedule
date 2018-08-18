@@ -63,6 +63,10 @@ public class TodayFragment extends Fragment {
      */
     private int lastClass = DateUtils.getWhichClassNow();
     private TodayRecyclerViewAdapter todayRecyclerViewAdapter;
+    private int finalIndex;
+    private boolean stop;
+    private boolean needMoved;
+    private int whichClassNow;
 
     static class ViewHolder {
         @BindView(R.id.rv)
@@ -98,32 +102,38 @@ public class TodayFragment extends Fragment {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
                 //时间改变时,更新进度
-                View viewProgress = todayRecyclerViewAdapter.getViewProgress();
-                if (viewProgress != null) {
-                    Display display = ((WindowManager) Objects.requireNonNull(Objects.requireNonNull(getContext()).getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    ViewGroup.LayoutParams layoutParams = viewProgress.getLayoutParams();
-                    layoutParams.width = DateUtils.getNowProgress(size.x);
-                    viewProgress.setLayoutParams(layoutParams);
-                }
+                setViewProgress();
                 //检查课程改变
-                if (lastClass != DateUtils.getWhichClassNow()) {
-                    Log.d(TAG, "time changed,need update class schedule");
-                    lastClass = DateUtils.getWhichClassNow();
-                    classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
-                    ViewHolder holder = (ViewHolder) view.getTag();
-                    RecyclerView.Adapter adapter = holder.rv.getAdapter();
-                    adapter.notifyDataSetChanged();
-                    if (!top.get()) {
-                        new Handler().postDelayed(() -> adapter.notifyItemMoved(0, lastClass), 1000);
-                        top.set(false);
-                    }
-                }
+                checkClassScheduleChange();
+                //设置面板
+                setPanelText((ViewHolder) view.getTag());
                 break;
             }
             default:
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onStart() {
+        stop = false;
+        if (needMoved) {
+            ViewHolder holder = (ViewHolder) view.getTag();
+            new Handler().postDelayed(() -> holder.rv.getAdapter().notifyItemMoved(0, finalIndex), 1000);
+            needMoved = false;
+        }
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        stop = true;
+        super.onStop();
     }
 
     @Nullable
@@ -137,20 +147,19 @@ public class TodayFragment extends Fragment {
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
-        DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
-        classScheduleList = ClassScheduleUtils
-                .orderListBySection(daoSession
-                        .getClassScheduleDao()
-                        .queryBuilder()
-                        .where(ClassScheduleDao.Properties.Week.eq(DateUtils.getWeek()))
-                        .list());
+        //初始化课程数据
+        initClassScheduleListData();
+        top = new AtomicBoolean(true);
+        whichClassNow = DateUtils.getWhichClassNow();
+
         //LinearLayout背景颜色
         holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
+
         //RecyclerView初始化
         holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(classScheduleList, getContext());
         holder.rv.setAdapter(todayRecyclerViewAdapter);
-        holder.rv.getAdapter().notifyDataSetChanged();
+
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小
         holder.rv.post(() -> view.post(() -> {
             int i = classScheduleList.size() == 0 ? holder.rv.getHeight() : holder.rv.getHeight() / classScheduleList.size();
@@ -159,27 +168,125 @@ public class TodayFragment extends Fragment {
             lp.height = view.getHeight() - i;
             holder.ll.setLayoutParams(lp);
         }));
+
+        //设置滑动索引
+        setFinalIndex();
         //NestedScrollView滑动监听
+        nestedScrollViewOnScrollChangeListener(holder);
+        //设置面板文字
+        setPanelText(holder);
+        return this.view;
+    }
+
+    /**
+     * 滑动监听
+     *
+     * @param holder {@link ViewHolder}
+     */
+    private void nestedScrollViewOnScrollChangeListener(ViewHolder holder) {
         RecyclerView.Adapter adapter = holder.rv.getAdapter();
-        top = new AtomicBoolean(true);
         LinearLayout.LayoutParams pp = (LinearLayout.LayoutParams) holder.rl.getLayoutParams();
         holder.nsv.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             //设置随滑动改变位置
             pp.topMargin = scrollY;
             holder.rl.setLayoutParams(pp);
-            int whichClassNow = DateUtils.getWhichClassNow();
             if (whichClassNow == -1) {
                 return;
             }
             if (scrollY <= 20 && !top.get()) {
                 top.set(true);
-                adapter.notifyItemMoved(whichClassNow, 0);
+                adapter.notifyItemMoved(finalIndex, 0);
             } else if (top.get() && scrollY == (holder.rv.getHeight() - holder.rv.getHeight() / classScheduleList.size())) {
                 top.set(false);
-                adapter.notifyItemMoved(0, whichClassNow);
+                adapter.notifyItemMoved(0, finalIndex);
             }
 
         });
-        return this.view;
+    }
+
+    /**
+     * 初始化课程数据
+     */
+    private void initClassScheduleListData() {
+        DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
+        classScheduleList = ClassScheduleUtils
+                .orderListBySection(daoSession
+                        .getClassScheduleDao()
+                        .queryBuilder()
+                        .where(ClassScheduleDao.Properties.Week.eq(DateUtils.getWeek()))
+                        .list());
+    }
+
+    /**
+     * 设置面板文字
+     *
+     * @param holder {@link ViewHolder}
+     */
+    private void setPanelText(ViewHolder holder) {
+        ClassSchedule classSchedule = classScheduleList.get(0);
+        holder.tvRemindLocation.setText(classSchedule.getLocation());
+        holder.tvRemindName.setText(classSchedule.getName());
+    }
+
+    /**
+     * 设置滑动索引
+     */
+    private void setFinalIndex() {
+        int index;
+        whichClassNow = DateUtils.getWhichClassNow();
+        if (whichClassNow != -1) {
+            a:
+            while (true) {
+                if (whichClassNow == 0) {
+                    index = 0;
+                    break;
+                }
+                for (ClassSchedule c : classScheduleList) {
+                    if (c.getSection() == whichClassNow) {
+                        index = classScheduleList.indexOf(c);
+                        break a;
+                    }
+                }
+                whichClassNow--;
+            }
+            finalIndex = index;
+        }
+    }
+
+    /**
+     * 更新进度
+     */
+    private void setViewProgress() {
+        View viewProgress = todayRecyclerViewAdapter.getViewProgress();
+        if (viewProgress != null) {
+            Display display = ((WindowManager) Objects.requireNonNull(Objects.requireNonNull(getContext()).getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            ViewGroup.LayoutParams layoutParams = viewProgress.getLayoutParams();
+            layoutParams.width = DateUtils.getNowProgress(size.x, classScheduleList);
+            viewProgress.setLayoutParams(layoutParams);
+        }
+    }
+
+    /**
+     * 检查课程改变
+     */
+    private void checkClassScheduleChange() {
+        if (lastClass != DateUtils.getWhichClassNow()) {
+            Log.d(TAG, "time changed,need update class schedule");
+            lastClass = DateUtils.getWhichClassNow();
+            classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
+            ViewHolder holder = (ViewHolder) view.getTag();
+            RecyclerView.Adapter adapter = holder.rv.getAdapter();
+            adapter.notifyDataSetChanged();
+            setFinalIndex();
+            if (!top.get() && whichClassNow != -1) {
+                if (stop) {
+                    needMoved = true;
+                }
+                new Handler().postDelayed(() -> adapter.notifyItemMoved(0, finalIndex), 1000);
+                top.set(false);
+            }
+        }
     }
 }

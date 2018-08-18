@@ -192,13 +192,21 @@ public class ClassScheduleUtils {
         int order = 1;
         int whichClassNow = DateUtils.getWhichClassNow();
         if (whichClassNow != -1) {
-            for (int i = 0; i < classScheduleList.size(); i++) {
-                if (classScheduleList.get(i).getSection() == whichClassNow + 1) {
-                    ORDER_LIST.add(classScheduleList.get(i));
+            while (true) {
+                if (ORDER_LIST.isEmpty()) {
+                    for (int i = 0; i < classScheduleList.size(); i++) {
+                        if (classScheduleList.get(i).getSection() == whichClassNow + 1) {
+                            ORDER_LIST.add(classScheduleList.get(i));
+                            break;
+                        }
+                    }
+                    whichClassNow++;
+                } else {
                     break;
                 }
             }
         }
+        whichClassNow--;
         while (true) {
             for (int i = 0; i < classScheduleList.size(); i++) {
                 int section = classScheduleList.get(i).getSection();

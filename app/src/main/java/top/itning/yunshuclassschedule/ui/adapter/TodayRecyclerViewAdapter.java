@@ -106,7 +106,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
             Point size = new Point();
             display.getSize(size);
             ViewGroup.LayoutParams layoutParams = viewHolder.viewProgress.getLayoutParams();
-            layoutParams.width = DateUtils.getNowProgress(size.x);
+            layoutParams.width = DateUtils.getNowProgress(size.x, scheduleList);
             viewHolder.viewProgress.setLayoutParams(layoutParams);
             viewProgress = viewHolder.viewProgress;
         }
