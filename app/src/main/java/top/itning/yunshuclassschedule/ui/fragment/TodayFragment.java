@@ -1,6 +1,7 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -27,7 +36,10 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
 import top.itning.yunshuclassschedule.entity.DaoSession;
+import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.adapter.TodayRecyclerViewAdapter;
+import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
+import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
  * 今天
@@ -39,6 +51,8 @@ public class TodayFragment extends Fragment {
 
     private View view;
     private List<ClassSchedule> classScheduleList;
+    private AtomicBoolean top;
+    private int lastClass = DateUtils.getWhichClassNow();
 
     static class ViewHolder {
         @BindView(R.id.rv)
@@ -63,6 +77,34 @@ public class TodayFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventEntity eventEntity) {
+        switch (eventEntity.getId()) {
+            case TIME_TICK_CHANGE: {
+                if (lastClass != DateUtils.getWhichClassNow()) {
+                    lastClass = DateUtils.getWhichClassNow();
+                    Log.e(TAG, classScheduleList.size() + "");
+                    classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
+                    ViewHolder holder = (ViewHolder) view.getTag();
+                    RecyclerView.Adapter adapter = holder.rv.getAdapter();
+                    adapter.notifyDataSetChanged();
+                    if (!top.get()) {
+                        new Handler().postDelayed(() -> adapter.notifyItemMoved(0, lastClass), 1000);
+                        top.set(false);
+                    }
+                }
+                break;
+            }
+            default:
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,15 +117,21 @@ public class TodayFragment extends Fragment {
             view.setTag(holder);
         }
         DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
-        classScheduleList = daoSession.getClassScheduleDao().queryBuilder().where(ClassScheduleDao.Properties.Week.eq("1")).list();
+        classScheduleList = ClassScheduleUtils
+                .orderListBySection(daoSession
+                        .getClassScheduleDao()
+                        .queryBuilder()
+                        .where(ClassScheduleDao.Properties.Week.eq(DateUtils.getWeek()))
+                        .list());
         //LinearLayout背景颜色
         holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
         //RecyclerView初始化
         holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
         holder.rv.setAdapter(new TodayRecyclerViewAdapter(classScheduleList, getContext()));
+        holder.rv.getAdapter().notifyDataSetChanged();
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小
         holder.rv.post(() -> view.post(() -> {
-            int i = holder.rv.getHeight() / classScheduleList.size();
+            int i = classScheduleList.size() == 0 ? holder.rv.getHeight() : holder.rv.getHeight() / classScheduleList.size();
             ViewGroup.LayoutParams lp;
             lp = holder.ll.getLayoutParams();
             lp.height = view.getHeight() - i;
@@ -91,28 +139,34 @@ public class TodayFragment extends Fragment {
         }));
         //NestedScrollView滑动监听
         RecyclerView.Adapter adapter = holder.rv.getAdapter();
-        AtomicBoolean top = new AtomicBoolean(true);
+        top = new AtomicBoolean(true);
         LinearLayout.LayoutParams pp = (LinearLayout.LayoutParams) holder.rl.getLayoutParams();
         holder.nsv.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (scrollY <= 20 && !top.get()) {
-                top.set(true);
-                adapter.notifyItemMoved(3, 0);
-            } else if (top.get() && scrollY == (holder.rv.getHeight() - holder.rv.getHeight() / classScheduleList.size())) {
-                top.set(false);
-                adapter.notifyItemMoved(0, 3);
-            }
+            //设置随滑动改变位置
             pp.topMargin = scrollY;
             holder.rl.setLayoutParams(pp);
+            int whichClassNow = DateUtils.getWhichClassNow();
+            if (whichClassNow == -1) {
+                return;
+            }
+            if (scrollY <= 20 && !top.get()) {
+                top.set(true);
+                adapter.notifyItemMoved(whichClassNow, 0);
+            } else if (top.get() && scrollY == (holder.rv.getHeight() - holder.rv.getHeight() / classScheduleList.size())) {
+                top.set(false);
+                adapter.notifyItemMoved(0, whichClassNow);
+            }
+
         });
         return this.view;
     }
 
     @Override
     public void onStart() {
-        Log.e(TAG, "onStart");
-        ViewHolder holder = (ViewHolder) view.getTag();
-        //TODO 开始计算时间
 
+        ViewHolder holder = (ViewHolder) view.getTag();
+        boolean inDateInterval = DateUtils.isInDateInterval("10:05", "11:35");
+        Log.e(TAG, "onStart-" + inDateInterval + " --" + DateUtils.getWeek());
         super.onStart();
     }
 }

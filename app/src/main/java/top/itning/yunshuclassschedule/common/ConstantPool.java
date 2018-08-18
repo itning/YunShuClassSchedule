@@ -96,7 +96,11 @@ public class ConstantPool {
         /**
          * 结束检查课程表更新(数据已更新)
          */
-        END_CHECK_CLASS_SCHEDULE_UPDATE(0x009);
+        END_CHECK_CLASS_SCHEDULE_UPDATE(0x009),
+        /**
+         * 时间改变
+         */
+        TIME_TICK_CHANGE(0x010);
 
         private int value;
 

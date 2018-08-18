@@ -6,6 +6,15 @@
     android:layout_height="60dp">
 
     <View
+        android:id="@+id/view_progress"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_toEndOf="@id/view_left"
+        android:background="@color/color_progress"
+        android:visibility="invisible" />
+
+    <View
         android:id="@+id/view_left"
         android:layout_width="6dip"
         android:layout_height="fill_parent"

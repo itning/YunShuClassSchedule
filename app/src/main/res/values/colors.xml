@@ -11,4 +11,6 @@
     <color name="class_color_5">#ef6e73ff</color>
     <color name="class_color_6">#f0ffaf49</color>
     <color name="class_color_7">#edffb7b7</color>
+
+    <color name="color_progress">#b0bbfa</color>
 </resources>

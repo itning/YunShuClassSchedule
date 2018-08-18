@@ -1,17 +1,22 @@
 package top.itning.yunshuclassschedule.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -19,16 +24,20 @@ import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.ui.view.RoundBackChange;
+import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
  * @author itning
  */
 public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
+    private static final String TAG = "TodayRecyclerAdapter";
     private List<ClassSchedule> scheduleList;
     private int[] colorArray = new int[7];
+    private Context context;
     private final ArrayList<Integer> showColorList;
 
     public TodayRecyclerViewAdapter(@NonNull List<ClassSchedule> scheduleList, Context context) {
+        this.context = context;
         this.scheduleList = scheduleList;
         colorArray[0] = ContextCompat.getColor(context, R.color.class_color_1);
         colorArray[1] = ContextCompat.getColor(context, R.color.class_color_2);
@@ -60,13 +69,28 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         ViewHolder viewHolder = (ViewHolder) holder;
         viewHolder.tvName.setText(classSchedule.getName());
         viewHolder.tvLocation.setText(classSchedule.getLocation());
-        viewHolder.tvTime.setText("09:50-12:30");
+        viewHolder.tvTime.setText(DateUtils.getTimeList().get(classSchedule.getSection() - 1));
         viewHolder.round.setBackColor(colorArray[showColorList.get(position)]);
-        if (position == 0) {
+
+        viewHolder.flNo.setVisibility(View.VISIBLE);
+        viewHolder.viewBottom.setVisibility(View.INVISIBLE);
+        viewHolder.viewTop.setVisibility(View.INVISIBLE);
+        viewHolder.viewLeft.setVisibility(View.INVISIBLE);
+        viewHolder.viewProgress.setVisibility(View.INVISIBLE);
+        if (DateUtils.getWhichClassNow() != -1 && position == 0) {
             viewHolder.flNo.setVisibility(View.INVISIBLE);
             viewHolder.viewBottom.setVisibility(View.VISIBLE);
             viewHolder.viewTop.setVisibility(View.VISIBLE);
             viewHolder.viewLeft.setVisibility(View.VISIBLE);
+            viewHolder.viewProgress.setVisibility(View.VISIBLE);
+
+
+            Display display = ((WindowManager) Objects.requireNonNull(context.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            ViewGroup.LayoutParams layoutParams = viewHolder.viewProgress.getLayoutParams();
+            layoutParams.width = size.x / 2;
+            viewHolder.viewProgress.setLayoutParams(layoutParams);
         }
     }
 
@@ -82,6 +106,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         View viewTop;
         @BindView(R.id.view_bottom)
         View viewBottom;
+        @BindView(R.id.view_progress)
+        View viewProgress;
         @BindView(R.id.round)
         RoundBackChange round;
         @BindView(R.id.fl_no)

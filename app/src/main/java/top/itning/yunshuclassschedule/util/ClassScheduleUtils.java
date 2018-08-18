@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,8 @@ public class ClassScheduleUtils {
     private ClassScheduleUtils() {
 
     }
+
+    private static final List<ClassSchedule> ORDER_LIST = new ArrayList<>();
 
     /**
      * 颜色数组
@@ -175,5 +178,37 @@ public class ClassScheduleUtils {
     private static String getText(String text) {
         String[] strings = text.split("@");
         return strings[0] + "@" + strings[1] + "\n" + strings[2];
+    }
+
+    @CheckResult
+    public static List<ClassSchedule> orderListBySection(List<ClassSchedule> classScheduleList) {
+        int order = 1;
+
+        int whichClassNow = DateUtils.getWhichClassNow();
+        if (whichClassNow != -1) {
+            for (int i = 0; i < classScheduleList.size(); i++) {
+                if (classScheduleList.get(i).getSection() == whichClassNow + 1) {
+                    ORDER_LIST.add(classScheduleList.get(i));
+                    break;
+                }
+            }
+        }
+        while (true) {
+            for (int i = 0; i < classScheduleList.size(); i++) {
+                int section = classScheduleList.get(i).getSection();
+                if (section == order && section != whichClassNow + 1) {
+                    ORDER_LIST.add(classScheduleList.get(i));
+                    break;
+                }
+            }
+            order++;
+            if (ORDER_LIST.size() == classScheduleList.size()) {
+                break;
+            }
+        }
+        classScheduleList.clear();
+        classScheduleList.addAll(ORDER_LIST);
+        ORDER_LIST.clear();
+        return classScheduleList;
     }
 }

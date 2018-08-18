@@ -39,7 +39,7 @@ public class ClassSchedule {
 
     @Generated(hash = 317900149)
     public ClassSchedule(String id, int week, int section, String name,
-            String location, String teacher) {
+                         String location, String teacher) {
         this.id = id;
         this.week = week;
         this.section = section;
@@ -98,5 +98,17 @@ public class ClassSchedule {
 
     public void setTeacher(String teacher) {
         this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassSchedule{" +
+                "id='" + id + '\'' +
+                ", week=" + week +
+                ", section=" + section +
+                ", name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", teacher='" + teacher + '\'' +
+                '}';
     }
 }

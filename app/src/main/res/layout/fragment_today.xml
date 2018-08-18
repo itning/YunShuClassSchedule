@@ -33,24 +33,24 @@
                     android:layout_above="@id/tv_remind_name"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
-                    android:text="下节课"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     app:autoSizeTextType="uniform"
-                    tools:ignore="MissingPrefix" />
+                    tools:ignore="MissingPrefix"
+                    tools:text="下节课" />
 
                 <TextView
                     android:id="@+id/tv_remind_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_above="@id/tv_remind_location"
-                    android:gravity="center"
                     android:layout_marginTop="20dp"
-                    android:text="数据库原理与应用"
+                    android:gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="30sp"
                     app:autoSizeTextType="uniform"
-                    tools:ignore="MissingPrefix" />
+                    tools:ignore="MissingPrefix"
+                    tools:text="数据库原理与应用" />
 
                 <TextView
                     android:id="@+id/tv_remind_location"
@@ -60,11 +60,11 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:text="A301"
                     android:textColor="@android:color/white"
                     android:textSize="35sp"
                     app:autoSizeTextType="uniform"
-                    tools:ignore="MissingPrefix" />
+                    tools:ignore="MissingPrefix"
+                    tools:text="A301" />
 
                 <TextView
                     android:id="@+id/tv_remind_time"
@@ -73,11 +73,11 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:text="距离上课还有14分钟"
                     android:textColor="@android:color/white"
                     android:textSize="80sp"
                     app:autoSizeTextType="uniform"
-                    tools:ignore="MissingPrefix" />
+                    tools:ignore="MissingPrefix"
+                    tools:text="距离上课还有14分钟" />
             </RelativeLayout>
 
 
