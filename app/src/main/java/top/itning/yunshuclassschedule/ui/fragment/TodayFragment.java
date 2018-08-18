@@ -1,5 +1,7 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -10,9 +12,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -58,6 +62,7 @@ public class TodayFragment extends Fragment {
      * 上次正在上的课程
      */
     private int lastClass = DateUtils.getWhichClassNow();
+    private TodayRecyclerViewAdapter todayRecyclerViewAdapter;
 
     static class ViewHolder {
         @BindView(R.id.rv)
@@ -92,7 +97,14 @@ public class TodayFragment extends Fragment {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
-                //时间改变时
+                //时间改变时,更新进度
+                Display display = ((WindowManager) Objects.requireNonNull(Objects.requireNonNull(getContext()).getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                ViewGroup.LayoutParams layoutParams = todayRecyclerViewAdapter.getViewProgress().getLayoutParams();
+                layoutParams.width = DateUtils.getNowProgress(size.x);
+                todayRecyclerViewAdapter.getViewProgress().setLayoutParams(layoutParams);
+                //检查课程改变
                 if (lastClass != DateUtils.getWhichClassNow()) {
                     Log.d(TAG, "time changed,need update class schedule");
                     lastClass = DateUtils.getWhichClassNow();
@@ -133,7 +145,8 @@ public class TodayFragment extends Fragment {
         holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
         //RecyclerView初始化
         holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        holder.rv.setAdapter(new TodayRecyclerViewAdapter(classScheduleList, getContext()));
+        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(classScheduleList, getContext());
+        holder.rv.setAdapter(todayRecyclerViewAdapter);
         holder.rv.getAdapter().notifyDataSetChanged();
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小
         holder.rv.post(() -> view.post(() -> {

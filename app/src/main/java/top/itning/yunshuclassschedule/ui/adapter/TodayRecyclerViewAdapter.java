@@ -49,6 +49,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
      * 随机好的颜色集合
      */
     private final ArrayList<Integer> showColorList;
+    private View viewProgress;
 
     public TodayRecyclerViewAdapter(@NonNull List<ClassSchedule> scheduleList, @NonNull Context context) {
         this.context = context;
@@ -101,14 +102,18 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
             viewHolder.viewTop.setVisibility(View.VISIBLE);
             viewHolder.viewLeft.setVisibility(View.VISIBLE);
             viewHolder.viewProgress.setVisibility(View.VISIBLE);
-            //TODO 获取进度大小
             Display display = ((WindowManager) Objects.requireNonNull(context.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
             ViewGroup.LayoutParams layoutParams = viewHolder.viewProgress.getLayoutParams();
-            layoutParams.width = size.x / 2;
+            layoutParams.width = DateUtils.getNowProgress(size.x);
             viewHolder.viewProgress.setLayoutParams(layoutParams);
+            viewProgress = viewHolder.viewProgress;
         }
+    }
+
+    public View getViewProgress() {
+        return viewProgress;
     }
 
     @Override

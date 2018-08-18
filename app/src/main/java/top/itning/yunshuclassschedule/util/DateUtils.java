@@ -33,9 +33,38 @@ public class DateUtils {
     }
 
     /**
+     * 获取上课进度
+     *
+     * @param max 最大进度
+     * @return 当前进度
+     */
+    public static int getNowProgress(int max) {
+        try {
+            String[] classItemArray = TIME_LIST.get(getWhichClassNow()).split("-");
+            String start = classItemArray[0];
+            String end = classItemArray[1];
+            long startTime = DF.parse(start).getTime();
+            long endTime = DF.parse(end).getTime();
+            long nowTime = DF.parse(DF.format(new Date())).getTime();
+            long totalTime = endTime - startTime;
+            if (nowTime <= startTime) {
+                return 0;
+            } else if (nowTime >= endTime) {
+                return max;
+            } else {
+                double l = (nowTime - startTime) / (double) totalTime;
+                return (int) (l * max);
+            }
+        } catch (ParseException e) {
+            Log.e(TAG, "get progress parse exception ", e);
+            return 0;
+        }
+    }
+
+    /**
      * 获取哪节课正在上,或者要上
      *
-     * @return 第几节课, 没有返回-1
+     * @return 第几节课, 没有返回-1,注意返回从0开始
      */
     public static int getWhichClassNow() {
         int i = 0;
@@ -55,6 +84,11 @@ public class DateUtils {
         return -1;
     }
 
+    /**
+     * 获取时间集合
+     *
+     * @return 集合
+     */
     public static List<String> getTimeList() {
         return TIME_LIST;
     }
