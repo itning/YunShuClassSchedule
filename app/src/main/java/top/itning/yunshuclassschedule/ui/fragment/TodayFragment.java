@@ -243,8 +243,14 @@ public class TodayFragment extends Fragment {
      */
     private void setPanelText(ViewHolder holder) {
         ClassSchedule classSchedule = classScheduleList.get(0);
-        holder.tvRemindLocation.setText(classSchedule.getLocation());
+        holder.tvRemindRemind.setText("下节课");
         holder.tvRemindName.setText(classSchedule.getName());
+        holder.tvRemindLocation.setText(classSchedule.getLocation());
+        holder.tvRemindTime.setText("离上课还有14分钟");
+
+        if (DateUtils.getWhichClassNow() == -1) {
+            //
+        }
     }
 
     /**

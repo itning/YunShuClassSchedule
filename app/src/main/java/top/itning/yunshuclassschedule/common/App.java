@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.Log;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.database.Database;
 
@@ -30,6 +32,8 @@ public class App extends Application {
         // 程序创建的时候执行
         //EventBus add Index
         EventBus.builder().addIndex(new AppActivityIndex()).installDefaultEventBus();
+        //bugly
+        CrashReport.initCrashReport(getApplicationContext(), "439037c8de", true);
 
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ConstantPool.Str.DB_NAME.get());
         Database db = helper.getWritableDb();

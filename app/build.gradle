@@ -49,6 +49,8 @@ dependencies {
     /*greenDAO*/
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.6'
+    /*bugly*/
+    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
