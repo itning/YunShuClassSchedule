@@ -80,7 +80,7 @@ public class ClassScheduleService extends Service {
                         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));
                     }
                 } else {
-                    Log.e(TAG, "检查课表错误" + response.code());
+                    Log.e(TAG, "check class schedule error " + response.code());
                     //event to commonService
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "服务器连接失败:" + response.code()));
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));
@@ -89,7 +89,7 @@ public class ClassScheduleService extends Service {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e(TAG, "检查课表错误", t);
+                Log.e(TAG, "check class schedule error ", t);
                 //event to commonService
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "服务器连接失败:" + t.toString()));
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));
@@ -117,7 +117,7 @@ public class ClassScheduleService extends Service {
                     }
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));
                 } else {
-                    Log.e(TAG, "下载课表错误:" + response.code());
+                    Log.e(TAG, "download class schedule error :" + response.code());
                     //event to commonService
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载课表错误:" + response.code()));
                     EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));
@@ -126,7 +126,7 @@ public class ClassScheduleService extends Service {
 
             @Override
             public void onFailure(@NonNull Call<List<ClassSchedule>> call, @NonNull Throwable t) {
-                Log.e(TAG, "下载课表错误", t);
+                Log.e(TAG, "download class schedule error ", t);
                 //event to commonService
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "下载课表错误:" + t.toString()));
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));

@@ -60,7 +60,7 @@ public class DownloadService extends Service {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case START_DOWNLOAD_UPDATE_APK: {
-                Log.d(TAG, "开始下载");
+                Log.d(TAG, "start download");
                 apkName = eventEntity.getData() + ".apk";
                 startDownload(eventEntity.getMsg(), apkName);
                 break;
