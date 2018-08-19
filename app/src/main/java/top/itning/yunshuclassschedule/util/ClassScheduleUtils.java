@@ -189,6 +189,9 @@ public class ClassScheduleUtils {
      */
     @CheckResult
     public static List<ClassSchedule> orderListBySection(List<ClassSchedule> classScheduleList) {
+        if (classScheduleList.isEmpty()) {
+            return classScheduleList;
+        }
         int order = 1;
         int whichClassNow = DateUtils.getWhichClassNow();
         if (whichClassNow != -1) {
