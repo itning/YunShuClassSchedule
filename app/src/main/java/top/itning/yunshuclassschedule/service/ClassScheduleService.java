@@ -65,7 +65,7 @@ public class ClassScheduleService extends Service {
      * 检查课程表数据更新
      */
     private void checkClassScheduleUpdate() {
-        HttpUtils.getRetrofit().create(CheckClassScheduleVersion.class).checkVersion(ConstantPool.Str.USER_CLASS_ID.get()).enqueue(new retrofit2.Callback<String>() {
+        HttpUtils.getRetrofit().create(CheckClassScheduleVersion.class).checkVersion(App.sharedPreferences.getString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")).enqueue(new retrofit2.Callback<String>() {
 
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -101,7 +101,7 @@ public class ClassScheduleService extends Service {
      * 下载课程表
      */
     private void downloadClassSchedule() {
-        HttpUtils.getRetrofit().create(DownloadClassSchedule.class).download(ConstantPool.Str.USER_CLASS_ID.get()).enqueue(new retrofit2.Callback<List<ClassSchedule>>() {
+        HttpUtils.getRetrofit().create(DownloadClassSchedule.class).download(App.sharedPreferences.getString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")).enqueue(new retrofit2.Callback<List<ClassSchedule>>() {
 
             @Override
             public void onResponse(@NonNull Call<List<ClassSchedule>> call, @NonNull Response<List<ClassSchedule>> response) {

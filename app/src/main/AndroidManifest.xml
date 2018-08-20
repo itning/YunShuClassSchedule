@@ -28,21 +28,18 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/AppTheme.FullScreen">
-
-        </activity>
-        <activity
-            android:name=".ui.activity.GuideActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".ui.activity.LoginActivity"
-            android:label="@string/login_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.GuideActivity"
+            android:theme="@style/AppTheme.FullScreen" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:label="@string/login_name" />
 
         <service
             android:name=".service.DownloadService"

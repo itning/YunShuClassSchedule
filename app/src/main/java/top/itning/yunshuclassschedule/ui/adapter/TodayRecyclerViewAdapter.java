@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.ui.view.RoundBackChange;
+import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
@@ -95,7 +96,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         viewHolder.viewTop.setVisibility(View.INVISIBLE);
         viewHolder.viewLeft.setVisibility(View.INVISIBLE);
         viewHolder.viewProgress.setVisibility(View.INVISIBLE);
-        if (DateUtils.getWhichClassNow() != -1 && position == 0) {
+        if (position == 0 && ClassScheduleUtils.haveClassAfterTime(scheduleList)) {
             //是当前正在或要上的课程
             viewHolder.flNo.setVisibility(View.INVISIBLE);
             viewHolder.viewBottom.setVisibility(View.VISIBLE);

@@ -211,7 +211,7 @@ public class TodayFragment extends Fragment {
             //设置随滑动改变位置
             pp.topMargin = scrollY;
             holder.rl.setLayoutParams(pp);
-            if (whichClassNow == -1) {
+            if (whichClassNow == -1 || !ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
                 return;
             }
             if (scrollY <= SLIDE_UP_THRESHOLD && !top.get()) {
@@ -254,7 +254,7 @@ public class TodayFragment extends Fragment {
                     String[] timeArray = DateUtils.getTimeList().get(lastCs.getSection() - 1).split("-");
                     if (!DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
                         //一节课没上判定
-                        String[] firstTimeArray = DateUtils.getTimeList().get(0).split("-");
+                        String[] firstTimeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
                         if (DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime() <= DateUtils.DF.parse(firstTimeArray[0]).getTime()) {
                             int restOfTheTime = DateUtils.getTheRestOfTheTime(firstTimeArray[0]);
                             line1 = "下节课";
@@ -279,10 +279,16 @@ public class TodayFragment extends Fragment {
                                 continue;
                             }
                             String start = DateUtils.getTimeList().get(c.getSection() - 1).split("-")[0];
-                            if (DateUtils.DF.parse(timeArray[0]).getTime() < DateUtils.DF.parse(start).getTime()) {
+                            if (ClassScheduleUtils.haveClassAfterTime(classScheduleList) && DateUtils.DF.parse(timeArray[0]).getTime() < DateUtils.DF.parse(start).getTime()) {
                                 line2 = c.getName();
                                 line3 = c.getLocation();
                                 line4 = "还有" + restOfTheTime + "分钟下课";
+                                break;
+                            } else {
+                                line1 = "";
+                                line2 = "今天课全都上完了";
+                                line3 = "(๑•̀ㅂ•́)و✧";
+                                line4 = "";
                                 break;
                             }
                         }
@@ -294,11 +300,18 @@ public class TodayFragment extends Fragment {
                             line3 = "还有" + restOfTheTime + "分钟下课";
                         }
                     } else {
-                        //即将上课
-                        int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[0]);
-                        line2 = classSchedule.getName();
-                        line3 = classSchedule.getLocation();
-                        line4 = "还有" + restOfTheTime + "分钟上课";
+                        if (ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
+                            //即将上课
+                            int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[0]);
+                            line2 = classSchedule.getName();
+                            line3 = classSchedule.getLocation();
+                            line4 = "还有" + restOfTheTime + "分钟上课";
+                        } else {
+                            line1 = "";
+                            line2 = "今天课全都上完了";
+                            line3 = "(๑•̀ㅂ•́)و✧";
+                            line4 = "";
+                        }
                     }
                 }
             } else {
@@ -328,7 +341,7 @@ public class TodayFragment extends Fragment {
     private void setFinalIndex() {
         int index;
         whichClassNow = DateUtils.getWhichClassNow();
-        if (whichClassNow != -1) {
+        if (whichClassNow != -1 && ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
             a:
             while (true) {
                 if (whichClassNow == 0) {
@@ -343,8 +356,11 @@ public class TodayFragment extends Fragment {
                 }
                 whichClassNow--;
             }
-            finalIndex = index;
+
+        } else {
+            index = 0;
         }
+        finalIndex = index;
     }
 
     /**

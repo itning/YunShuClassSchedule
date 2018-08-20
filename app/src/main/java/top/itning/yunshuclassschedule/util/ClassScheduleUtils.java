@@ -16,7 +16,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -181,6 +183,37 @@ public class ClassScheduleUtils {
     }
 
     /**
+     * 未来时间段内是否有课
+     *
+     * @param classScheduleList 课程列表
+     * @return 有课返回true
+     */
+    public static boolean haveClassAfterTime(List<ClassSchedule> classScheduleList) {
+        int whichClassNow = DateUtils.getWhichClassNow();
+        if (whichClassNow == -1) {
+            ClassSchedule classSchedule = classScheduleList.get(0);
+            String[] firstTimeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
+            try {
+                return DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime() <= DateUtils.DF.parse(firstTimeArray[0]).getTime();
+            } catch (ParseException e) {
+                return false;
+            }
+
+        }
+        while (true) {
+            for (ClassSchedule classSchedule : classScheduleList) {
+                if (classSchedule.getSection() == whichClassNow + 1) {
+                    return true;
+                }
+            }
+            whichClassNow++;
+            if (whichClassNow > 5) {
+                return false;
+            }
+        }
+    }
+
+    /**
      * 重新将给定的课程集合排序<br/>
      * 排序规则:当前正在上的课,课程节数
      *
@@ -189,7 +222,7 @@ public class ClassScheduleUtils {
      */
     @CheckResult
     public static List<ClassSchedule> orderListBySection(List<ClassSchedule> classScheduleList) {
-        if (classScheduleList.isEmpty()) {
+        if (classScheduleList.isEmpty() || classScheduleList.size() == 1) {
             return classScheduleList;
         }
         int order = 1;
@@ -204,6 +237,9 @@ public class ClassScheduleUtils {
                         }
                     }
                     whichClassNow++;
+                    if (whichClassNow > 5) {
+                        break;
+                    }
                 } else {
                     break;
                 }

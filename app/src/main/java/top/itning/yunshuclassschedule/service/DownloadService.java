@@ -71,11 +71,12 @@ public class DownloadService extends Service {
 
     private void startDownload(@NonNull String url, @NonNull String fileName) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"download")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "download")
                 .setContentTitle("正在下载更新文件")
                 .setContentText("连接服务器")
                 .setSmallIcon(this.getApplicationInfo().icon)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setDefaults(Notification.FLAG_ONLY_ALERT_ONCE)
                 .setProgress(100, 0, true);
         Notification notification = builder.build();
         notification.flags = Notification.FLAG_ONGOING_EVENT;

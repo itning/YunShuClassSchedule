@@ -100,7 +100,15 @@ public class ConstantPool {
         /**
          * 时间改变
          */
-        TIME_TICK_CHANGE(0x010);
+        TIME_TICK_CHANGE(0x010),
+        /**
+         * 登陆加载专业数据
+         */
+        LOGIN_LOADING_PROFESSION_DATA(0x011),
+        /**
+         * 登陆加载班级数据
+         */
+        LOGIN_LOADING_CLASS_DATA(0x012);
 
         private int value;
 
