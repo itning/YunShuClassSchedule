@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.btn_login)
     AppCompatButton btnLogin;
+    @BindView(R.id.btn_refresh)
+    AppCompatButton btnRefresh;
     @BindView(R.id.acs_profession)
     AppCompatSpinner acsProfession;
     @BindView(R.id.acs_class)
@@ -112,9 +115,11 @@ public class LoginActivity extends BaseActivity {
     private void initClassSpinner() {
         if (classEntityList.isEmpty()) {
             Toast.makeText(this, "该专业下没有班级数据", Toast.LENGTH_LONG).show();
-            btnLogin.setEnabled(false);
+            btnLogin.setVisibility(View.INVISIBLE);
+            acsClass.setVisibility(View.INVISIBLE);
         } else {
-            btnLogin.setEnabled(true);
+            btnLogin.setVisibility(View.VISIBLE);
+            acsClass.setVisibility(View.VISIBLE);
         }
         List<String> classList = new ArrayList<>();
         for (ClassEntity classEntity : classEntityList) {
@@ -131,7 +136,15 @@ public class LoginActivity extends BaseActivity {
     private void initProfessionSpinner() {
         if (professionList.isEmpty()) {
             Toast.makeText(this, "专业数据加载失败", Toast.LENGTH_LONG).show();
-            btnLogin.setEnabled(false);
+            btnLogin.setVisibility(View.INVISIBLE);
+            acsProfession.setVisibility(View.INVISIBLE);
+            acsClass.setVisibility(View.INVISIBLE);
+            btnRefresh.setVisibility(View.VISIBLE);
+        } else {
+            btnRefresh.setVisibility(View.GONE);
+            btnLogin.setVisibility(View.VISIBLE);
+            acsProfession.setVisibility(View.VISIBLE);
+            acsClass.setVisibility(View.VISIBLE);
         }
         List<String> professionNameList = new ArrayList<>();
         for (Profession profession : professionList) {
@@ -250,5 +263,13 @@ public class LoginActivity extends BaseActivity {
                 .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
                 .apply();
         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_CHECK_CLASS_SCHEDULE_UPDATE));
+    }
+
+    /**
+     * 刷新按钮
+     */
+    @OnClick(R.id.btn_refresh)
+    public void onRefreshBtnClicked() {
+        this.initData();
     }
 }
