@@ -108,7 +108,15 @@ public class ConstantPool {
         /**
          * 登陆加载班级数据
          */
-        LOGIN_LOADING_CLASS_DATA(0x012);
+        LOGIN_LOADING_CLASS_DATA(0x012),
+        /**
+         * 安装APK权限请求码
+         */
+        INSTALL_PACKAGES_REQUEST_CODE(0x013),
+        /**
+         * 设置安装位置来源
+         */
+        APP_INSTALL_UNKNOWN_APK_SETTING(0x014);
 
         private int value;
 

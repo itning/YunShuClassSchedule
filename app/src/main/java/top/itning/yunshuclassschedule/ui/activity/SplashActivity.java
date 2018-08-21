@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -30,7 +31,6 @@ import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.AppUpdate;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
-import top.itning.yunshuclassschedule.service.ClassScheduleService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
 import top.itning.yunshuclassschedule.util.NetWorkUtils;
@@ -149,6 +149,12 @@ public class SplashActivity extends BaseActivity {
      */
     @CheckResult
     private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!getPackageManager().canRequestPackageInstalls()) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, ConstantPool.Int.INSTALL_PACKAGES_REQUEST_CODE.get());
+                return false;
+            }
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -183,11 +189,33 @@ public class SplashActivity extends BaseActivity {
                         .show();
             }
         }
+        if (requestCode == ConstantPool.Int.INSTALL_PACKAGES_REQUEST_CODE.get()) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (checkPermission()) {
+                    upgradeApplication();
+                }
+            } else {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    new AlertDialog.Builder(this).setTitle("需要权限安装升级文件")
+                            .setMessage("我们需要安装权限")
+                            .setCancelable(false)
+                            .setPositiveButton("确定", (dialog, which) -> startActivityForResult(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES), ConstantPool.Int.APP_INSTALL_UNKNOWN_APK_SETTING.get()))
+                            .setNegativeButton("取消", (dialog, which) -> enterMainActivity())
+                            .show();
+                }
+            }
+
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ConstantPool.Int.APP_SETTING_REQUEST_CODE.get()) {
+            if (checkPermission()) {
+                upgradeApplication();
+            }
+        }
+        if (requestCode == ConstantPool.Int.APP_INSTALL_UNKNOWN_APK_SETTING.get()) {
             if (checkPermission()) {
                 upgradeApplication();
             }
@@ -205,6 +233,7 @@ public class SplashActivity extends BaseActivity {
                     .setCancelable(false).setPositiveButton("确定", (dialog, which) -> enterMainActivity()).show();
             return;
         }
+        //event to DownloadService
         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_DOWNLOAD_UPDATE_APK, appUpdate.getDownloadUrl(), appUpdate.getVersionCode()));
         enterMainActivity();
     }
