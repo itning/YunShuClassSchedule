@@ -1,5 +1,6 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.IdRes;
@@ -10,11 +11,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +29,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -29,6 +37,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
@@ -164,7 +173,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //菜单回调
         switch (item.getItemId()) {
             case R.id.action_set_text_size: {
-                Toast.makeText(this, "更改字体", Toast.LENGTH_LONG).show();
+                changeWeekFragmentFont();
                 return true;
             }
             case R.id.action_course_error: {
@@ -178,6 +187,47 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * 更改本周课程字体大小
+     */
+    private void changeWeekFragmentFont() {
+        Toast.makeText(this, "更改字体", Toast.LENGTH_LONG).show();
+        @SuppressLint("InflateParams")
+        View view = LayoutInflater.from(this).inflate(R.layout.setting_week_font, null);
+        TextView tvFontPreview = view.findViewById(R.id.tv_font_preview);
+        float setFont = App.sharedPreferences.getFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12);
+        tvFontPreview.setText(MessageFormat.format("字体大小:{0}", setFont));
+        tvFontPreview.setTextSize(setFont);
+        AppCompatSeekBar seekBar = view.findViewById(R.id.seekBar);
+        seekBar.setProgress((int) setFont - 10);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            private int progress;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                this.progress = progress + 10;
+                tvFontPreview.setText(MessageFormat.format("字体大小:{0}", this.progress));
+                tvFontPreview.setTextSize(this.progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                App.sharedPreferences.edit().putFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), progress).apply();
+            }
+        });
+        new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(false)
+                .setTitle("更改字体大小")
+                .setPositiveButton("确定", (dialog, which) -> EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA)))
+                .show();
     }
 
     @Override

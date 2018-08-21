@@ -35,7 +35,11 @@ public class ConstantPool {
         /**
          * 用户所在班级
          */
-        USER_CLASS_ID("user_class_id");
+        USER_CLASS_ID("user_class_id"),
+        /**
+         * 周课表文字大小
+         */
+        WEEK_FONT_SIZE("class_font_size");
 
         private String value;
 
@@ -116,7 +120,11 @@ public class ConstantPool {
         /**
          * 设置安装位置来源
          */
-        APP_INSTALL_UNKNOWN_APK_SETTING(0x014);
+        APP_INSTALL_UNKNOWN_APK_SETTING(0x014),
+        /**
+         * 刷新本周课程fragment数据
+         */
+        REFRESH_WEEK_FRAGMENT_DATA(0x015);
 
         private int value;
 

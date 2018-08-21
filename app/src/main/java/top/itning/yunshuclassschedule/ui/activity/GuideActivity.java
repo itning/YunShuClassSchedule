@@ -12,7 +12,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 
 /**
@@ -32,6 +34,16 @@ public class GuideActivity extends BaseActivity {
         setContentView(R.layout.activity_guide);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        initData();
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        App.sharedPreferences.edit()
+                .putFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12)
+                .apply();
     }
 
     @Override

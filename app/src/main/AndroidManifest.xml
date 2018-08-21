@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -25,9 +25,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,10 +39,12 @@
         </activity>
         <activity
             android:name=".ui.activity.GuideActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:label="@string/login_name" />
+            android:label="@string/login_name"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.DownloadService"

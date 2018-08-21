@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.common.App;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 
 /**
@@ -32,6 +34,9 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
  */
 @SuppressWarnings("unused")
 public class ClassScheduleUtils {
+
+    private static float weekFont;
+
     private ClassScheduleUtils() {
 
     }
@@ -61,9 +66,11 @@ public class ClassScheduleUtils {
      */
     public static void loadingView(List<ClassSchedule> classScheduleList, @NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
         initColorArray(context);
+        initFontSize();
         Display display = Objects.requireNonNull(activity).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        gridLayout.removeViews(13, gridLayout.getChildCount() - 13);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 7; j++) {
                 gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
@@ -71,7 +78,7 @@ public class ClassScheduleUtils {
         }
         if (classScheduleList != null) {
             for (ClassSchedule classSchedule : classScheduleList) {
-                gridLayout.addView(setClass(classSchedule.getName(), getColor(classSchedule.getName()), context), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
+                gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.getName()), context), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
             }
         }
     }
@@ -93,7 +100,7 @@ public class ClassScheduleUtils {
         textView.setPadding(5, 5, 5, 5);
         textView.setText(text);
         textView.setBackgroundColor(backgroundColor);
-        textView.setTextSize(12);
+        textView.setTextSize(weekFont);
         cardView.addView(textView);
         return cardView;
     }
@@ -171,18 +178,6 @@ public class ClassScheduleUtils {
     }
 
     /**
-     * 获取文字
-     *
-     * @param text 课程字符串
-     * @return 格式化课程字符串
-     */
-    @CheckResult
-    private static String getText(String text) {
-        String[] strings = text.split("@");
-        return strings[0] + "@" + strings[1] + "\n" + strings[2];
-    }
-
-    /**
      * 未来时间段内是否有课
      *
      * @param classScheduleList 课程列表
@@ -211,6 +206,18 @@ public class ClassScheduleUtils {
                 return false;
             }
         }
+    }
+
+    /**
+     * 初始化字体大小
+     */
+    private static void initFontSize() {
+        weekFont = App.sharedPreferences.getFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12);
+    }
+
+    @CheckResult
+    private static String showText(ClassSchedule classSchedule) {
+        return classSchedule.getName() + "@" + classSchedule.getLocation();
     }
 
     /**
