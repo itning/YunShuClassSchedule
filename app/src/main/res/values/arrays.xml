@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_list_default_show_main_fragment">
+        <item>今天课程</item>
+        <item>本周课程</item>
+    </string-array>
+    <string-array name="entries_values_default_show_main_fragment">
+        <item>today</item>
+        <item>week</item>
+    </string-array>
+
+    <string-array name="entries_list_class_reminder_up_time">
+        <item>上课前1分钟</item>
+        <item>上课前3分钟</item>
+        <item>上课前5分钟</item>
+        <item>上课前10分钟</item>
+    </string-array>
+    <string-array name="entries_values_class_reminder_up_time">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="entries_list_class_reminder_down_time">
+        <item>下课前1分钟</item>
+        <item>下课前5分钟</item>
+        <item>下课前10分钟</item>
+        <item>下课前30分钟</item>
+    </string-array>
+    <string-array name="entries_values_class_reminder_down_time">
+        <item>1</item>
+        <item>3</item>
+        <item>10</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="entries_list_class_schedule_update_frequency">
+        <item>每次启动应用时</item>
+        <item>每天</item>
+        <item>每周</item>
+    </string-array>
+    <string-array name="entries_values_class_schedule_update_frequency">
+        <item>each_start_app</item>
+        <item>every_day</item>
+        <item>every_week</item>
+    </string-array>
+</resources>

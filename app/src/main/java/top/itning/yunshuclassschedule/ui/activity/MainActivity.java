@@ -1,6 +1,7 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.IdRes;
@@ -242,7 +243,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             }
             case R.id.nav_settings: {
-                Toast.makeText(this, "设置", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
             }
             case R.id.nav_about: {

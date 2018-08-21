@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:gridlayout-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:preference-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     /*HTTP Client*/
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'

@@ -1,0 +1,115 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="课程设置">
+        <ListPreference
+            android:dialogTitle="选择默认展示课程页面"
+            android:entries="@array/entries_list_default_show_main_fragment"
+            android:entryValues="@array/entries_values_default_show_main_fragment"
+            android:key="default_show_main_fragment"
+            android:title="默认展示课程页面" />
+        <PreferenceScreen
+            android:key="class_reminder"
+            android:persistent="false"
+            android:summary="设置上下课提前提醒通知"
+            android:title="上下课提醒">
+            <PreferenceCategory android:title="上课提醒">
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="class_reminder_up_status"
+                    android:summaryOff="上课提醒通知已关闭"
+                    android:summaryOn="上课提醒通知已开启"
+                    android:title="上课提醒通知" />
+                <ListPreference
+                    android:dependency="class_reminder_up_status"
+                    android:dialogTitle="选择上课提醒通知发出时间"
+                    android:entries="@array/entries_list_class_reminder_up_time"
+                    android:entryValues="@array/entries_values_class_reminder_up_time"
+                    android:key="class_reminder_up_time"
+                    android:title="提醒时间设置" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="下课提醒">
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="class_reminder_down_status"
+                    android:summaryOff="下课提醒通知已关闭"
+                    android:summaryOn="下课提醒通知已开启"
+                    android:title="下课提醒通知" />
+                <ListPreference
+                    android:dependency="class_reminder_down_status"
+                    android:dialogTitle="选择下课提醒通知发出时间"
+                    android:entries="@array/entries_list_class_reminder_down_time"
+                    android:entryValues="@array/entries_values_class_reminder_down_time"
+                    android:key="class_reminder_up_time"
+                    android:title="提醒时间设置" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+        <ListPreference
+            android:dialogTitle="选择课程数据更新频率"
+            android:entries="@array/entries_list_class_schedule_update_frequency"
+            android:entryValues="@array/entries_values_class_schedule_update_frequency"
+            android:key="class_schedule_update_frequency"
+            android:title="课程数据更新频率" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="个性化设置">
+        <PreferenceScreen
+            android:key="sound_and_vibrate"
+            android:persistent="false"
+            android:summary="设置应用声音和震动"
+            android:title="声音与震动">
+            <PreferenceCategory android:title="声音">
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="sound_status"
+                    android:summaryOff="应用声音已关闭"
+                    android:summaryOn="应用声音已开启"
+                    android:title="开启声音" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="震动">
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="vibrate_status"
+                    android:summaryOff="应用震动已关闭"
+                    android:summaryOn="应用震动已开启"
+                    android:title="开启震动" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="theme_color"
+            android:persistent="false"
+            android:summary="设置应用主题"
+            android:title="主题颜色">
+            <PreferenceCategory android:title="声音">
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="sound_status"
+                    android:summaryOff="应用声音已关闭"
+                    android:summaryOn="应用声音已开启"
+                    android:title="开启声音" />
+            </PreferenceCategory>
+            <PreferenceCategory android:title="震动">
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="vibrate_status"
+                    android:summaryOff="应用震动已关闭"
+                    android:summaryOn="应用震动已开启"
+                    android:title="开启震动" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="其它">
+        <Preference android:title="权限说明">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.baidu.com" />
+        </Preference>
+        <Preference android:title="反馈建议">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.baidu.com" />
+        </Preference>
+        <Preference android:title="关于">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.baidu.com" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>
