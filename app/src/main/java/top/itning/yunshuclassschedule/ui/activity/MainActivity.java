@@ -193,7 +193,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * 更改本周课程字体大小
      */
     private void changeWeekFragmentFont() {
-        Toast.makeText(this, "更改字体", Toast.LENGTH_LONG).show();
         @SuppressLint("InflateParams")
         View view = LayoutInflater.from(this).inflate(R.layout.setting_week_font, null);
         TextView tvFontPreview = view.findViewById(R.id.tv_font_preview);
@@ -224,9 +223,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
         new AlertDialog.Builder(this)
                 .setView(view)
-                .setCancelable(false)
                 .setTitle("更改字体大小")
-                .setPositiveButton("确定", (dialog, which) -> EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA)))
+                .setPositiveButton("确定", null)
+                .setOnDismissListener(dialog -> EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA)))
                 .show();
     }
 
