@@ -25,6 +25,7 @@ import top.itning.yunshuclassschedule.receiver.TimeTickReceiver;
  */
 public class CommonService extends Service {
     private static final String TAG = "CommonService";
+    private TimeTickReceiver timeTickReceiver;
 
     @Override
     public void onCreate() {
@@ -35,7 +36,8 @@ public class CommonService extends Service {
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         //设置了系统时间
         filter.addAction(Intent.ACTION_TIME_CHANGED);
-        registerReceiver(new TimeTickReceiver(), filter);
+        timeTickReceiver = new TimeTickReceiver();
+        registerReceiver(timeTickReceiver, filter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "download";
@@ -53,6 +55,7 @@ public class CommonService extends Service {
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        unregisterReceiver(timeTickReceiver);
     }
 
     @Override
