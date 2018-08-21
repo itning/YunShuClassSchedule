@@ -40,7 +40,7 @@ public class CommonService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "download";
             String channelName = "下载通知";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW;
             createNotificationChannel(channelId, channelName, importance);
 
             channelId = "class";
