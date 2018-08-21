@@ -322,8 +322,8 @@ public class TodayFragment extends Fragment {
                     line3 = "检查网络状态稍后再试";
                     line4 = "(ಥ﹏ಥ)";
                 } else {
-                    line3 = "今天没有课";
-                    line4 = "ヾ(≧∇≦*)ゝ";
+                    line2 = "今天没有课";
+                    line3 = "ヾ(≧∇≦*)ゝ";
                 }
             }
             holder.tvRemindRemind.setText(line1);
