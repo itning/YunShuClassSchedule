@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,6 +96,11 @@ public class ClassScheduleFragment extends Fragment {
                 }
             });
             holder.tl.setupWithViewPager(holder.vp);
+            //设置默认展示页面
+            if (!"today".equals(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("default_show_main_fragment", "today"))) {
+                holder.vp.setCurrentItem(1);
+                Objects.requireNonNull(holder.tl.getTabAt(1)).select();
+            }
         }
         return view;
     }

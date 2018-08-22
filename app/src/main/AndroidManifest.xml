@@ -61,6 +61,10 @@
             android:name=".service.ClassScheduleService"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".service.ClassReminderService"
+            android:enabled="true"
+            android:exported="false" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

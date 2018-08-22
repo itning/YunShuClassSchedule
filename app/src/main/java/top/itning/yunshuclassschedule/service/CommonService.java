@@ -45,7 +45,7 @@ public class CommonService extends Service {
             int importance = NotificationManager.IMPORTANCE_LOW;
             createNotificationChannel(channelId, channelName, importance);
 
-            channelId = "class";
+            channelId = "class_reminder";
             channelName = "课程提醒";
             importance = NotificationManager.IMPORTANCE_HIGH;
             createNotificationChannel(channelId, channelName, importance);

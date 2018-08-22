@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.service.ClassReminderService;
 import top.itning.yunshuclassschedule.service.ClassScheduleService;
 import top.itning.yunshuclassschedule.service.CommonService;
 import top.itning.yunshuclassschedule.service.DownloadService;
@@ -26,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         startService(new Intent(this, CommonService.class));
         startService(new Intent(this, ClassScheduleService.class));
         startService(new Intent(this, DownloadService.class));
+        startService(new Intent(this, ClassReminderService.class));
     }
 
     /**
