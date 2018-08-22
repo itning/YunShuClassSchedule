@@ -1,6 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="课程设置">
         <ListPreference
+            android:defaultValue="today"
             android:dialogTitle="选择默认展示课程页面"
             android:entries="@array/entries_list_default_show_main_fragment"
             android:entryValues="@array/entries_values_default_show_main_fragment"
@@ -19,6 +20,7 @@
                     android:summaryOn="上课提醒通知已开启"
                     android:title="上课提醒通知" />
                 <ListPreference
+                    android:defaultValue="3"
                     android:dependency="class_reminder_up_status"
                     android:dialogTitle="选择上课提醒通知发出时间"
                     android:entries="@array/entries_list_class_reminder_up_time"
@@ -34,11 +36,12 @@
                     android:summaryOn="下课提醒通知已开启"
                     android:title="下课提醒通知" />
                 <ListPreference
+                    android:defaultValue="1"
                     android:dependency="class_reminder_down_status"
                     android:dialogTitle="选择下课提醒通知发出时间"
                     android:entries="@array/entries_list_class_reminder_down_time"
                     android:entryValues="@array/entries_values_class_reminder_down_time"
-                    android:key="class_reminder_up_time"
+                    android:key="class_reminder_down_time"
                     android:title="提醒时间设置" />
             </PreferenceCategory>
         </PreferenceScreen>
@@ -55,6 +58,7 @@
                     android:summaryOn="上课手机自动静音已开启"
                     android:title="上课手机自动静音" />
                 <ListPreference
+                    android:defaultValue="0"
                     android:dependency="phone_mute_status"
                     android:dialogTitle="选择上课开启静音时间"
                     android:entries="@array/entries_list_phone_mute_before_time"
@@ -62,15 +66,17 @@
                     android:key="phone_mute_before_time"
                     android:title="上课前静音时间设置" />
                 <ListPreference
+                    android:defaultValue="0"
                     android:dependency="phone_mute_status"
                     android:dialogTitle="选择下课解除静音时间"
                     android:entries="@array/entries_list_phone_mute_after_time"
                     android:entryValues="@array/entries_values_phone_mute_after_time"
                     android:key="phone_mute_after_time"
-                    android:title="下课前静音时间设置" />
+                    android:title="下课前解除静音时间设置" />
             </PreferenceCategory>
         </PreferenceScreen>
         <ListPreference
+            android:defaultValue="each_start_app"
             android:dialogTitle="选择课程数据更新频率"
             android:entries="@array/entries_list_class_schedule_update_frequency"
             android:entryValues="@array/entries_values_class_schedule_update_frequency"

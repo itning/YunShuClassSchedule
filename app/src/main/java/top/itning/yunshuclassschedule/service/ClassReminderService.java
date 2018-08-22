@@ -26,6 +26,8 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 public class ClassReminderService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ClassReminderService";
+    public static final String CLASS_REMINDER_UP_STATUS = "class_reminder_up_status";
+    public static final String CLASS_REMINDER_DOWN_STATUS = "class_reminder_down_status";
     private SharedPreferences defaultSharedPreferences;
     private boolean classReminderDownStatus;
     private boolean classReminderUpStatus;
@@ -76,8 +78,8 @@ public class ClassReminderService extends Service implements SharedPreferences.O
      */
     private void start() {
         Log.d(TAG, "run thread name:" + Thread.currentThread().getName());
-        classReminderUpStatus = defaultSharedPreferences.getBoolean("class_reminder_up_status", true);
-        classReminderDownStatus = defaultSharedPreferences.getBoolean("class_reminder_down_status", true);
+        classReminderUpStatus = defaultSharedPreferences.getBoolean(CLASS_REMINDER_UP_STATUS, true);
+        classReminderDownStatus = defaultSharedPreferences.getBoolean(CLASS_REMINDER_DOWN_STATUS, true);
     }
 
     /**
@@ -130,6 +132,11 @@ public class ClassReminderService extends Service implements SharedPreferences.O
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+        if (CLASS_REMINDER_UP_STATUS.equals(key)) {
+            classReminderUpStatus = sharedPreferences.getBoolean(key, true);
+        }
+        if (CLASS_REMINDER_DOWN_STATUS.equals(key)) {
+            classReminderDownStatus = sharedPreferences.getBoolean(key, true);
+        }
     }
 }
