@@ -39,7 +39,11 @@ public class ConstantPool {
         /**
          * 周课表文字大小
          */
-        WEEK_FONT_SIZE("class_font_size");
+        WEEK_FONT_SIZE("class_font_size"),
+        /**
+         * 上一次的日期
+         */
+        LAST_DATE("last-date");
 
         private String value;
 

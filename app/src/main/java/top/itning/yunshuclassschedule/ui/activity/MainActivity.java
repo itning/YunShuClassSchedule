@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.CheckResult;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -32,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -108,6 +110,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .beginTransaction()
                 .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
                 .commit();
+        App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), Calendar.getInstance().get(Calendar.DATE)).apply();
     }
 
     /**
@@ -130,6 +133,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 EventBus.getDefault().removeStickyEvent(eventEntity);
                 ApkInstallUtils.installApk(new File(Environment.getExternalStorageDirectory(), eventEntity.getMsg()), this, true, true);
                 break;
+            }
+            case TIME_TICK_CHANGE: {
+                if (needRefresh()) {
+                    fragmentSparseArray.remove(R.id.nav_class_schedule);
+                    fragmentSparseArray.put(R.id.nav_class_schedule, new ClassScheduleFragment());
+                    if (supportFragmentManager.findFragmentById(R.id.frame_container) instanceof ClassScheduleFragment) {
+                        supportFragmentManager
+                                .beginTransaction()
+                                .replace(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
+                                .commitAllowingStateLoss();
+                    }
+                }
             }
             default:
         }
@@ -271,5 +286,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     .replace(R.id.frame_container, fragment)
                     .commit();
         }
+    }
+
+    /**
+     * 是否需要重新加载数据<br/>
+     * 新的一天需要重新加载数据
+     *
+     * @return 需要返回true
+     */
+    @CheckResult
+    private boolean needRefresh() {
+        int last = App.sharedPreferences.getInt(ConstantPool.Str.LAST_DATE.get(), 0);
+        int i = Calendar.getInstance().get(Calendar.DATE);
+        App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), i).apply();
+        Log.d(TAG, "need refresh : " + (last != i));
+        return last != i;
     }
 }

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
@@ -77,7 +77,7 @@ public class ClassScheduleFragment extends Fragment {
             Log.d(TAG, "adapter is null,now loading adapter");
             //预加载
             holder.vp.setOffscreenPageLimit(fragmentList.size());
-            holder.vp.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
+            holder.vp.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
 
                 @Override
                 public int getCount() {
