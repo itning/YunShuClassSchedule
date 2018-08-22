@@ -17,8 +17,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
-import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
  * 上下课提醒通知
@@ -42,6 +40,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "Class Reminder Service On Destroy");
         EventBus.getDefault().unregister(this);
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -60,8 +59,12 @@ public class ClassReminderService extends Service implements SharedPreferences.O
                 start();
                 break;
             }
-            case TIME_TICK_CHANGE: {
-                timeChange();
+            case CLASS_UP_TIME_CHANGE: {
+                timeUpChange(Integer.parseInt(eventEntity.getMsg()));
+                break;
+            }
+            case CLASS_DOWN_TIME_CHANGE: {
+                timeDownChange(Integer.parseInt(eventEntity.getMsg()));
                 break;
             }
             default:
@@ -75,20 +78,42 @@ public class ClassReminderService extends Service implements SharedPreferences.O
         Log.d(TAG, "run thread name:" + Thread.currentThread().getName());
         classReminderUpStatus = defaultSharedPreferences.getBoolean("class_reminder_up_status", true);
         classReminderDownStatus = defaultSharedPreferences.getBoolean("class_reminder_down_status", true);
-        sendNotification("测试标题", "测试内容");
     }
 
-    public void timeChange() {
+    /**
+     * 离上课分钟改变
+     *
+     * @param time 离上课分钟
+     */
+    private void timeUpChange(int time) {
         if (classReminderUpStatus) {
-            //开启了上课提醒通知
             int classReminderUpTime = Integer.parseInt(defaultSharedPreferences.getString("class_reminder_up_time", "1"));
-
-        }
-        if (classReminderDownStatus) {
-            //开启了下课提醒通知
+            if (classReminderUpTime == time) {
+                sendNotification("上课提醒", "离上课还有" + classReminderUpTime + "分钟");
+            }
         }
     }
 
+    /**
+     * 离下课分钟改变
+     *
+     * @param time 离下课分钟
+     */
+    private void timeDownChange(int time) {
+        if (classReminderDownStatus) {
+            int classReminderDownTime = Integer.parseInt(defaultSharedPreferences.getString("class_reminder_down_time", "1"));
+            if (classReminderDownTime == time) {
+                sendNotification("下课提醒", "离下课还有" + classReminderDownTime + "分钟");
+            }
+        }
+    }
+
+    /**
+     * 发送通知
+     *
+     * @param contentTitle 标题
+     * @param contentText  内容
+     */
     private void sendNotification(String contentTitle, String contentText) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")

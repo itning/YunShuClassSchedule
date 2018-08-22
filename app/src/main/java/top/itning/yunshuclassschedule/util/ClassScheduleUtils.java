@@ -184,6 +184,9 @@ public class ClassScheduleUtils {
      * @return 有课返回true
      */
     public static boolean haveClassAfterTime(List<ClassSchedule> classScheduleList) {
+        if (classScheduleList.isEmpty()) {
+            return false;
+        }
         int whichClassNow = DateUtils.getWhichClassNow();
         if (whichClassNow == -1) {
             ClassSchedule classSchedule = classScheduleList.get(0);
@@ -215,6 +218,12 @@ public class ClassScheduleUtils {
         weekFont = App.sharedPreferences.getFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12);
     }
 
+    /**
+     * 格式化展示在TextView的文字
+     *
+     * @param classSchedule {@link ClassSchedule}
+     * @return 格式化完的文字
+     */
     @CheckResult
     private static String showText(ClassSchedule classSchedule) {
         return classSchedule.getName() + "@" + classSchedule.getLocation();

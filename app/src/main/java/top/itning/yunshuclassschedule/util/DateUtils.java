@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import top.itning.yunshuclassschedule.common.App;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 
 /**
@@ -44,6 +46,10 @@ public class DateUtils {
      */
     @CheckResult
     public static int getNowProgress(int max, List<ClassSchedule> classScheduleList) {
+        int whichClassNow = getWhichClassNow();
+        if (whichClassNow == -1) {
+            return 0;
+        }
         boolean have = false;
         for (ClassSchedule c : classScheduleList) {
             if (c.getSection() == getWhichClassNow() + 1) {
@@ -54,7 +60,7 @@ public class DateUtils {
             return 0;
         }
         try {
-            String[] classItemArray = TIME_LIST.get(getWhichClassNow()).split("-");
+            String[] classItemArray = TIME_LIST.get(whichClassNow).split("-");
             String start = classItemArray[0];
             String end = classItemArray[1];
             long startTime = DF.parse(start).getTime();
@@ -125,6 +131,21 @@ public class DateUtils {
             return CAL.get(Calendar.DAY_OF_WEEK) - 1;
         }
 
+    }
+
+    /**
+     * 是否需要重新加载数据<br/>
+     * 新的一天需要重新加载数据
+     *
+     * @return 需要返回true
+     */
+    @CheckResult
+    public static boolean isNewDay() {
+        int last = App.sharedPreferences.getInt(ConstantPool.Str.LAST_DATE.get(), 0);
+        int i = Calendar.getInstance().get(Calendar.DATE);
+        App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), i).apply();
+        Log.d(TAG, "need refresh : " + (last != i));
+        return last != i;
     }
 
     /**
