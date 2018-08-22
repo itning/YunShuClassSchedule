@@ -15,7 +15,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 
 /**
@@ -37,7 +36,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
         EventBus.getDefault().register(this);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_CLASS_REMINDER_WORK));
+        start();
     }
 
     @Override
@@ -57,10 +56,6 @@ public class ClassReminderService extends Service implements SharedPreferences.O
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
-            case START_CLASS_REMINDER_WORK: {
-                start();
-                break;
-            }
             case CLASS_UP_TIME_CHANGE: {
                 timeUpChange(Integer.parseInt(eventEntity.getMsg()));
                 break;

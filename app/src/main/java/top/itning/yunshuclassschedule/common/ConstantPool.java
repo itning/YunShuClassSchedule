@@ -130,17 +130,13 @@ public class ConstantPool {
          */
         REFRESH_WEEK_FRAGMENT_DATA(0x015),
         /**
-         * 开始上下课提醒工作
-         */
-        START_CLASS_REMINDER_WORK(0x016),
-        /**
          * 离上课时间改变
          */
-        CLASS_UP_TIME_CHANGE(0x017),
+        CLASS_UP_TIME_CHANGE(0x016),
         /**
          * 离下课时间改变
          */
-        CLASS_DOWN_TIME_CHANGE(0x018);
+        CLASS_DOWN_TIME_CHANGE(0x017);
 
 
         private int value;

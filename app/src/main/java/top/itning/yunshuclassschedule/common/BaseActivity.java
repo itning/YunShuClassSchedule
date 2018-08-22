@@ -11,6 +11,7 @@ import top.itning.yunshuclassschedule.service.ClassReminderService;
 import top.itning.yunshuclassschedule.service.ClassScheduleService;
 import top.itning.yunshuclassschedule.service.CommonService;
 import top.itning.yunshuclassschedule.service.DownloadService;
+import top.itning.yunshuclassschedule.service.PhoneMuteService;
 
 /**
  * Base App Activity
@@ -28,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         startService(new Intent(this, ClassScheduleService.class));
         startService(new Intent(this, DownloadService.class));
         startService(new Intent(this, ClassReminderService.class));
+        startService(new Intent(this, PhoneMuteService.class));
     }
 
     /**

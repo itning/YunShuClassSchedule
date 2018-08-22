@@ -52,7 +52,7 @@
             android:title="手机自动静音">
             <PreferenceCategory android:title="手机自动静音">
                 <SwitchPreference
-                    android:defaultValue="true"
+                    android:defaultValue="false"
                     android:key="phone_mute_status"
                     android:summaryOff="上课手机自动静音已关闭"
                     android:summaryOn="上课手机自动静音已开启"
