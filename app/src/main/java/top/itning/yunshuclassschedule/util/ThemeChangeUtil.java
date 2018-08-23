@@ -2,9 +2,11 @@ package top.itning.yunshuclassschedule.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import top.itning.yunshuclassschedule.R;
@@ -16,6 +18,12 @@ import top.itning.yunshuclassschedule.R;
  */
 public class ThemeChangeUtil {
     public static boolean isChange = false;
+
+    public synchronized static void changeNightMode(@NonNull AppCompatActivity activity) {
+        ThemeChangeUtil.isChange = !ThemeChangeUtil.isChange;
+        activity.startActivity(new Intent(activity, activity.getClass()));
+        activity.finish();
+    }
 
     public static void changeTheme(@NonNull Activity activity) {
         if (isChange) {

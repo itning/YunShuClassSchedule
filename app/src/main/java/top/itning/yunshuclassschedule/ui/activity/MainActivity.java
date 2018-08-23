@@ -268,13 +268,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             }
             case R.id.nav_day_night: {
-                if (ThemeChangeUtil.isChange) {
-                    ThemeChangeUtil.isChange = false;
-                } else {
-                    ThemeChangeUtil.isChange = true;
-                }
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                ThemeChangeUtil.changeNightMode(this);
                 return true;
             }
             default:
