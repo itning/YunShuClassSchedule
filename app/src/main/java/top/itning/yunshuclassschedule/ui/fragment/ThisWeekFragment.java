@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +48,7 @@ public class ThisWeekFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "on Create View");
         ViewHolder holder;
         if (view != null) {
             holder = (ViewHolder) view.getTag();
@@ -56,9 +57,9 @@ public class ThisWeekFragment extends Fragment {
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
-        DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
+        DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
         List<ClassSchedule> classScheduleList = daoSession.getClassScheduleDao().loadAll();
-        ClassScheduleUtils.loadingView(classScheduleList, holder.scheduleGridlayout, Objects.requireNonNull(getContext()), Objects.requireNonNull(getActivity()));
+        ClassScheduleUtils.loadingView(classScheduleList, holder.scheduleGridlayout, requireContext(), requireActivity());
         return view;
     }
 
@@ -70,6 +71,7 @@ public class ThisWeekFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "on Destroy");
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -78,9 +80,9 @@ public class ThisWeekFragment extends Fragment {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case REFRESH_WEEK_FRAGMENT_DATA: {
-                DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
+                DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
                 List<ClassSchedule> classScheduleList = daoSession.getClassScheduleDao().loadAll();
-                ClassScheduleUtils.loadingView(classScheduleList, ((ViewHolder) view.getTag()).scheduleGridlayout, Objects.requireNonNull(getContext()), Objects.requireNonNull(getActivity()));
+                ClassScheduleUtils.loadingView(classScheduleList, ((ViewHolder) view.getTag()).scheduleGridlayout, requireContext(), requireActivity());
                 break;
             }
             default:

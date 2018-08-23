@@ -20,7 +20,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
@@ -67,7 +66,7 @@ public class ClassScheduleUtils {
     public static void loadingView(List<ClassSchedule> classScheduleList, @NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
         initColorArray(context);
         initFontSize();
-        Display display = Objects.requireNonNull(activity).getWindowManager().getDefaultDisplay();
+        Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         gridLayout.removeViews(13, gridLayout.getChildCount() - 13);
