@@ -1,6 +1,7 @@
 package top.itning.yunshuclassschedule.service;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -9,6 +10,8 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,6 +32,7 @@ public class CommonService extends Service {
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -40,6 +44,7 @@ public class CommonService extends Service {
         registerReceiver(timeTickReceiver, filter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "Build.VERSION.SDK_INT :" + Build.VERSION.SDK_INT + " now create Notification Channel");
             String channelId = "download";
             String channelName = "下载通知";
             int importance = NotificationManager.IMPORTANCE_LOW;
@@ -53,9 +58,25 @@ public class CommonService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")
+                .setContentTitle("应用")
+                .setContentText("运行中")
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
+                .setSmallIcon(this.getApplicationInfo().icon)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+        Notification notification = builder.build();
+        // 开始前台服务
+        startForeground(110, notification);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         unregisterReceiver(timeTickReceiver);
+        stopForeground(true);
     }
 
     @Override
@@ -84,6 +105,7 @@ public class CommonService extends Service {
      */
     @TargetApi(Build.VERSION_CODES.O)
     private void createNotificationChannel(@NonNull String channelId, @NonNull String channelName, int importance) {
+        Log.d(TAG, "created Notification Channel id:" + channelId + " name:" + channelName + " importance:" + importance);
         NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         assert notificationManager != null;

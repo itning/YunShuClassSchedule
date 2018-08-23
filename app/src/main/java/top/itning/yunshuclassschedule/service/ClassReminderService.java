@@ -33,6 +33,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -83,6 +84,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
      * @param time 离上课分钟
      */
     private void timeUpChange(int time) {
+        Log.d(TAG, "Leaving class up have " + time + " minute");
         if (classReminderUpStatus) {
             int classReminderUpTime = Integer.parseInt(defaultSharedPreferences.getString("class_reminder_up_time", "1"));
             if (classReminderUpTime == time) {
@@ -97,6 +99,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
      * @param time 离下课分钟
      */
     private void timeDownChange(int time) {
+        Log.d(TAG, "Leaving class down have " + time + " minute");
         if (classReminderDownStatus) {
             int classReminderDownTime = Integer.parseInt(defaultSharedPreferences.getString("class_reminder_down_time", "1"));
             if (classReminderDownTime == time) {
@@ -112,6 +115,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
      * @param contentText  内容
      */
     private void sendNotification(String contentTitle, String contentText) {
+        Log.d(TAG, "now send notification");
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")
                 .setContentTitle(contentTitle)
@@ -127,6 +131,7 @@ public class ClassReminderService extends Service implements SharedPreferences.O
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(TAG, "Shared Preference Changed Key Is " + key);
         if (CLASS_REMINDER_UP_STATUS.equals(key)) {
             classReminderUpStatus = sharedPreferences.getBoolean(key, true);
         }

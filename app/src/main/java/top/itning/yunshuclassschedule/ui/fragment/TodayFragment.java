@@ -123,6 +123,7 @@ public class TodayFragment extends Fragment {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
+                Log.d(TAG, "Time changed event already received");
                 //时间改变时,更新进度
                 setViewProgress();
                 //检查课程改变
@@ -398,7 +399,7 @@ public class TodayFragment extends Fragment {
      */
     private void checkClassScheduleChange() {
         if (lastClass != DateUtils.getWhichClassNow()) {
-            Log.d(TAG, "time changed,need update class schedule");
+            Log.d(TAG, "time changed ,need update class schedule");
             lastClass = DateUtils.getWhichClassNow();
             classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList);
             ViewHolder holder = (ViewHolder) view.getTag();

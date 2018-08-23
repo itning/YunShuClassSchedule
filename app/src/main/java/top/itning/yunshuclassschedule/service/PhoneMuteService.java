@@ -41,6 +41,7 @@ public class PhoneMuteService extends Service implements SharedPreferences.OnSha
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -91,6 +92,8 @@ public class PhoneMuteService extends Service implements SharedPreferences.OnSha
      * @param i 分钟
      */
     private void timeDownChange(int i) {
+        Log.d(TAG, "Leaving class down have " + i + " minute");
+        Log.d(TAG, "currentVolume:" + currentVolume);
         if (currentVolume == 0) {
             return;
         }
@@ -100,9 +103,11 @@ public class PhoneMuteService extends Service implements SharedPreferences.OnSha
                 handler.removeCallbacks(runnable);
                 index = currentVolume;
                 handler.postDelayed(runnable, 60000);
+                Log.d(TAG, "post delayed 1 minute turn volume to " + index);
                 return;
             }
             if (phoneMuteBeforeTime == i) {
+                Log.d(TAG, "turn volume to " + currentVolume);
                 changeVolume(currentVolume);
             }
         }
@@ -114,17 +119,21 @@ public class PhoneMuteService extends Service implements SharedPreferences.OnSha
      * @param i 分钟
      */
     private void timeUpChange(int i) {
+        Log.d(TAG, "Leaving class up have " + i + " minute");
         if (phoneMuteStatus) {
             int phoneMuteAfterTime = Integer.parseInt(defaultSharedPreferences.getString("phone_mute_after_time", "0"));
             //当前音量
             currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            Log.d(TAG, "get current volume:" + currentVolume);
             if (phoneMuteAfterTime == 0 && i == 1) {
                 handler.removeCallbacks(runnable);
                 index = 0;
                 handler.postDelayed(runnable, 60000);
+                Log.d(TAG, "post delayed 1 minute turn volume to 0");
                 return;
             }
             if (phoneMuteAfterTime == i) {
+                Log.d(TAG, "turn volume to 0");
                 audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, AudioManager.FLAG_SHOW_UI);
             }
         }
