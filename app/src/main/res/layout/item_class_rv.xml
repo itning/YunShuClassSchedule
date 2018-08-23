@@ -47,6 +47,7 @@
         android:layout_toEndOf="@id/view_left">
 
         <View
+            android:id="@+id/view_center"
             android:layout_width="1dip"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"

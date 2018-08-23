@@ -47,6 +47,7 @@ import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 主活动
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -264,6 +266,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_about: {
                 Toast.makeText(this, "关于", Toast.LENGTH_LONG).show();
                 break;
+            }
+            case R.id.nav_day_night: {
+                if (ThemeChangeUtil.isChange) {
+                    ThemeChangeUtil.isChange = false;
+                } else {
+                    ThemeChangeUtil.isChange = true;
+                }
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                return true;
             }
             default:
         }

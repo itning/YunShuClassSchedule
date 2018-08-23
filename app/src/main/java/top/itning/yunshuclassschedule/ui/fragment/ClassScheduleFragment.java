@@ -20,6 +20,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 课程表
@@ -28,6 +29,8 @@ import top.itning.yunshuclassschedule.R;
  */
 public class ClassScheduleFragment extends Fragment {
     private static final String TAG = "ClassScheduleFragment";
+    public static final String TODAY = "today";
+    public static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
 
     /**
      * Bind View
@@ -73,6 +76,7 @@ public class ClassScheduleFragment extends Fragment {
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
+        ThemeChangeUtil.setTabLayoutColor(requireContext(), holder.tl);
         if (holder.vp.getAdapter() == null) {
             Log.d(TAG, "adapter is null,now loading adapter");
             //预加载
@@ -97,7 +101,7 @@ public class ClassScheduleFragment extends Fragment {
             });
             holder.tl.setupWithViewPager(holder.vp);
             //设置默认展示页面
-            if (!"today".equals(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("default_show_main_fragment", "today"))) {
+            if (!TODAY.equals(PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY))) {
                 holder.vp.setCurrentItem(1);
                 Objects.requireNonNull(holder.tl.getTabAt(1)).select();
             }

@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="nightThemeColorPrimary">#ff212121</color>
+    <color name="nightThemeColorPrimaryDark">#ff000000</color>
+    <color name="nightThemeColorAccent">#ff80cbc4</color>
+
     <color name="class_color_1">#f1ff4949</color>
     <color name="class_color_2">#f0ff6e6e</color>
     <color name="class_color_3">#f0c992ff</color>
@@ -13,4 +17,5 @@
     <color name="class_color_7">#edffb7b7</color>
 
     <color name="color_progress">#b0bbfa</color>
+    <color name="color_progress_night">#f53e3e3e</color>
 </resources>

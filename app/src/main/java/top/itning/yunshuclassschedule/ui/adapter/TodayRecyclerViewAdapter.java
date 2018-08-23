@@ -26,6 +26,7 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.ui.view.RoundBackChange;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 今天课程列表适配器
@@ -96,6 +97,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         viewHolder.viewTop.setVisibility(View.INVISIBLE);
         viewHolder.viewLeft.setVisibility(View.INVISIBLE);
         viewHolder.viewProgress.setVisibility(View.INVISIBLE);
+        ThemeChangeUtil.setProgressBackgroundResource(viewHolder.viewProgress);
+        ThemeChangeUtil.setBackgroundResources(viewHolder.viewBottom,viewHolder.viewTop,viewHolder.viewLeft,viewHolder.viewCenter);
         if (position == 0 && ClassScheduleUtils.haveClassAfterTime(scheduleList)) {
             //是当前正在或要上的课程
             viewHolder.flNo.setVisibility(View.INVISIBLE);
@@ -129,6 +132,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         View viewTop;
         @BindView(R.id.view_bottom)
         View viewBottom;
+        @BindView(R.id.view_center)
+        View viewCenter;
         @BindView(R.id.view_progress)
         View viewProgress;
         @BindView(R.id.round)

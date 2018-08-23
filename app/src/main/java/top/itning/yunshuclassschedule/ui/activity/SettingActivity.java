@@ -3,11 +3,9 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
-import android.util.Log;
 import android.view.MenuItem;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,6 +17,7 @@ import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 设置Activity
@@ -32,6 +31,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeChangeUtil.changeSettingTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);

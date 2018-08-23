@@ -6,11 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_class_schedule"
-            android:icon="@android:drawable/ic_menu_today"
+            android:icon="@drawable/baseline_today_24"
             android:title="课程表" />
         <item
             android:id="@+id/nav_check_score"
-            android:icon="@android:drawable/ic_search_category_default"
+            android:icon="@drawable/baseline_score_24"
             android:title="查成绩" />
     </group>
 
@@ -18,12 +18,16 @@
         <menu>
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/baseline_settings_applications_24"
                 android:title="设置" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@android:drawable/ic_dialog_info"
+                android:icon="@drawable/baseline_info_24"
                 android:title="关于" />
+            <item
+                android:id="@+id/nav_day_night"
+                android:icon="@drawable/baseline_brightness_4_24"
+                android:title="夜间模式" />
         </menu>
     </item>
 

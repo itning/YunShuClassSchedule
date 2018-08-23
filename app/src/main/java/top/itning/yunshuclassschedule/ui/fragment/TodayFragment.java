@@ -43,6 +43,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.adapter.TodayRecyclerViewAdapter;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 今天
@@ -176,6 +177,7 @@ public class TodayFragment extends Fragment {
 
         //LinearLayout背景颜色
         holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
+        ThemeChangeUtil.setBackgroundResources(holder.ll);
 
         //RecyclerView初始化
         holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
