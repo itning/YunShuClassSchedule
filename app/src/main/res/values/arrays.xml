@@ -72,4 +72,89 @@
         <item>5</item>
         <item>10</item>
     </string-array>
+    <!--颜色-->
+    <string-array name="color_choices">
+        <item>#f44336</item>
+        <item>#e91e63</item>
+        <item>#9c27b0</item>
+        <item>#673ab7</item>
+        <item>#3f51b5</item>
+        <item>#2196f3</item>
+        <item>#03a9f4</item>
+        <item>#00bcd4</item>
+        <item>#009688</item>
+        <item>#4caf50</item>
+        <item>#8bc34a</item>
+        <item>#cddc39</item>
+        <item>#ffeb3b</item>
+        <item>#ffc107</item>
+        <item>#ff9800</item>
+        <item>#ff5722</item>
+        <item>#795548</item>
+        <item>#9e9e9e</item>
+        <item>#607d8b</item>
+    </string-array>
+
+    <string-array name="color_choices_700">
+        <item>#d32f2f</item>
+        <item>#c2185b</item>
+        <item>#7b1fa2</item>
+        <item>#512da8</item>
+        <item>#303f9f</item>
+        <item>#1976d2</item>
+        <item>#0288d1</item>
+        <item>#0097a7</item>
+        <item>#00796b</item>
+        <item>#388e3c</item>
+        <item>#689f38</item>
+        <item>#afb42b</item>
+        <item>#fbc02d</item>
+        <item>#ffa000</item>
+        <item>#f57c00</item>
+        <item>#e64a19</item>
+        <item>#5d4037</item>
+        <item>#616161</item>
+        <item>#455a64</item>
+    </string-array>
+
+    <string-array name="color_choices_200">
+        <item>#FF5252</item>
+        <item>#FF4081</item>
+        <item>#E040FB</item>
+        <item>#7C4DFF</item>
+        <item>#536DFE</item>
+        <item>#448AFF</item>
+        <item>#40C4FF</item>
+        <item>#18FFFF</item>
+        <item>#64FFDA</item>
+        <item>#69F0AE</item>
+        <item>#B2FF59</item>
+        <item>#EEFF41</item>
+        <item>#FFFF00</item>
+        <item>#FFD740</item>
+        <item>#FFAB40</item>
+        <item>#FF6E40</item>
+    </string-array>
+
+    <string-array name="color_choices_progress">
+        <item>#de746c</item>
+        <item>#d14b78</item>
+        <item>#9e4fac</item>
+        <item>#917ab9</item>
+        <item>#6873b1</item>
+        <item>#9ccdf4</item>
+        <item>#b0bbfa</item>
+        <item>#b0edf4</item>
+        <item>#5ca19b</item>
+        <item>#73b776</item>
+        <item>#acc68e</item>
+        <item>#c9d181</item>
+        <item>#fff59f</item>
+        <item>#fdde81</item>
+        <item>#fac371</item>
+        <item>#fa9271</item>
+        <item>#806c65</item>
+        <item>#cccccc</item>
+        <item>#798387</item>
+    </string-array>
 </resources>

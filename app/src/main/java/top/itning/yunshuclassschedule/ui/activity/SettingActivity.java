@@ -59,7 +59,13 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
     @Override
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
-
+        switch (eventEntity.getId()) {
+            case APP_COLOR_CHANGE: {
+                ThemeChangeUtil.changeSettingTheme(this);
+                break;
+            }
+            default:
+        }
     }
 
     @Override

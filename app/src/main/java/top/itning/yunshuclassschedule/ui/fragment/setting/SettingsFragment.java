@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.Objects;
 
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 设置Fragment
@@ -20,10 +22,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
     private static final String CLASS_SCHEDULE_UPDATE_FREQUENCY = "class_schedule_update_frequency";
-    public static final String CLASS_REMINDER_UP_TIME = "class_reminder_up_time";
-    public static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
-    public static final String PHONE_MUTE_BEFORE_TIME = "phone_mute_before_time";
-    public static final String PHONE_MUTE_AFTER_TIME = "phone_mute_after_time";
+    private static final String CLASS_REMINDER_UP_TIME = "class_reminder_up_time";
+    private static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
+    private static final String PHONE_MUTE_BEFORE_TIME = "phone_mute_before_time";
+    private static final String PHONE_MUTE_AFTER_TIME = "phone_mute_after_time";
+    private static final String APP_COLOR_PRIMARY = "app_color_primary";
+    private static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";
+    private static final String APP_COLOR_ACCENT = "app_color_accent";
+    private static final String APP_COLOR_PROGRESS = "app_color_progress";
+
     private SharedPreferences prefs;
     private ListPreference defaultShowMainFragmentListPreference;
     private ListPreference classScheduleUpdateFrequency;
@@ -67,9 +74,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
+        Log.d(TAG, "on Destroy View");
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     @Override
@@ -115,6 +123,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 if (phoneMuteAfterTime != null) {
                     phoneMuteAfterTime.setSummary(phoneMuteAfterTime.getEntry());
                 }
+                break;
+            }
+            case APP_COLOR_PRIMARY: {
+                ThemeChangeUtil.changeColor();
+                break;
+            }
+            case APP_COLOR_PRIMARY_DARK: {
+                ThemeChangeUtil.changeColor();
+                break;
+            }
+            case APP_COLOR_ACCENT: {
+                ThemeChangeUtil.changeColor();
+                break;
+            }
+            case APP_COLOR_PROGRESS: {
+                ThemeChangeUtil.changeColor();
                 break;
             }
             default:

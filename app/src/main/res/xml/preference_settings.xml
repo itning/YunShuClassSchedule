@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="课程设置">
         <ListPreference
             android:defaultValue="today"
@@ -111,21 +112,27 @@
             android:persistent="false"
             android:summary="设置应用主题"
             android:title="主题颜色">
-            <PreferenceCategory android:title="声音">
-                <SwitchPreference
-                    android:defaultValue="true"
-                    android:key="sound_status"
-                    android:summaryOff="应用声音已关闭"
-                    android:summaryOn="应用声音已开启"
-                    android:title="开启声音" />
-            </PreferenceCategory>
-            <PreferenceCategory android:title="震动">
-                <SwitchPreference
-                    android:defaultValue="true"
-                    android:key="vibrate_status"
-                    android:summaryOff="应用震动已关闭"
-                    android:summaryOn="应用震动已开启"
-                    android:title="开启震动" />
+            <PreferenceCategory android:title="主题颜色">
+                <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+                    android:defaultValue="@color/colorPrimary"
+                    android:key="app_color_primary"
+                    android:title="主色调"
+                    app:colorChoices="@array/color_choices" />
+                <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+                    android:defaultValue="@color/colorPrimaryDark"
+                    android:key="app_color_primary_dark"
+                    android:title="次色调"
+                    app:colorChoices="@array/color_choices_700" />
+                <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+                    android:defaultValue="@color/colorAccent"
+                    android:key="app_color_accent"
+                    android:title="强调色"
+                    app:colorChoices="@array/color_choices_200" />
+                <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+                    android:defaultValue="@color/color_progress"
+                    android:key="app_color_progress"
+                    android:title="进度条颜色"
+                    app:colorChoices="@array/color_choices_progress" />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>

@@ -13,6 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +24,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
@@ -107,5 +112,28 @@ public class ClassScheduleFragment extends Fragment {
             }
         }
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventEntity eventEntity) {
+        switch (eventEntity.getId()) {
+            case APP_COLOR_CHANGE: {
+                ThemeChangeUtil.setTabLayoutColor(requireContext(), ((ViewHolder) view.getTag()).tl);
+                break;
+            }
+            default:
+        }
     }
 }

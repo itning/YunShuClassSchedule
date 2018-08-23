@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -132,6 +131,14 @@ public class TodayFragment extends Fragment {
                 setPanelText((ViewHolder) view.getTag());
                 break;
             }
+            case APP_COLOR_CHANGE: {
+                Log.d(TAG, "app color change , now afresh view");
+                ViewHolder viewHolder = (ViewHolder) view.getTag();
+                viewHolder.nsv.scrollTo(0, 0);
+                ThemeChangeUtil.setBackgroundResources(requireContext(), viewHolder.ll);
+                viewHolder.rv.getAdapter().notifyDataSetChanged();
+                break;
+            }
             default:
         }
     }
@@ -176,12 +183,11 @@ public class TodayFragment extends Fragment {
         whichClassNow = DateUtils.getWhichClassNow();
 
         //LinearLayout背景颜色
-        holder.ll.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorPrimary));
-        ThemeChangeUtil.setBackgroundResources(holder.ll);
+        ThemeChangeUtil.setBackgroundResources(requireContext(), holder.ll);
 
         //RecyclerView初始化
         holder.rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(classScheduleList, getContext());
+        todayRecyclerViewAdapter = new TodayRecyclerViewAdapter(classScheduleList, requireContext());
         holder.rv.setAdapter(todayRecyclerViewAdapter);
 
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小

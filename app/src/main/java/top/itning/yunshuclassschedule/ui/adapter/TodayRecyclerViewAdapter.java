@@ -97,8 +97,8 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         viewHolder.viewTop.setVisibility(View.INVISIBLE);
         viewHolder.viewLeft.setVisibility(View.INVISIBLE);
         viewHolder.viewProgress.setVisibility(View.INVISIBLE);
-        ThemeChangeUtil.setProgressBackgroundResource(viewHolder.viewProgress);
-        ThemeChangeUtil.setBackgroundResources(viewHolder.viewBottom,viewHolder.viewTop,viewHolder.viewLeft,viewHolder.viewCenter);
+        ThemeChangeUtil.setProgressBackgroundResource(context, viewHolder.viewProgress);
+        ThemeChangeUtil.setBackgroundResources(context, viewHolder.viewBottom, viewHolder.viewTop, viewHolder.viewLeft, viewHolder.viewCenter);
         if (position == 0 && ClassScheduleUtils.haveClassAfterTime(scheduleList)) {
             //是当前正在或要上的课程
             viewHolder.flNo.setVisibility(View.INVISIBLE);

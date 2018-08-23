@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toolbar.setTitle(ACTION_BAR_TITLE_FORMAT.format(new Date()));
         //设置导航
         setSupportActionBar(toolbar);
-
+        ThemeChangeUtil.initColor(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -114,18 +114,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .commit();
         App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), Calendar.getInstance().get(Calendar.DATE)).apply();
     }
-
-    /**
-     * 消息事件
-     *
-     * @param what what
-     */
-    @SuppressWarnings("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(Integer what) {
-        Log.d(TAG, what + "");
-    }
-
 
     @Override
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -147,6 +135,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 .commitAllowingStateLoss();
                     }
                 }
+            }
+            case APP_COLOR_CHANGE: {
+                Log.d(TAG, "app color change , now afresh view");
+                ThemeChangeUtil.initColor(this);
+                break;
             }
             default:
         }

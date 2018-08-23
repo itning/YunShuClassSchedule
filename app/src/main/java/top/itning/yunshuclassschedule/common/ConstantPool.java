@@ -136,7 +136,11 @@ public class ConstantPool {
         /**
          * 离下课时间改变
          */
-        CLASS_DOWN_TIME_CHANGE(0x017);
+        CLASS_DOWN_TIME_CHANGE(0x017),
+        /**
+         * 应用颜色改变
+         */
+        APP_COLOR_CHANGE(0x018);
 
 
         private int value;
