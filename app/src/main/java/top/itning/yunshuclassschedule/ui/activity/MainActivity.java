@@ -135,6 +135,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 .commitAllowingStateLoss();
                     }
                 }
+                break;
             }
             case APP_COLOR_CHANGE: {
                 Log.d(TAG, "app color change , now afresh view");
