@@ -27,12 +27,17 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
  * @author itning
  */
 public class ThemeChangeUtil {
+    public static boolean isChange = false;
+
     private static final String APP_COLOR_PRIMARY = "app_color_primary";
     private static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";
     private static final String APP_COLOR_ACCENT = "app_color_accent";
     private static final String APP_COLOR_PROGRESS = "app_color_progress";
     private static final String TAG = "ThemeChangeUtil";
-    public static boolean isChange = false;
+    private static int defaultColorPrimary;
+    private static int defaultColorPrimaryDark;
+    private static int defaultColorAccent;
+    private static int defaultColorProgress;
 
     public synchronized static void changeNightMode(@NonNull AppCompatActivity activity) {
         ThemeChangeUtil.isChange = !ThemeChangeUtil.isChange;
@@ -50,7 +55,7 @@ public class ThemeChangeUtil {
             ActionBar supportActionBar = activity.getSupportActionBar();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
             if (supportActionBar != null) {
-                int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, R.color.colorPrimary);
+                int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, defaultColorPrimary);
                 supportActionBar.setBackgroundDrawable(new ColorDrawable(appColorPrimary));
             }
             Window window = activity.getWindow();
@@ -59,7 +64,7 @@ public class ThemeChangeUtil {
             //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             //设置状态栏颜色
-            int appColorPrimaryDark = sharedPreferences.getInt(APP_COLOR_PRIMARY_DARK, R.color.colorPrimaryDark);
+            int appColorPrimaryDark = sharedPreferences.getInt(APP_COLOR_PRIMARY_DARK, defaultColorPrimaryDark);
             window.setStatusBarColor(appColorPrimaryDark);
         }
     }
@@ -68,6 +73,14 @@ public class ThemeChangeUtil {
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme);
         }
+        initDefaultColor(activity);
+    }
+
+    private static void initDefaultColor(@NonNull AppCompatActivity activity) {
+        defaultColorPrimary = ContextCompat.getColor(activity, R.color.colorPrimary);
+        defaultColorPrimaryDark = ContextCompat.getColor(activity, R.color.colorPrimaryDark);
+        defaultColorAccent = ContextCompat.getColor(activity, R.color.colorAccent);
+        defaultColorProgress = ContextCompat.getColor(activity, R.color.color_progress);
     }
 
     public static void changeSettingTheme(@NonNull AppCompatActivity activity) {
@@ -77,14 +90,14 @@ public class ThemeChangeUtil {
         ActionBar actionBar = activity.getSupportActionBar();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
         if (actionBar != null) {
-            int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, R.color.colorPrimary);
+            int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, defaultColorPrimary);
             actionBar.setBackgroundDrawable(new ColorDrawable(appColorPrimary));
         }
         Window window = activity.getWindow();
         //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         //设置状态栏颜色
-        int appColorPrimaryDark = sharedPreferences.getInt(APP_COLOR_PRIMARY_DARK, R.color.colorPrimaryDark);
+        int appColorPrimaryDark = sharedPreferences.getInt(APP_COLOR_PRIMARY_DARK, defaultColorPrimaryDark);
         window.setStatusBarColor(appColorPrimaryDark);
     }
 
@@ -98,8 +111,8 @@ public class ThemeChangeUtil {
             return;
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, R.color.colorPrimary);
-        int appColorAccent = sharedPreferences.getInt(APP_COLOR_ACCENT, R.color.colorAccent);
+        int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, defaultColorPrimary);
+        int appColorAccent = sharedPreferences.getInt(APP_COLOR_ACCENT, defaultColorAccent);
         tabLayout.setBackgroundColor(appColorPrimary);
         tabLayout.setSelectedTabIndicatorColor(appColorAccent);
         tabLayout.setTabTextColors(colorNormal, appColorAccent);
@@ -113,7 +126,7 @@ public class ThemeChangeUtil {
             return;
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, R.color.colorPrimary);
+        int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, defaultColorPrimary);
         for (View v : views) {
             if (v.getId() == R.id.view_center || v.getId() == R.id.view_top || v.getId() == R.id.view_bottom) {
                 continue;
@@ -128,7 +141,7 @@ public class ThemeChangeUtil {
             return;
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int appColorProgress = sharedPreferences.getInt(APP_COLOR_PROGRESS, R.color.color_progress);
+        int appColorProgress = sharedPreferences.getInt(APP_COLOR_PROGRESS, defaultColorProgress);
         view.setBackgroundColor(appColorProgress);
     }
 }
