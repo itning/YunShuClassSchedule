@@ -7,7 +7,6 @@ import top.itning.yunshuclassschedule.common.ConstantPool;
  *
  * @author itning
  */
-@SuppressWarnings("unused")
 public class EventEntity {
     private ConstantPool.Int id;
     private String msg;
