@@ -9,12 +9,12 @@ import top.itning.yunshuclassschedule.entity.AppUpdate;
  *
  * @author itning
  */
-public interface CheckAppUpdate{
+public interface CheckAppUpdate {
     /**
      * 检查APP版本
      *
      * @return {@link AppUpdate}
      */
-    @GET("app/checkUpdate")
+    @GET("update.json")
     Call<AppUpdate> checkUpdate();
 }
