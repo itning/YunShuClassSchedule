@@ -23,8 +23,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import top.itning.yunshuclassschedule.common.App;
@@ -131,6 +133,10 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 sendNotification("下课提醒", "快要下课了");
                 break;
             }
+            case END_CHECK_CLASS_SCHEDULE_UPDATE: {
+                initData();
+                break;
+            }
             default:
         }
     }
@@ -142,12 +148,13 @@ public class RemindService extends Service implements SharedPreferences.OnShared
         Log.d(TAG, "start init data");
         classReminderUpStatus = sharedPreferences.getBoolean(CLASS_REMINDER_UP_STATUS, true);
         classReminderDownStatus = sharedPreferences.getBoolean(CLASS_REMINDER_DOWN_STATUS, true);
-        phoneMuteStatus = sharedPreferences.getBoolean(PHONE_MUTE_STATUS, true);
+        phoneMuteStatus = sharedPreferences.getBoolean(PHONE_MUTE_STATUS, false);
         phoneMuteBeforeTime = Integer.parseInt(sharedPreferences.getString(PHONE_MUTE_BEFORE_TIME, "0"));
         phoneMuteAfterTime = Integer.parseInt(sharedPreferences.getString(PHONE_MUTE_AFTER_TIME, "0"));
         classReminderUpTime = Integer.parseInt(sharedPreferences.getString(CLASS_REMINDER_UP_TIME, "1"));
         classReminderDownTime = Integer.parseInt(sharedPreferences.getString(CLASS_REMINDER_DOWN_TIME, "1"));
         initClassScheduleList();
+        obsoleteClear();
         if (!classScheduleList.isEmpty()) {
             clearAlarm();
             initTimeList();
@@ -210,6 +217,30 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                         .queryBuilder()
                         .where(ClassScheduleDao.Properties.Week.eq(DateUtils.getWeek()))
                         .list());
+        Log.d(TAG, "init class schedule list size:" + classScheduleList.size());
+    }
+
+    private void obsoleteClear() {
+        if (classScheduleList != null) {
+            Log.d(TAG, "start obsolete clear list");
+            try {
+                List<String> timeList = DateUtils.getTimeList();
+                List<ClassSchedule> tempList = new ArrayList<>();
+                for (ClassSchedule c : classScheduleList) {
+                    String[] timeArray = timeList.get(c.getSection() - 1).split("-");
+                    if (DateUtils.DF.parse(timeArray[1]).getTime() >= DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime()) {
+                        tempList.add(c);
+                        Log.d(TAG, "add section " + c.getSection());
+                    }
+                }
+                Log.d(TAG, "end obsolete clear list now size:" + tempList.size());
+                classScheduleList.clear();
+                classScheduleList.addAll(tempList);
+                tempList.clear();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -235,37 +266,42 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     }
 
     private void initIntent(List<Intent> upTimeList, List<Intent> downTimeList, ClassSchedule classSchedule, String[] timeArray, int beforeTime, int afterTime, String type, boolean haveBefore, boolean haveAfter) {
-        String[] up = timeArray[0].split(":");
-        String[] down = timeArray[1].split(":");
-        if (haveBefore) {
-            Intent upIntent = new Intent(this, RemindReceiver.class);
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(up[0]));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(up[1]));
-            calendar.add(Calendar.MINUTE, 0 - beforeTime);
-            upIntent.putExtra("time", calendar.getTimeInMillis());
-            upIntent.putExtra("type", type);
-            upIntent.putExtra("status", 0);
-            upIntent.putExtra("name", classSchedule.getName());
-            upIntent.putExtra("location", classSchedule.getLocation());
-            upIntent.putExtra("section", classSchedule.getSection());
-            upTimeList.add(upIntent);
-            Log.d(TAG, "add up time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
-        }
-        if (haveAfter) {
-            Intent downIntent = new Intent(this, RemindReceiver.class);
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(down[0]));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(down[1]));
-            calendar.add(Calendar.MINUTE, 0 - afterTime);
-            downIntent.putExtra("time", calendar.getTimeInMillis());
-            downIntent.putExtra("type", type);
-            downIntent.putExtra("status", 1);
-            downIntent.putExtra("name", classSchedule.getName());
-            downIntent.putExtra("location", classSchedule.getLocation());
-            downIntent.putExtra("section", classSchedule.getSection());
-            downTimeList.add(downIntent);
-            Log.d(TAG, "add down time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+        try {
+            String[] up = timeArray[0].split(":");
+            String[] down = timeArray[1].split(":");
+            String[] timeArr = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
+            if (haveBefore && DateUtils.DF.parse(timeArr[0]).getTime() > DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime()) {
+                Intent upIntent = new Intent(this, RemindReceiver.class);
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(up[0]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(up[1]));
+                calendar.add(Calendar.MINUTE, 0 - beforeTime);
+                upIntent.putExtra("time", calendar.getTimeInMillis());
+                upIntent.putExtra("type", type);
+                upIntent.putExtra("status", 0);
+                upIntent.putExtra("name", classSchedule.getName());
+                upIntent.putExtra("location", classSchedule.getLocation());
+                upIntent.putExtra("section", classSchedule.getSection());
+                upTimeList.add(upIntent);
+                Log.d(TAG, "add up time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+            }
+            if (haveAfter) {
+                Intent downIntent = new Intent(this, RemindReceiver.class);
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(down[0]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(down[1]));
+                calendar.add(Calendar.MINUTE, 0 - afterTime);
+                downIntent.putExtra("time", calendar.getTimeInMillis());
+                downIntent.putExtra("type", type);
+                downIntent.putExtra("status", 1);
+                downIntent.putExtra("name", classSchedule.getName());
+                downIntent.putExtra("location", classSchedule.getLocation());
+                downIntent.putExtra("section", classSchedule.getSection());
+                downTimeList.add(downIntent);
+                Log.d(TAG, "add down time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 

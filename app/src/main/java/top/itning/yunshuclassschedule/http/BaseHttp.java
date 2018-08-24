@@ -5,5 +5,5 @@ package top.itning.yunshuclassschedule.http;
  * @author itning
  */
 public interface BaseHttp {
-    String BASE_URL="http://192.168.123.132:8080/";
+    String BASE_URL="http://api.itning.top/";
 }
