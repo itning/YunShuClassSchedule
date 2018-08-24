@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -309,7 +310,15 @@ public class RemindService extends Service implements SharedPreferences.OnShared
      */
     private void sendNotification(String contentTitle, String contentText) {
         Log.d(TAG, "now send notification");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 99, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        // 设置启动的程序，如果存在则找出，否则新的启动
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        //用ComponentName得到class对象
+        intent.setComponent(new ComponentName(this, MainActivity.class));
+        // 关键的一步，设置启动模式，两种情况
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 99, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")
                 .setContentTitle(contentTitle)
@@ -317,6 +326,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 .setVisibility(Notification.VISIBILITY_PRIVATE)
                 .setSmallIcon(this.getApplicationInfo().icon)
                 .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
         Notification notification = builder.build();
