@@ -34,7 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
-import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
 import top.itning.yunshuclassschedule.entity.DaoSession;
@@ -239,7 +238,7 @@ public class TodayFragment extends Fragment {
      * 初始化课程数据
      */
     private void initClassScheduleListData() {
-        DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
+        DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
         classScheduleList = ClassScheduleUtils
                 .orderListBySection(daoSession
                         .getClassScheduleDao()
@@ -271,7 +270,6 @@ public class TodayFragment extends Fragment {
                             line2 = classSchedule.getName();
                             line3 = classSchedule.getLocation();
                             line4 = "还有" + restOfTheTime + "分钟上课";
-                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.CLASS_UP_TIME_CHANGE, "" + restOfTheTime));
                         } else {
                             line2 = "今天课全都上完了";
                             line3 = "(๑•̀ㅂ•́)و✧";
@@ -294,7 +292,6 @@ public class TodayFragment extends Fragment {
                                 line2 = c.getName();
                                 line3 = c.getLocation();
                                 line4 = "还有" + restOfTheTime + "分钟下课";
-                                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.CLASS_DOWN_TIME_CHANGE, "" + restOfTheTime));
                                 break;
                             } else {
                                 if (!ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
@@ -312,7 +309,6 @@ public class TodayFragment extends Fragment {
                             line1 = "";
                             line2 = "这是最后一节课";
                             line3 = "还有" + restOfTheTime + "分钟下课";
-                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.CLASS_DOWN_TIME_CHANGE, "" + restOfTheTime));
                         }
                     } else {
                         if (ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
@@ -321,7 +317,6 @@ public class TodayFragment extends Fragment {
                             line2 = classSchedule.getName();
                             line3 = classSchedule.getLocation();
                             line4 = "还有" + restOfTheTime + "分钟上课";
-                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.CLASS_UP_TIME_CHANGE, "" + restOfTheTime));
                         } else {
                             line1 = "";
                             line2 = "今天课全都上完了";

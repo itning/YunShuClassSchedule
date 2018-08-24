@@ -68,31 +68,31 @@ public class ConstantPool {
         /**
          * 下载课程表信息错误
          */
-        HTTP_ERROR(0x001),
+        HTTP_ERROR(111),
         /**
          * 进入主活动
          */
-        ENTER_HOME_ACTIVITY(0x002),
+        ENTER_HOME_ACTIVITY(112),
         /**
          * 开始检查APP是否有更新
          */
-        START_CHECK_APP_UPDATE(0x003),
+        START_CHECK_APP_UPDATE(113),
         /**
          * 外置存储权限请求码
          */
-        WRITE_EXTERNAL_STORAGE_REQUEST_CODE(0x004),
+        WRITE_EXTERNAL_STORAGE_REQUEST_CODE(114),
         /**
          * 设置权限页面请求码
          */
-        APP_SETTING_REQUEST_CODE(0x005),
+        APP_SETTING_REQUEST_CODE(115),
         /**
          * 开始下载升级文件
          */
-        START_DOWNLOAD_UPDATE_APK(0x006),
+        START_DOWNLOAD_UPDATE_APK(116),
         /**
          * 安装APK
          */
-        INSTALL_APK(0x007),
+        INSTALL_APK(117),
         /**
          * 退出间隔延迟
          */
@@ -100,48 +100,55 @@ public class ConstantPool {
         /**
          * 开始检查课程表更新
          */
-        START_CHECK_CLASS_SCHEDULE_UPDATE(0x008),
+        START_CHECK_CLASS_SCHEDULE_UPDATE(118),
         /**
          * 结束检查课程表更新(数据已更新)
          */
-        END_CHECK_CLASS_SCHEDULE_UPDATE(0x009),
+        END_CHECK_CLASS_SCHEDULE_UPDATE(119),
         /**
          * 时间改变
          */
-        TIME_TICK_CHANGE(0x010),
+        TIME_TICK_CHANGE(120),
         /**
          * 登陆加载专业数据
          */
-        LOGIN_LOADING_PROFESSION_DATA(0x011),
+        LOGIN_LOADING_PROFESSION_DATA(121),
         /**
          * 登陆加载班级数据
          */
-        LOGIN_LOADING_CLASS_DATA(0x012),
+        LOGIN_LOADING_CLASS_DATA(122),
         /**
          * 安装APK权限请求码
          */
-        INSTALL_PACKAGES_REQUEST_CODE(0x013),
+        INSTALL_PACKAGES_REQUEST_CODE(123),
         /**
          * 设置安装位置来源
          */
-        APP_INSTALL_UNKNOWN_APK_SETTING(0x014),
+        APP_INSTALL_UNKNOWN_APK_SETTING(124),
         /**
          * 刷新本周课程fragment数据
          */
-        REFRESH_WEEK_FRAGMENT_DATA(0x015),
-        /**
-         * 离上课时间改变
-         */
-        CLASS_UP_TIME_CHANGE(0x016),
-        /**
-         * 离下课时间改变
-         */
-        CLASS_DOWN_TIME_CHANGE(0x017),
+        REFRESH_WEEK_FRAGMENT_DATA(125),
         /**
          * 应用颜色改变
          */
-        APP_COLOR_CHANGE(0x018);
-
+        APP_COLOR_CHANGE(126),
+        /**
+         * 上课提醒
+         */
+        CLASS_UP_REMIND(127),
+        /**
+         * 下课提醒
+         */
+        CLASS_DOWN_REMIND(128),
+        /**
+         * 手机状态:取消静音
+         */
+        PHONE_MUTE_CANCEL(129),
+        /**
+         * 手机状态:开启静音
+         */
+        PHONE_MUTE_OPEN(130);
 
         private int value;
 

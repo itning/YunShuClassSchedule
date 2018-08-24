@@ -1,7 +1,6 @@
 package top.itning.yunshuclassschedule.service;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -10,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,21 +53,6 @@ public class CommonService extends Service {
             importance = NotificationManager.IMPORTANCE_HIGH;
             createNotificationChannel(channelId, channelName, importance);
         }
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")
-                .setContentTitle("应用")
-                .setContentText("运行中")
-                .setVisibility(Notification.VISIBILITY_PRIVATE)
-                .setSmallIcon(this.getApplicationInfo().icon)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_MAX);
-        Notification notification = builder.build();
-        // 开始前台服务
-        startForeground(110, notification);
-        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

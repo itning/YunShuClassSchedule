@@ -63,13 +63,11 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".service.ClassReminderService"
+            android:name=".service.RemindService"
             android:enabled="true"
             android:exported="false" />
-        <service
-            android:name=".service.PhoneMuteService"
-            android:enabled="true"
-            android:exported="false" />
+
+        <receiver android:name="top.itning.yunshuclassschedule.receiver.RemindReceiver" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
