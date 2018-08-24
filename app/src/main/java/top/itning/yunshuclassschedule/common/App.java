@@ -33,7 +33,7 @@ public class App extends Application {
         //EventBus add Index
         EventBus.builder().addIndex(new AppActivityIndex()).installDefaultEventBus();
         //bugly
-        CrashReport.initCrashReport(getApplicationContext(), "439037c8de", true);
+        CrashReport.initCrashReport(getApplicationContext(), "439037c8de", false);
 
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ConstantPool.Str.DB_NAME.get());
         Database db = helper.getWritableDb();
