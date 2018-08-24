@@ -21,19 +21,20 @@ import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.APP_COLOR_ACCENT;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.APP_COLOR_PRIMARY;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.APP_COLOR_PRIMARY_DARK;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.APP_COLOR_PROGRESS;
+
 /**
  * 主题更换工具类
  *
  * @author itning
  */
 public class ThemeChangeUtil {
-    private static boolean isChange = false;
-
-    private static final String APP_COLOR_PRIMARY = "app_color_primary";
-    private static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";
-    private static final String APP_COLOR_ACCENT = "app_color_accent";
-    private static final String APP_COLOR_PROGRESS = "app_color_progress";
     private static final String TAG = "ThemeChangeUtil";
+
+    private static boolean isChange = false;
     private static int defaultColorPrimary;
     private static int defaultColorPrimaryDark;
     private static int defaultColorAccent;

@@ -20,16 +20,16 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "SettingsFragment";
 
-    private static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
+    public static final String CLASS_REMINDER_UP_TIME = "class_reminder_up_time";
+    public static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
+    public static final String PHONE_MUTE_BEFORE_TIME = "phone_mute_before_time";
+    public static final String PHONE_MUTE_AFTER_TIME = "phone_mute_after_time";
+    public static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
+    public static final String APP_COLOR_PRIMARY = "app_color_primary";
+    public static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";
+    public static final String APP_COLOR_ACCENT = "app_color_accent";
+    public static final String APP_COLOR_PROGRESS = "app_color_progress";
     private static final String CLASS_SCHEDULE_UPDATE_FREQUENCY = "class_schedule_update_frequency";
-    private static final String CLASS_REMINDER_UP_TIME = "class_reminder_up_time";
-    private static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
-    private static final String PHONE_MUTE_BEFORE_TIME = "phone_mute_before_time";
-    private static final String PHONE_MUTE_AFTER_TIME = "phone_mute_after_time";
-    private static final String APP_COLOR_PRIMARY = "app_color_primary";
-    private static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";
-    private static final String APP_COLOR_ACCENT = "app_color_accent";
-    private static final String APP_COLOR_PROGRESS = "app_color_progress";
 
     private SharedPreferences prefs;
     private ListPreference defaultShowMainFragmentListPreference;

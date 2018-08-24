@@ -39,6 +39,11 @@ import top.itning.yunshuclassschedule.receiver.RemindReceiver;
 import top.itning.yunshuclassschedule.ui.activity.MainActivity;
 import top.itning.yunshuclassschedule.util.DateUtils;
 
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.CLASS_REMINDER_DOWN_TIME;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.CLASS_REMINDER_UP_TIME;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_AFTER_TIME;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_BEFORE_TIME;
+
 /**
  * 提醒服务
  *
@@ -51,10 +56,6 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     private static final String CLASS_REMINDER_UP_STATUS = "class_reminder_up_status";
     private static final String CLASS_REMINDER_DOWN_STATUS = "class_reminder_down_status";
     private static final String PHONE_MUTE_STATUS = "phone_mute_status";
-    private static final String PHONE_MUTE_BEFORE_TIME = "phone_mute_before_time";
-    private static final String PHONE_MUTE_AFTER_TIME = "phone_mute_after_time";
-    private static final String CLASS_REMINDER_UP_TIME = "class_reminder_up_time";
-    private static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
     private List<ClassSchedule> classScheduleList;
     private SharedPreferences sharedPreferences;
     private final Calendar calendar = Calendar.getInstance();

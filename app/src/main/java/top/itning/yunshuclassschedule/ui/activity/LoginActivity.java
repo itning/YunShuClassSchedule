@@ -43,6 +43,10 @@ import top.itning.yunshuclassschedule.util.HttpUtils;
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
+
+    /**
+     * 加载登陆班级数据
+     */
     private static final String LOADING_CLASS_DATA = "1";
     private long firstPressedTime;
 

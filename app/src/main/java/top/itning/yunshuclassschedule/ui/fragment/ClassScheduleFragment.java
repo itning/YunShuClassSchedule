@@ -27,6 +27,8 @@ import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.DEFAULT_SHOW_MAIN_FRAGMENT;
+
 /**
  * 课程表
  *
@@ -34,8 +36,8 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
  */
 public class ClassScheduleFragment extends Fragment {
     private static final String TAG = "ClassScheduleFragment";
+
     private static final String TODAY = "today";
-    private static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
 
     /**
      * Bind View
