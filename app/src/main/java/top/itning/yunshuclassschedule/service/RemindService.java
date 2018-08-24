@@ -36,7 +36,6 @@ import top.itning.yunshuclassschedule.entity.DaoSession;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.receiver.RemindReceiver;
 import top.itning.yunshuclassschedule.ui.activity.MainActivity;
-import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
@@ -211,12 +210,11 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     private void initClassScheduleList() {
         Log.d(TAG, "init class schedule list data");
         DaoSession daoSession = ((App) getApplication()).getDaoSession();
-        classScheduleList = ClassScheduleUtils
-                .orderListBySection(daoSession
-                        .getClassScheduleDao()
-                        .queryBuilder()
-                        .where(ClassScheduleDao.Properties.Week.eq(DateUtils.getWeek()))
-                        .list());
+        classScheduleList = daoSession
+                .getClassScheduleDao()
+                .queryBuilder()
+                .where(ClassScheduleDao.Properties.Week.eq(DateUtils.getWeek()))
+                .list();
         Log.d(TAG, "init class schedule list size:" + classScheduleList.size());
     }
 
@@ -228,9 +226,11 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 List<ClassSchedule> tempList = new ArrayList<>();
                 for (ClassSchedule c : classScheduleList) {
                     String[] timeArray = timeList.get(c.getSection() - 1).split("-");
-                    if (DateUtils.DF.parse(timeArray[1]).getTime() >= DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime()) {
+                    long endTime = DateUtils.DF.parse(timeArray[1]).getTime();
+                    long nowTime = DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime();
+                    if (endTime >= nowTime) {
                         tempList.add(c);
-                        Log.d(TAG, "add section " + c.getSection());
+                        Log.d(TAG, "add section " + c.getSection() + " time:" + timeArray[1] + " endTime:" + endTime + " nowTime:" + nowTime);
                     }
                 }
                 Log.d(TAG, "end obsolete clear list now size:" + tempList.size());
@@ -282,6 +282,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 upIntent.putExtra("name", classSchedule.getName());
                 upIntent.putExtra("location", classSchedule.getLocation());
                 upIntent.putExtra("section", classSchedule.getSection());
+                upIntent.putExtra("week", classSchedule.getWeek());
                 upTimeList.add(upIntent);
                 Log.d(TAG, "add up time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
             }
@@ -297,6 +298,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 downIntent.putExtra("name", classSchedule.getName());
                 downIntent.putExtra("location", classSchedule.getLocation());
                 downIntent.putExtra("section", classSchedule.getSection());
+                downIntent.putExtra("week", classSchedule.getWeek());
                 downTimeList.add(downIntent);
                 Log.d(TAG, "add down time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
             }
@@ -359,7 +361,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setVisibility(Notification.VISIBILITY_PRIVATE)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setSmallIcon(this.getApplicationInfo().icon)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)

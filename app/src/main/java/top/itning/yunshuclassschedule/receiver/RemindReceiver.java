@@ -27,14 +27,16 @@ public class RemindReceiver extends BroadcastReceiver {
         String location = intent.getStringExtra("location");
         int section = intent.getIntExtra("section", -1);
         int status = intent.getIntExtra("status", -1);
-        if (section == -1 || status == -1) {
-            Log.e(TAG, "section or status error ! section:" + section + " status:" + status);
+        int week = intent.getIntExtra("week", -1);
+        if (section == -1 || status == -1 || week == -1) {
+            Log.e(TAG, "section or status , week error ! section:" + section + " status:" + status + " week:" + week);
             return;
         }
         if (type == null || name == null || location == null) {
             Log.e(TAG, "null value ! type:" + type + " name:" + name + " location:" + location);
             return;
         }
+        Log.d(TAG, "get data: type->" + type + " name->" + name + " location->" + location + " section->" + section + " status->" + status + " week->" + week);
         if ("phone_mute".equals(type)) {
             if (status == 0) {
                 Log.d(TAG, "PHONE_MUTE_OPEN");
