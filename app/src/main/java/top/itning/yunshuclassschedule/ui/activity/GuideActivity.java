@@ -2,6 +2,7 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,6 +42,8 @@ public class GuideActivity extends BaseActivity {
      * 初始化数据
      */
     private void initData() {
+        Log.d(TAG, "init data");
+        //周课表文字大小
         App.sharedPreferences.edit()
                 .putFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12)
                 .apply();

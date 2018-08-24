@@ -27,7 +27,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
  * @author itning
  */
 public class ThemeChangeUtil {
-    public static boolean isChange = false;
+    private static boolean isChange = false;
 
     private static final String APP_COLOR_PRIMARY = "app_color_primary";
     private static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";

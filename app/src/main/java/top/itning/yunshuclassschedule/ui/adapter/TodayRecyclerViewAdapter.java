@@ -38,15 +38,15 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
     /**
      * 列表数据集合
      */
-    private List<ClassSchedule> scheduleList;
+    private final List<ClassSchedule> scheduleList;
     /**
      * 颜色数组
      */
-    private int[] colorArray = new int[7];
+    private final int[] colorArray = new int[7];
     /**
      * {@link Context}
      */
-    private Context context;
+    private final Context context;
     /**
      * 随机好的颜色集合
      */

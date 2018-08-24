@@ -57,7 +57,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     private static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
     private List<ClassSchedule> classScheduleList;
     private SharedPreferences sharedPreferences;
-    private Calendar calendar = Calendar.getInstance();
+    private final Calendar calendar = Calendar.getInstance();
     private AlarmManager alarmManager;
     private PowerManager powerManager;
     private volatile boolean classReminderDownStatus;

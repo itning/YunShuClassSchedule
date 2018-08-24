@@ -16,7 +16,7 @@ import top.itning.yunshuclassschedule.R;
  */
 public class RoundBackChange extends View {
     private int color = 0xddffffff;
-    private Paint mPaint = new Paint();
+    private final Paint mPaint = new Paint();
 
     public RoundBackChange(Context context) {
         super(context, null);

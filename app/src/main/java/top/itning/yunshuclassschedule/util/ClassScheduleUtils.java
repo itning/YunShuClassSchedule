@@ -34,6 +34,8 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
 @SuppressWarnings("unused")
 public class ClassScheduleUtils {
 
+    private static final int CLASS_SECTION = 5;
+    private static final int CLASS_WEEK = 7;
     private static float weekFont;
 
     private ClassScheduleUtils() {
@@ -70,8 +72,8 @@ public class ClassScheduleUtils {
         Point size = new Point();
         display.getSize(size);
         gridLayout.removeViews(13, gridLayout.getChildCount() - 13);
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < CLASS_SECTION; i++) {
+            for (int j = 0; j < CLASS_WEEK; j++) {
                 gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
             }
         }

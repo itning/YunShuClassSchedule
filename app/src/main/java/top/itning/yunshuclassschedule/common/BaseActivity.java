@@ -17,8 +17,6 @@ import top.itning.yunshuclassschedule.service.RemindService;
  * @author itning
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    private static final String TAG = "BaseActivity";
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

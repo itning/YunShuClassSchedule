@@ -16,6 +16,7 @@ public interface DownloadClassSchedule {
     /**
      * 检查课程表版本
      *
+     * @param classId 课程ID
      * @return {@link ClassSchedule}
      */
     @GET("classSchedule/download")

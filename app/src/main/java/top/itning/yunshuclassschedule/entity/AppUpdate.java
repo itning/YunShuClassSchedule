@@ -7,6 +7,7 @@ import java.io.Serializable;
  *
  * @author itning
  */
+@SuppressWarnings("unused")
 public class AppUpdate implements Serializable {
     /**
      * 版本号

@@ -18,6 +18,9 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
  */
 public class RemindReceiver extends BroadcastReceiver {
     private static final String TAG = "RemindReceiver";
+    private static final String PHONE_MUTE = "phone_mute";
+    private static final String CLASS_REMINDER_UP = "class_reminder_up";
+    private static final String CLASS_REMINDER_DOWN = "class_reminder_down";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,7 +40,7 @@ public class RemindReceiver extends BroadcastReceiver {
             return;
         }
         Log.d(TAG, "get data: type->" + type + " name->" + name + " location->" + location + " section->" + section + " status->" + status + " week->" + week);
-        if ("phone_mute".equals(type)) {
+        if (PHONE_MUTE.equals(type)) {
             if (status == 0) {
                 Log.d(TAG, "PHONE_MUTE_OPEN");
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.PHONE_MUTE_OPEN));
@@ -50,11 +53,11 @@ public class RemindReceiver extends BroadcastReceiver {
         classSchedule.setSection(section);
         classSchedule.setName(name);
         classSchedule.setLocation(location);
-        if ("class_reminder_up".equals(type)) {
+        if (CLASS_REMINDER_UP.equals(type)) {
             Log.d(TAG, "CLASS_UP_REMIND");
             EventBus.getDefault().post(new EventEntity(ConstantPool.Int.CLASS_UP_REMIND, "", classSchedule));
         }
-        if ("class_reminder_down".equals(type)) {
+        if (CLASS_REMINDER_DOWN.equals(type)) {
             Log.d(TAG, "CLASS_DOWN_REMIND");
             EventBus.getDefault().post(new EventEntity(ConstantPool.Int.CLASS_DOWN_REMIND, "", classSchedule));
         }

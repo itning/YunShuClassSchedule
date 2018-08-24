@@ -12,6 +12,7 @@ import top.itning.yunshuclassschedule.http.BaseHttp;
  *
  * @author itning
  */
+@SuppressWarnings("unused")
 public class HttpUtils {
     private static final Retrofit.Builder BUILDER = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create());
     private static final OkHttpClient CLIENT = new OkHttpClient().newBuilder().connectTimeout(2, TimeUnit.SECONDS).build();

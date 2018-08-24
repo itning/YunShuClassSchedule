@@ -43,6 +43,7 @@ import top.itning.yunshuclassschedule.util.HttpUtils;
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
+    private static final String LOADING_CLASS_DATA = "1";
     private long firstPressedTime;
 
     @BindView(R.id.btn_login)
@@ -56,7 +57,7 @@ public class LoginActivity extends BaseActivity {
     private int professSelect;
     private int classSelect;
     private List<Profession> professionList;
-    private ClassScheduleMetaData classScheduleMetaData = HttpUtils.getRetrofit().create(ClassScheduleMetaData.class);
+    private final ClassScheduleMetaData classScheduleMetaData = HttpUtils.getRetrofit().create(ClassScheduleMetaData.class);
     private List<ClassEntity> classEntityList;
     private ProgressDialog progressDialog;
 
@@ -190,7 +191,7 @@ public class LoginActivity extends BaseActivity {
                 break;
             }
             case LOGIN_LOADING_CLASS_DATA: {
-                if ("1".equals(eventEntity.getMsg())) {
+                if (LOADING_CLASS_DATA.equals(eventEntity.getMsg())) {
                     changeLoadingState(true, "加载班级信息");
                     loadingClassData();
                 } else {
@@ -241,7 +242,7 @@ public class LoginActivity extends BaseActivity {
         switch (spinner.getId()) {
             case R.id.acs_profession: {
                 professSelect = position;
-                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.LOGIN_LOADING_CLASS_DATA, "1"));
+                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.LOGIN_LOADING_CLASS_DATA, LOADING_CLASS_DATA));
                 break;
             }
             case R.id.acs_class: {

@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
      * 初始化View
      */
     private void initView() {
+        Log.d(TAG, "init view");
         //设置返回箭头
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -121,7 +123,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
      */
 
     @TargetApi(Build.VERSION_CODES.M)
-    public void ignoreBatteryOptimization(Activity activity) {
+    private void ignoreBatteryOptimization(Activity activity) {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         assert powerManager != null;
         boolean hasIgnored = powerManager.isIgnoringBatteryOptimizations(activity.getPackageName());

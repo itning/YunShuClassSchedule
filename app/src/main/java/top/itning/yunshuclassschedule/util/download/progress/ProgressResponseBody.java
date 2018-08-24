@@ -16,7 +16,7 @@ import okio.Source;
  * @author ljd
  * @date 3/29/16
  */
-public class ProgressResponseBody extends ResponseBody {
+class ProgressResponseBody extends ResponseBody {
     private final ResponseBody responseBody;
     private final ProgressListener progressListener;
     private BufferedSource bufferedSource;

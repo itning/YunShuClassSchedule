@@ -34,8 +34,8 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
  */
 public class ClassScheduleFragment extends Fragment {
     private static final String TAG = "ClassScheduleFragment";
-    public static final String TODAY = "today";
-    public static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
+    private static final String TODAY = "today";
+    private static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
 
     /**
      * Bind View
@@ -44,11 +44,11 @@ public class ClassScheduleFragment extends Fragment {
     /**
      * 标题集合
      */
-    private List<String> titleList;
+    private final List<String> titleList;
     /**
      * 片段集合
      */
-    private List<Fragment> fragmentList;
+    private final List<Fragment> fragmentList;
 
     {
         titleList = new ArrayList<>();

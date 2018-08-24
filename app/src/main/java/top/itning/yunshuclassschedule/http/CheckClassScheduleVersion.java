@@ -13,6 +13,7 @@ public interface CheckClassScheduleVersion {
     /**
      * 检查课程表版本
      *
+     * @param classId 课程ID
      * @return String
      */
     @GET("classSchedule/checkVersion")

@@ -2,13 +2,16 @@ package top.itning.yunshuclassschedule.entity;
 
 import top.itning.yunshuclassschedule.common.ConstantPool;
 
+/**
+ * 事件实体
+ *
+ * @author itning
+ */
+@SuppressWarnings("unused")
 public class EventEntity {
     private ConstantPool.Int id;
     private String msg;
     private Object data;
-
-    public EventEntity() {
-    }
 
     public EventEntity(ConstantPool.Int id) {
         this.id = id;

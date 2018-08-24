@@ -67,7 +67,7 @@ public class TodayFragment extends Fragment {
     /**
      * 向上滑动的临界值
      */
-    public static final int SLIDE_UP_THRESHOLD = 20;
+    private static final int SLIDE_UP_THRESHOLD = 20;
     /**
      * {@link TodayRecyclerViewAdapter}
      */
