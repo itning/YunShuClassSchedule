@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -58,6 +59,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     private SharedPreferences sharedPreferences;
     private Calendar calendar = Calendar.getInstance();
     private AlarmManager alarmManager;
+    private PowerManager powerManager;
     private volatile boolean classReminderDownStatus;
     private volatile boolean classReminderUpStatus;
     private volatile boolean phoneMuteStatus;
@@ -83,6 +85,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         initData();
         super.onCreate();
     }
@@ -145,6 +148,8 @@ public class RemindService extends Service implements SharedPreferences.OnShared
      */
     private void initData() {
         Log.d(TAG, "start init data");
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "initData");
+        wakeLock.acquire(5 * 60 * 1000);
         classReminderUpStatus = sharedPreferences.getBoolean(CLASS_REMINDER_UP_STATUS, true);
         classReminderDownStatus = sharedPreferences.getBoolean(CLASS_REMINDER_DOWN_STATUS, true);
         phoneMuteStatus = sharedPreferences.getBoolean(PHONE_MUTE_STATUS, false);
@@ -160,6 +165,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
             initPendingIntentList();
             addToAlarm();
         }
+        wakeLock.release();
     }
 
     private void clearAlarm() {
