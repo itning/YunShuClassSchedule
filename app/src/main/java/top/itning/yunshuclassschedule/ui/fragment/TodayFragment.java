@@ -342,7 +342,7 @@ public class TodayFragment extends Fragment {
             holder.tvRemindLocation.setText(line3);
             holder.tvRemindTime.setText(line4);
         } catch (ParseException e) {
-            Log.e(TAG, "pasrse exception ", e);
+            Log.e(TAG, "parse exception ", e);
         }
     }
 
