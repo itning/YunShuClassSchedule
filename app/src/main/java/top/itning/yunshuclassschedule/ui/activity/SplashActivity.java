@@ -1,6 +1,8 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -8,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
@@ -59,6 +62,11 @@ public class SplashActivity extends BaseActivity {
                 //非第一次进入,才进行课程表数据更新检查
                 //event to ClassScheduleService
                 EventBus.getDefault().postSticky(new EventEntity(ConstantPool.Int.START_CHECK_CLASS_SCHEDULE_UPDATE));
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                assert notificationManager != null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("phone_mute_status", false).apply();
+                }
             }
         } else {
             Toast.makeText(this, "没有网络", Toast.LENGTH_LONG).show();
