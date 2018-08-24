@@ -97,7 +97,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        return START_REDELIVER_INTENT;
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)

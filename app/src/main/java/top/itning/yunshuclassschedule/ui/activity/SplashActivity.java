@@ -2,6 +2,9 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.Manifest;
 import android.app.NotificationManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,6 +37,7 @@ import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.AppUpdate;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
+import top.itning.yunshuclassschedule.service.JobSchedulerService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
 import top.itning.yunshuclassschedule.util.NetWorkUtils;
@@ -55,6 +59,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        initJobScheduler();
         if (NetWorkUtils.isNetworkConnected(this)) {
             startTime = System.currentTimeMillis();
             checkAppUpdate();
@@ -71,6 +76,26 @@ public class SplashActivity extends BaseActivity {
         } else {
             Toast.makeText(this, "没有网络", Toast.LENGTH_LONG).show();
             new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get());
+        }
+    }
+
+    /**
+     * init Job Scheduler
+     */
+    private void initJobScheduler() {
+        Log.d(TAG, "init Job Scheduler");
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        assert jobScheduler != null;
+        jobScheduler.cancelAll();
+        JobInfo jobInfo = new JobInfo.Builder(1024, new ComponentName(getPackageName(), JobSchedulerService.class.getName()))
+                //10 minutes
+                .setPeriodic(10 * 60 * 1000)
+                .setPersisted(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+                .build();
+        int schedule = jobScheduler.schedule(jobInfo);
+        if (schedule <= 0) {
+            Log.e(TAG, "schedule error！");
         }
     }
 

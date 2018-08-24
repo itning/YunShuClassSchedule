@@ -56,6 +56,11 @@ public class CommonService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_REDELIVER_INTENT;
+    }
+
+    @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         unregisterReceiver(timeTickReceiver);
