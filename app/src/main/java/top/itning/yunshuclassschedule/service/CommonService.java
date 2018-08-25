@@ -1,14 +1,18 @@
 package top.itning.yunshuclassschedule.service;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,6 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.receiver.TimeTickReceiver;
+import top.itning.yunshuclassschedule.ui.activity.MainActivity;
 
 /**
  * 公共服务
@@ -32,6 +37,7 @@ public class CommonService extends Service {
     public void onCreate() {
         Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
+        startForegroundServer();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
         //设置了系统时区
@@ -52,11 +58,44 @@ public class CommonService extends Service {
             channelName = "课程提醒";
             importance = NotificationManager.IMPORTANCE_HIGH;
             createNotificationChannel(channelId, channelName, importance);
+
+            channelId = "foreground_service";
+            channelName = "前台服务";
+            importance = NotificationManager.IMPORTANCE_MIN;
+            createNotificationChannel(channelId, channelName, importance);
+        }
+    }
+
+    /**
+     * 开启前台服务
+     */
+    private void startForegroundServer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            //用ComponentName得到class对象
+            intent.setComponent(new ComponentName(this, MainActivity.class));
+            // 关键的一步，设置启动模式，两种情况
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
+                    .setContentTitle("云舒课表")
+                    .setContentText("提醒服务正在运行")
+                    .setVisibility(Notification.VISIBILITY_SECRET)
+                    .setSmallIcon(this.getApplicationInfo().icon)
+                    .setDefaults(Notification.DEFAULT_LIGHTS)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_MAX);
+            Notification notification = builder.build();
+            startForeground(111, notification);
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "on Start Command");
         return START_REDELIVER_INTENT;
     }
 

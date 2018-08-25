@@ -88,7 +88,7 @@ public class ClassScheduleFragment extends Fragment {
             Log.d(TAG, "adapter is null,now loading adapter");
             //预加载
             holder.vp.setOffscreenPageLimit(fragmentList.size());
-            holder.vp.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
+            holder.vp.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
 
                 @Override
                 public int getCount() {

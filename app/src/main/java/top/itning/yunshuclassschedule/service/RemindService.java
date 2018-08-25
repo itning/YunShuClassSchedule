@@ -83,12 +83,40 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     public void onCreate() {
         Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
+        startForegroundServer();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         initData();
         super.onCreate();
+    }
+
+    /**
+     * 开启前台服务
+     */
+    private void startForegroundServer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            //用ComponentName得到class对象
+            intent.setComponent(new ComponentName(this, MainActivity.class));
+            // 关键的一步，设置启动模式，两种情况
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
+                    .setContentTitle("云舒课表")
+                    .setContentText("提醒服务正在运行")
+                    .setVisibility(Notification.VISIBILITY_SECRET)
+                    .setSmallIcon(this.getApplicationInfo().icon)
+                    .setDefaults(Notification.DEFAULT_LIGHTS)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_MAX);
+            Notification notification = builder.build();
+            startForeground(111, notification);
+        }
     }
 
     @Override
@@ -101,6 +129,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "on Start Command");
         return START_REDELIVER_INTENT;
     }
 

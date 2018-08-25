@@ -3,6 +3,7 @@ package top.itning.yunshuclassschedule.service;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -14,8 +15,13 @@ public class JobSchedulerService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "onStartJob(): params = [" + params + "]");
-        startService(new Intent(this, CommonService.class));
-        startService(new Intent(this, RemindService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(this, CommonService.class));
+            startForegroundService(new Intent(this, RemindService.class));
+        } else {
+            startService(new Intent(this, CommonService.class));
+            startService(new Intent(this, RemindService.class));
+        }
         jobFinished(params, false);
         return true;
     }
