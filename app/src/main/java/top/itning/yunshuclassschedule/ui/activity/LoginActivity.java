@@ -185,6 +185,7 @@ public class LoginActivity extends BaseActivity {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case END_CHECK_CLASS_SCHEDULE_UPDATE: {
+                changeLoadingState(false, "登陆中");
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 break;
@@ -262,6 +263,7 @@ public class LoginActivity extends BaseActivity {
      */
     @OnClick(R.id.btn_login)
     public void onLoginBtnClicked() {
+        changeLoadingState(true, "登陆中");
         App.sharedPreferences.edit()
                 .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
                 .putString(ConstantPool.Str.USER_CLASS_ID.get(), classEntityList.get(classSelect).getId())
