@@ -1,5 +1,7 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,11 +11,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,6 +32,8 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.DaoSession;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
+import top.itning.yunshuclassschedule.util.FileUtils;
+import top.itning.yunshuclassschedule.util.GlideApp;
 
 
 /**
@@ -57,6 +67,7 @@ public class ThisWeekFragment extends Fragment {
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
+        setViewBackground();
         DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
         List<ClassSchedule> classScheduleList = daoSession.getClassScheduleDao().loadAll();
         ClassScheduleUtils.loadingView(classScheduleList, holder.scheduleGridlayout, requireContext(), requireActivity());
@@ -85,7 +96,40 @@ public class ThisWeekFragment extends Fragment {
                 ClassScheduleUtils.loadingView(classScheduleList, ((ViewHolder) view.getTag()).scheduleGridlayout, requireContext(), requireActivity());
                 break;
             }
+            case NOTIFICATION_BACKGROUND_CHANGE: {
+                FileUtils.transferFile(requireContext(), (Uri) eventEntity.getData(), "background_img");
+                setViewBackground();
+                break;
+            }
             default:
+        }
+    }
+
+    private void setViewBackground() {
+        File file = requireContext().getFileStreamPath("background_img");
+        if (file.exists() && file.isFile() && file.length() != 0) {
+            GlideApp
+                    .with(this)
+                    .load(file)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(new CustomViewTarget<View, Drawable>(view) {
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            Toast.makeText(requireContext(), "图片加载失败", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            view.setBackground(resource);
+                        }
+
+                        @Override
+                        protected void onResourceCleared(@Nullable Drawable placeholder) {
+                            view.setBackgroundResource(R.drawable.this_week_background);
+                        }
+                    });
         }
     }
 }

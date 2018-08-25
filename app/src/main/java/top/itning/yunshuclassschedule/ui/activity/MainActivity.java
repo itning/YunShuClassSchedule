@@ -2,6 +2,7 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.IdRes;
@@ -25,6 +26,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -34,6 +39,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -47,6 +53,7 @@ import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.Glide4Engine;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
@@ -56,6 +63,7 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
  */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
+    private static final int REQUEST_CODE_CHOOSE = 101;
 
     private FragmentManager supportFragmentManager;
     private SparseArray<Fragment> fragmentSparseArray;
@@ -188,6 +196,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 changeWeekFragmentFont();
                 return true;
             }
+            case R.id.action_set_background_image: {
+                Matisse.from(MainActivity.this)
+                        //图片类型
+                        .choose(MimeType.ofImage())
+                        //true:选中后显示数字;false:选中后显示对号
+                        .countable(true)
+                        //可选的最大数
+                        .maxSelectable(1)
+                        //选择照片时，是否显示拍照
+                        .capture(true)
+                        //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
+                        .captureStrategy(new CaptureStrategy(true, "top.itning.yunshuclassschedule.fileProvider"))
+                        //图片加载引擎
+                        .imageEngine(new Glide4Engine())
+                        .theme(com.zhihu.matisse.R.style.Matisse_Dracula)
+                        .forResult(REQUEST_CODE_CHOOSE);
+                return true;
+            }
             case R.id.action_course_error: {
                 Toast.makeText(this, "课程错误", Toast.LENGTH_LONG).show();
                 return true;
@@ -198,6 +224,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            List<Uri> result = Matisse.obtainResult(data);
+            if (result != null && !result.isEmpty()) {
+                Log.d(TAG, "the result uri:" + result.get(0).toString());
+                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.NOTIFICATION_BACKGROUND_CHANGE, "", result.get(0)));
+            } else {
+                Toast.makeText(this, "背景图片设置失败", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

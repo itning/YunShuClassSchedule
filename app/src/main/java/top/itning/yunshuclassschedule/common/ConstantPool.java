@@ -148,7 +148,11 @@ public class ConstantPool {
         /**
          * 手机状态:开启静音
          */
-        PHONE_MUTE_OPEN(130);
+        PHONE_MUTE_OPEN(130),
+        /**
+         * 本周课程背景变化
+         */
+        NOTIFICATION_BACKGROUND_CHANGE(131);
 
         private int value;
 

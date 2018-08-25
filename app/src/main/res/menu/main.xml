@@ -7,6 +7,11 @@
         android:title="@string/action_set_text_size"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_set_background_image"
+        android:orderInCategory="100"
+        android:title="@string/action_set_background_image"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_course_error"
         android:orderInCategory="100"
         android:title="@string/action_course_error"

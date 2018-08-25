@@ -54,6 +54,10 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     /*color preference*/
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.6'
+    /*image select*/
+    implementation 'com.zhihu.android:matisse:0.5.2-beta2'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
