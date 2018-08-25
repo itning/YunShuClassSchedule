@@ -54,6 +54,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
     private View viewProgress;
 
     public TodayRecyclerViewAdapter(@NonNull List<ClassSchedule> scheduleList, @NonNull Context context) {
+        Log.d(TAG, "new Today Recycler View Adapter");
         this.context = context;
         this.scheduleList = scheduleList;
         //数组赋值

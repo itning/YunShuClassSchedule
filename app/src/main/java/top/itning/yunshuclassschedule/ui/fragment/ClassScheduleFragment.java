@@ -118,12 +118,14 @@ public class ClassScheduleFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "on Create");
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "on Destroy");
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
