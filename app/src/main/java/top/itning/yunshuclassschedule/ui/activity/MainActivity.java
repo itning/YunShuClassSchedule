@@ -1,13 +1,18 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -64,6 +69,8 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE_CHOOSE = 101;
+    public static final int REQUEST_CODE = 103;
+    public static final int SETTING_REQUEST_CODE = 104;
 
     private FragmentManager supportFragmentManager;
     private SparseArray<Fragment> fragmentSparseArray;
@@ -197,7 +204,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 return true;
             }
             case R.id.action_set_background_image: {
-                startSelectImageActivity();
+                if (checkPermission()) {
+                    startSelectImageActivity();
+                }
                 return true;
             }
             case R.id.action_course_error: {
@@ -214,8 +223,59 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     /**
+     * 显示弹窗
+     */
+    private void showDialogToUser() {
+        new AlertDialog.Builder(this).setTitle("需要外置存储权限和相机权限")
+                .setMessage("请授予外置存储权限和相机权限,才能够更换背景图片")
+                .setCancelable(false)
+                .setPositiveButton("确定", (dialog1, which1) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CODE))
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (checkPermission()) {
+                    startSelectImageActivity();
+                }
+            } else {
+                new AlertDialog.Builder(this).setTitle("需要外置存储权限和相机权限")
+                        .setMessage("请授予外置存储权限和相机权限,才能够更换背景图片")
+                        .setCancelable(false)
+                        .setPositiveButton("确定", (dialog, which) -> startActivityForResult(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getPackageName(), null)), SETTING_REQUEST_CODE))
+                        .setNegativeButton("取消", null)
+                        .show();
+            }
+        }
+    }
+
+    /**
+     * 检查权限
+     *
+     * @return 权限通过
+     */
+    private boolean checkPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                showDialogToUser();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CODE);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * 开启选择图片Activity
      */
+    @RequiresPermission(allOf = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA})
     private void startSelectImageActivity() {
         Matisse.from(MainActivity.this)
                 //图片类型
@@ -244,6 +304,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.NOTIFICATION_BACKGROUND_CHANGE, "", result.get(0)));
             } else {
                 Toast.makeText(this, "背景图片设置失败", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == SETTING_REQUEST_CODE) {
+            if (checkPermission()) {
+                startSelectImageActivity();
             }
         }
     }
