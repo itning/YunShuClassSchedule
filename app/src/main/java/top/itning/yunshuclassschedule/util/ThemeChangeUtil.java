@@ -87,6 +87,7 @@ public class ThemeChangeUtil {
     public static void changeSettingTheme(@NonNull AppCompatActivity activity) {
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme_Setting);
+            return;
         }
         ActionBar actionBar = activity.getSupportActionBar();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
