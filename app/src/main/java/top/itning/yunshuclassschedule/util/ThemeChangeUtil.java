@@ -73,10 +73,13 @@ public class ThemeChangeUtil {
     }
 
     public static void changeTheme(@NonNull AppCompatActivity activity) {
+        initDefaultColor(activity);
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme);
         }
-        initDefaultColor(activity);
+        Window window = activity.getWindow();
+        //设置状态栏透明
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
 
     private static void initDefaultColor(@NonNull AppCompatActivity activity) {
