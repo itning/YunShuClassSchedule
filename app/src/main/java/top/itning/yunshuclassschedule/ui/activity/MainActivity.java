@@ -197,21 +197,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 return true;
             }
             case R.id.action_set_background_image: {
-                Matisse.from(MainActivity.this)
-                        //图片类型
-                        .choose(MimeType.ofImage())
-                        //true:选中后显示数字;false:选中后显示对号
-                        .countable(true)
-                        //可选的最大数
-                        .maxSelectable(1)
-                        //选择照片时，是否显示拍照
-                        .capture(true)
-                        //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
-                        .captureStrategy(new CaptureStrategy(true, "top.itning.yunshuclassschedule.fileProvider"))
-                        //图片加载引擎
-                        .imageEngine(new Glide4Engine())
-                        .theme(com.zhihu.matisse.R.style.Matisse_Dracula)
-                        .forResult(REQUEST_CODE_CHOOSE);
+                startSelectImageActivity();
                 return true;
             }
             case R.id.action_course_error: {
@@ -225,6 +211,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * 开启选择图片Activity
+     */
+    private void startSelectImageActivity() {
+        Matisse.from(MainActivity.this)
+                //图片类型
+                .choose(MimeType.ofImage())
+                //true:选中后显示数字;false:选中后显示对号
+                .countable(true)
+                //可选的最大数
+                .maxSelectable(1)
+                //选择照片时，是否显示拍照
+                .capture(true)
+                //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
+                .captureStrategy(new CaptureStrategy(true, "top.itning.yunshuclassschedule.fileProvider"))
+                //图片加载引擎
+                .imageEngine(new Glide4Engine())
+                .theme(com.zhihu.matisse.R.style.Matisse_Dracula)
+                .forResult(REQUEST_CODE_CHOOSE);
     }
 
     @Override
