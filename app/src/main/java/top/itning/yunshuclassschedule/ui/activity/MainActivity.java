@@ -209,10 +209,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
                 return true;
             }
-            case R.id.action_course_error: {
-                Toast.makeText(this, "课程错误", Toast.LENGTH_LONG).show();
-                return true;
-            }
             default:
                 return super.onOptionsItemSelected(item);
         }
