@@ -37,6 +37,7 @@ public class CommonService extends Service {
     public void onCreate() {
         Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
+        initNotificationChannel();
         startForegroundServer();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -46,7 +47,14 @@ public class CommonService extends Service {
         filter.addAction(Intent.ACTION_TIME_CHANGED);
         timeTickReceiver = new TimeTickReceiver();
         registerReceiver(timeTickReceiver, filter);
+    }
 
+    /**
+     * 初始化通知渠道
+     *
+     * @since android 8.0
+     */
+    private void initNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Build.VERSION.SDK_INT :" + Build.VERSION.SDK_INT + " now create Notification Channel");
             String channelId = "download";
@@ -68,9 +76,12 @@ public class CommonService extends Service {
 
     /**
      * 开启前台服务
+     *
+     * @since android 8.0
      */
     private void startForegroundServer() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "start Foreground Server");
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             //用ComponentName得到class对象

@@ -94,9 +94,12 @@ public class RemindService extends Service implements SharedPreferences.OnShared
 
     /**
      * 开启前台服务
+     *
+     * @since android 8.0
      */
     private void startForegroundServer() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "start Foreground Server");
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             //用ComponentName得到class对象
