@@ -213,10 +213,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Toast.makeText(this, "课程错误", Toast.LENGTH_LONG).show();
                 return true;
             }
-            case R.id.action_feedback: {
-                Toast.makeText(this, "反馈建议", Toast.LENGTH_LONG).show();
-                return true;
-            }
             default:
                 return super.onOptionsItemSelected(item);
         }
