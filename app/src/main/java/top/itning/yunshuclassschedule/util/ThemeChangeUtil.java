@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import org.greenrobot.eventbus.EventBus;
 
 import top.itning.yunshuclassschedule.R;
+import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 
@@ -34,7 +35,7 @@ import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragmen
 public class ThemeChangeUtil {
     private static final String TAG = "ThemeChangeUtil";
 
-    private static boolean isChange = false;
+    private static boolean isChange = App.sharedPreferences.getBoolean("night_mode", false);
     private static int defaultColorPrimary;
     private static int defaultColorPrimaryDark;
     private static int defaultColorAccent;
@@ -42,6 +43,7 @@ public class ThemeChangeUtil {
 
     public synchronized static void changeNightMode(@NonNull AppCompatActivity activity) {
         ThemeChangeUtil.isChange = !ThemeChangeUtil.isChange;
+        App.sharedPreferences.edit().putBoolean("night_mode", ThemeChangeUtil.isChange).apply();
         activity.startActivity(new Intent(activity, activity.getClass()));
         activity.finish();
     }
