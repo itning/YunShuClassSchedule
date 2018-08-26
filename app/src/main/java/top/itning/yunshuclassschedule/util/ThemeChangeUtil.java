@@ -63,7 +63,7 @@ public class ThemeChangeUtil {
             }
             Window window = activity.getWindow();
             //设置状态栏透明
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             //设置状态栏颜色
@@ -76,10 +76,10 @@ public class ThemeChangeUtil {
         initDefaultColor(activity);
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme);
+            Window window = activity.getWindow();
+            //设置状态栏透明
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Window window = activity.getWindow();
-        //设置状态栏透明
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
 
     private static void initDefaultColor(@NonNull AppCompatActivity activity) {
