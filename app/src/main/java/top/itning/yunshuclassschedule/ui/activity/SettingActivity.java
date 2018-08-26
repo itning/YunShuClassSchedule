@@ -131,7 +131,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
         if (!hasIgnored) {
             new AlertDialog.Builder(this).setTitle("更好的上下课通知")
                     .setMessage("为了确保准确的上下课静音和通知,最好让我能在后台运行")
-                    .setCancelable(false)
+                    .setCancelable(true)
                     .setPositiveButton("可以",
                             (dialog, which) -> {
                                 @SuppressLint("BatteryLife")
