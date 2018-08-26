@@ -368,10 +368,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(this, SettingActivity.class));
                 break;
             }
-            case R.id.nav_about: {
-                Toast.makeText(this, "关于", Toast.LENGTH_LONG).show();
-                break;
-            }
             case R.id.nav_day_night: {
                 drawerSwitch.setChecked(!drawerSwitch.isChecked());
                 return true;
