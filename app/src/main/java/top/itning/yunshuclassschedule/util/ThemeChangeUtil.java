@@ -35,7 +35,7 @@ import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragmen
 public class ThemeChangeUtil {
     private static final String TAG = "ThemeChangeUtil";
 
-    private static boolean isChange = App.sharedPreferences.getBoolean("night_mode", false);
+    public static boolean isChange = App.sharedPreferences.getBoolean("night_mode", false);
     private static int defaultColorPrimary;
     private static int defaultColorPrimaryDark;
     private static int defaultColorAccent;

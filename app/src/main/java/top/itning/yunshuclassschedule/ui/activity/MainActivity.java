@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
@@ -83,6 +84,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView navView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    private SwitchCompat drawerSwitch;
 
 
     @Override
@@ -120,6 +122,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
         //默认选中第一项
         navView.getMenu().getItem(0).setChecked(true);
+        drawerSwitch = (SwitchCompat) navView.getMenu().findItem(R.id.nav_day_night).getActionView();
+        if (ThemeChangeUtil.isChange) {
+            drawerSwitch.setChecked(true);
+        }
+        drawerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> ThemeChangeUtil.changeNightMode(this));
         navView.setNavigationItemSelectedListener(this);
 
         supportFragmentManager = getSupportFragmentManager();
@@ -366,7 +373,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             }
             case R.id.nav_day_night: {
-                ThemeChangeUtil.changeNightMode(this);
+                drawerSwitch.setChecked(!drawerSwitch.isChecked());
                 return true;
             }
             default:
