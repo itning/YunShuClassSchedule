@@ -23,7 +23,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         startService(new Intent(this, CommonService.class));
         startService(new Intent(this, DataDownloadService.class));
-        startService(new Intent(this, ApkDownloadService.class));
         startService(new Intent(this, RemindService.class));
     }
 

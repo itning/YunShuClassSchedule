@@ -55,6 +55,7 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.service.ApkDownloadService;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
@@ -143,6 +144,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (eventEntity.getId()) {
             case INSTALL_APK: {
                 EventBus.getDefault().removeStickyEvent(eventEntity);
+                stopService(new Intent(this, ApkDownloadService.class));
                 ApkInstallUtils.installApk(new File(Environment.getExternalStorageDirectory(), eventEntity.getMsg()), this, true, true);
                 break;
             }

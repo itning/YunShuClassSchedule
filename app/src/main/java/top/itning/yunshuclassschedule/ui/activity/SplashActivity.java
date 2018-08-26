@@ -37,6 +37,7 @@ import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.AppUpdate;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
+import top.itning.yunshuclassschedule.service.ApkDownloadService;
 import top.itning.yunshuclassschedule.service.JobSchedulerService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
@@ -147,6 +148,7 @@ public class SplashActivity extends BaseActivity {
             case START_CHECK_APP_UPDATE: {
                 if (ApkInstallUtils.getPackageVersionCode(this) != appUpdate.getVersionCode()) {
                     //需要升级
+                    startService(new Intent(this, ApkDownloadService.class));
                     applicationUpdate();
                 } else {
                     new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get() - (System.currentTimeMillis() - startTime));
