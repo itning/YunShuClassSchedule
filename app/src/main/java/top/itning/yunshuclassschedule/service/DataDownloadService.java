@@ -29,8 +29,8 @@ import top.itning.yunshuclassschedule.util.HttpUtils;
  *
  * @author itning
  */
-public class ClassScheduleService extends Service {
-    private static final String TAG = "ClassScheduleService";
+public class DataDownloadService extends Service {
+    private static final String TAG = "DataDownloadService";
 
     @Override
     public void onCreate() {

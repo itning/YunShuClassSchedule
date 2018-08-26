@@ -6,9 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.service.ClassScheduleService;
+import top.itning.yunshuclassschedule.service.ApkDownloadService;
+import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.service.CommonService;
-import top.itning.yunshuclassschedule.service.DownloadService;
 import top.itning.yunshuclassschedule.service.RemindService;
 
 /**
@@ -22,8 +22,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         startService(new Intent(this, CommonService.class));
-        startService(new Intent(this, ClassScheduleService.class));
-        startService(new Intent(this, DownloadService.class));
+        startService(new Intent(this, DataDownloadService.class));
+        startService(new Intent(this, ApkDownloadService.class));
         startService(new Intent(this, RemindService.class));
     }
 

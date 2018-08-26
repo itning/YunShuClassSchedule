@@ -36,8 +36,8 @@ import top.itning.yunshuclassschedule.util.download.progress.ProgressHelper;
  *
  * @author itning
  */
-public class DownloadService extends Service {
-    private static final String TAG = "DownloadService";
+public class ApkDownloadService extends Service {
+    private static final String TAG = "ApkDownloadService";
     private String apkName;
 
     @Override

@@ -55,7 +55,7 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".service.DownloadService"
+            android:name=".service.ApkDownloadService"
             android:enabled="true"
             android:exported="false" />
         <service
@@ -63,7 +63,7 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".service.ClassScheduleService"
+            android:name=".service.DataDownloadService"
             android:enabled="true"
             android:exported="false" />
         <service

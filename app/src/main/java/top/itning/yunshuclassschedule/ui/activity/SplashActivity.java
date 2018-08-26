@@ -65,7 +65,7 @@ public class SplashActivity extends BaseActivity {
             checkAppUpdate();
             if (!App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
                 //非第一次进入,才进行课程表数据更新检查
-                //event to ClassScheduleService
+                //event to DataDownloadService
                 EventBus.getDefault().postSticky(new EventEntity(ConstantPool.Int.START_CHECK_CLASS_SCHEDULE_UPDATE));
                 NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                 assert notificationManager != null;
@@ -266,7 +266,7 @@ public class SplashActivity extends BaseActivity {
                     .setCancelable(false).setPositiveButton("确定", (dialog, which) -> enterMainActivity()).show();
             return;
         }
-        //event to DownloadService
+        //event to ApkDownloadService
         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.START_DOWNLOAD_UPDATE_APK, appUpdate.getDownloadUrl(), appUpdate.getVersionCode()));
         enterMainActivity();
     }
