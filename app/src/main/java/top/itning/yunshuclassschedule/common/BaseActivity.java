@@ -6,9 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.service.ApkDownloadService;
-import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.service.CommonService;
+import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.service.RemindService;
 
 /**
