@@ -38,6 +38,7 @@ import top.itning.yunshuclassschedule.entity.AppUpdate;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.http.CheckAppUpdate;
 import top.itning.yunshuclassschedule.service.ApkDownloadService;
+import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.service.JobSchedulerService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.HttpUtils;
@@ -60,6 +61,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        startService(new Intent(this, DataDownloadService.class));
         initJobScheduler();
         if (NetWorkUtils.isNetworkConnected(this)) {
             startTime = System.currentTimeMillis();

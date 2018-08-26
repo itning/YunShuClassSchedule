@@ -164,6 +164,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 break;
             }
             case END_CHECK_CLASS_SCHEDULE_UPDATE: {
+                stopService(new Intent(this, DataDownloadService.class));
                 initData();
                 break;
             }
