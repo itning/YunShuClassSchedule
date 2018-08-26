@@ -39,6 +39,7 @@ import top.itning.yunshuclassschedule.util.DateUtils;
 
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.CLASS_REMINDER_DOWN_TIME;
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.CLASS_REMINDER_UP_TIME;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.FOREGROUND_SERVICE_STATUS;
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_AFTER_TIME;
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_BEFORE_TIME;
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_STATUS;
@@ -92,32 +93,28 @@ public class RemindService extends Service implements SharedPreferences.OnShared
 
     /**
      * 开启前台服务
-     *
-     * @since android 8.0
      */
     private void startForegroundServer() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(TAG, "start Foreground Server");
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            //用ComponentName得到class对象
-            intent.setComponent(new ComponentName(this, MainActivity.class));
-            // 关键的一步，设置启动模式，两种情况
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
-                    .setContentTitle("云舒课表")
-                    .setContentText("提醒服务正在运行")
-                    .setVisibility(Notification.VISIBILITY_SECRET)
-                    .setSmallIcon(this.getApplicationInfo().icon)
-                    .setDefaults(Notification.DEFAULT_LIGHTS)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_MAX);
-            Notification notification = builder.build();
-            startForeground(111, notification);
-        }
+        Log.d(TAG, "start Foreground Server");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        //用ComponentName得到class对象
+        intent.setComponent(new ComponentName(this, MainActivity.class));
+        // 关键的一步，设置启动模式，两种情况
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
+                .setContentTitle("云舒课表")
+                .setContentText("提醒服务正在运行")
+                .setVisibility(Notification.VISIBILITY_SECRET)
+                .setSmallIcon(this.getApplicationInfo().icon)
+                .setDefaults(Notification.DEFAULT_LIGHTS)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+        Notification notification = builder.build();
+        startForeground(111, notification);
     }
 
     @Override
@@ -412,6 +409,13 @@ public class RemindService extends Service implements SharedPreferences.OnShared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(FOREGROUND_SERVICE_STATUS)) {
+            if (sharedPreferences.getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
+                startForegroundServer();
+            } else {
+                stopForeground(true);
+            }
+        }
         if (key.equals(CLASS_REMINDER_DOWN_STATUS)
                 || key.equals(CLASS_REMINDER_UP_STATUS)
                 || key.equals(PHONE_MUTE_STATUS)

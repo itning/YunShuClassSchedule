@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -37,7 +38,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public static final String APP_COLOR_PRIMARY_DARK = "app_color_primary_dark";
     public static final String APP_COLOR_ACCENT = "app_color_accent";
     public static final String APP_COLOR_PROGRESS = "app_color_progress";
+    public static final String FOREGROUND_SERVICE_STATUS = "foreground_service_status";
     private static final String CLASS_SCHEDULE_UPDATE_FREQUENCY = "class_schedule_update_frequency";
+    private static boolean LAST_FOREGROUND_SERVICE_STATUS = true;
 
     private SharedPreferences prefs;
     private ListPreference defaultShowMainFragmentListPreference;
@@ -58,6 +61,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             defaultShowMainFragmentListPreference.setSummary(defaultShowMainFragmentListPreference.getEntry());
             classScheduleUpdateFrequency = (ListPreference) findPreference(CLASS_SCHEDULE_UPDATE_FREQUENCY);
             classScheduleUpdateFrequency.setSummary(classScheduleUpdateFrequency.getEntry());
+            Preference foregroundServiceStatus = findPreference(FOREGROUND_SERVICE_STATUS);
+            foregroundServiceStatus.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (!(boolean) newValue) {
+                    if (LAST_FOREGROUND_SERVICE_STATUS) {
+                        LAST_FOREGROUND_SERVICE_STATUS = false;
+                        new AlertDialog.Builder(requireContext()).setTitle("注意")
+                                .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！")
+                                .setCancelable(true)
+                                .setPositiveButton("我知道了", null)
+                                .show();
+                        return false;
+                    } else {
+                        LAST_FOREGROUND_SERVICE_STATUS = true;
+                        return true;
+                    }
+                }
+                return true;
+            });
         } else {
             String key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT);
             assert key != null;
