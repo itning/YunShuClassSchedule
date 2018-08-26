@@ -88,8 +88,8 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="foreground_service_status"
-            android:summaryOff="后台提醒已关闭"
-            android:summaryOn="后台提醒已开启"
+            android:summaryOff="通知栏服务常驻已关闭"
+            android:summaryOn="通知栏服务常驻已开启"
             android:title="提醒服务后台常驻" />
     </PreferenceCategory>
     <PreferenceCategory android:title="个性化设置">
