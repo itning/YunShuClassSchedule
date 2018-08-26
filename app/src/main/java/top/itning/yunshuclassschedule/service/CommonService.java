@@ -76,7 +76,7 @@ public class CommonService extends Service implements SharedPreferences.OnShared
 
             channelId = "foreground_service";
             channelName = "前台服务";
-            importance = NotificationManager.IMPORTANCE_MIN;
+            importance = NotificationManager.IMPORTANCE_NONE;
             createNotificationChannel(channelId, channelName, importance);
         }
     }

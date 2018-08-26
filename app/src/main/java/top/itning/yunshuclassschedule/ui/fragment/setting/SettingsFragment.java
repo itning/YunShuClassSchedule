@@ -66,11 +66,27 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 if (!(boolean) newValue) {
                     if (LAST_FOREGROUND_SERVICE_STATUS) {
                         LAST_FOREGROUND_SERVICE_STATUS = false;
-                        new AlertDialog.Builder(requireContext()).setTitle("注意")
-                                .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！")
-                                .setCancelable(true)
-                                .setPositiveButton("我知道了", null)
-                                .show();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            new AlertDialog.Builder(requireContext()).setTitle("注意")
+                                    .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！\n" +
+                                            "您可以选择关闭该通知渠道来取消通知栏通知!")
+                                    .setCancelable(true)
+                                    .setPositiveButton("带我去设置", (dialog1, which1) -> {
+                                        Intent channelIntent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+                                        channelIntent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+                                        //渠道id必须是我们之前注册的
+                                        channelIntent.putExtra(Settings.EXTRA_CHANNEL_ID, "foreground_service");
+                                        startActivity(channelIntent);
+                                    })
+                                    .setNegativeButton("不用了", null)
+                                    .show();
+                        } else {
+                            new AlertDialog.Builder(requireContext()).setTitle("注意")
+                                    .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！")
+                                    .setCancelable(true)
+                                    .setPositiveButton("我知道了", null)
+                                    .show();
+                        }
                         return false;
                     } else {
                         LAST_FOREGROUND_SERVICE_STATUS = true;
