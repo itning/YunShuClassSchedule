@@ -1,6 +1,7 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -75,6 +76,7 @@ public class ClassScheduleFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "on Create View");
         ViewHolder holder;
         if (view != null) {
             holder = (ViewHolder) view.getTag();
@@ -84,34 +86,38 @@ public class ClassScheduleFragment extends Fragment {
             view.setTag(holder);
         }
         ThemeChangeUtil.setTabLayoutColor(requireContext(), holder.tl);
-        if (holder.vp.getAdapter() == null) {
-            Log.d(TAG, "adapter is null,now loading adapter");
-            //预加载
-            holder.vp.setOffscreenPageLimit(fragmentList.size());
-            holder.vp.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
+        holder.vp.setAdapter(null);
+        //预加载
+        holder.vp.setOffscreenPageLimit(fragmentList.size());
+        holder.vp.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
 
-                @Override
-                public int getCount() {
-                    return fragmentList.size();
-                }
-
-                @Override
-                public Fragment getItem(int position) {
-                    return fragmentList.get(position);
-                }
-
-                @Nullable
-                @Override
-                public CharSequence getPageTitle(int position) {
-                    return titleList.get(position);
-                }
-            });
-            holder.tl.setupWithViewPager(holder.vp);
-            //设置默认展示页面
-            if (!TODAY.equals(PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY))) {
-                holder.vp.setCurrentItem(1);
-                Objects.requireNonNull(holder.tl.getTabAt(1)).select();
+            @Override
+            public int getCount() {
+                return fragmentList.size();
             }
+
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return titleList.get(position);
+            }
+
+            @Override
+            public Parcelable saveState() {
+                return null;
+            }
+
+        });
+        holder.tl.setupWithViewPager(holder.vp);
+        //设置默认展示页面
+        if (!TODAY.equals(PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY))) {
+            holder.vp.setCurrentItem(1);
+            Objects.requireNonNull(holder.tl.getTabAt(1)).select();
         }
         return view;
     }
