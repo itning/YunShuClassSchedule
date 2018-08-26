@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,7 +56,7 @@ public class ThemeChangeUtil {
         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.APP_COLOR_CHANGE));
     }
 
-    public static void initColor(@NonNull AppCompatActivity activity) {
+    public static void initColor(@NonNull AppCompatActivity activity, DrawerLayout drawerLayout) {
         if (!isChange) {
             ActionBar supportActionBar = activity.getSupportActionBar();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -61,14 +64,8 @@ public class ThemeChangeUtil {
                 int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, defaultColorPrimary);
                 supportActionBar.setBackgroundDrawable(new ColorDrawable(appColorPrimary));
             }
-            Window window = activity.getWindow();
-            //设置状态栏透明
-            //window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //设置状态栏颜色
             int appColorPrimaryDark = sharedPreferences.getInt(APP_COLOR_PRIMARY_DARK, defaultColorPrimaryDark);
-            window.setStatusBarColor(appColorPrimaryDark);
+            StatusBarUtil.setColorForDrawerLayout(activity, drawerLayout, appColorPrimaryDark, 10);
         }
     }
 
@@ -100,12 +97,8 @@ public class ThemeChangeUtil {
             int appColorPrimary = sharedPreferences.getInt(APP_COLOR_PRIMARY, defaultColorPrimary);
             actionBar.setBackgroundDrawable(new ColorDrawable(appColorPrimary));
         }
-        Window window = activity.getWindow();
-        //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //设置状态栏颜色
         int appColorPrimaryDark = sharedPreferences.getInt(APP_COLOR_PRIMARY_DARK, defaultColorPrimaryDark);
-        window.setStatusBarColor(appColorPrimaryDark);
+        StatusBarUtil.setColor(activity, appColorPrimaryDark, 30);
     }
 
     public static void setTabLayoutColor(@NonNull Context context, @NonNull TabLayout tabLayout) {
