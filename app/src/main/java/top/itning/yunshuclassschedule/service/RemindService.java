@@ -13,12 +13,10 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +41,7 @@ import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragmen
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.CLASS_REMINDER_UP_TIME;
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_AFTER_TIME;
 import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_BEFORE_TIME;
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.PHONE_MUTE_STATUS;
 
 /**
  * 提醒服务
@@ -55,7 +54,6 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     private static final String REMIND_SERVICE_NEW_DAY = "remind_service_new_day";
     private static final String CLASS_REMINDER_UP_STATUS = "class_reminder_up_status";
     private static final String CLASS_REMINDER_DOWN_STATUS = "class_reminder_down_status";
-    private static final String PHONE_MUTE_STATUS = "phone_mute_status";
     private List<ClassSchedule> classScheduleList;
     private SharedPreferences sharedPreferences;
     private final Calendar calendar = Calendar.getInstance();
@@ -414,20 +412,6 @@ public class RemindService extends Service implements SharedPreferences.OnShared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (PHONE_MUTE_STATUS.equals(key)) {
-            if (sharedPreferences.getBoolean(key, false)) {
-                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                assert notificationManager != null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
-                    Toast.makeText(this, "请授予免打扰权限", Toast.LENGTH_LONG).show();
-                    Toast.makeText(this, "权限授予后请重新开启自动静音", Toast.LENGTH_LONG).show();
-                    if (sharedPreferences.edit().putBoolean(key, false).commit()) {
-                        startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
-                        return;
-                    }
-                }
-            }
-        }
         if (key.equals(CLASS_REMINDER_DOWN_STATUS)
                 || key.equals(CLASS_REMINDER_UP_STATUS)
                 || key.equals(PHONE_MUTE_STATUS)

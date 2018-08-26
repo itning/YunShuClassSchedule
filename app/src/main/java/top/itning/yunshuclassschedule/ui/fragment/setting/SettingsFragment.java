@@ -1,11 +1,18 @@
 package top.itning.yunshuclassschedule.ui.fragment.setting;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -22,6 +29,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     public static final String CLASS_REMINDER_UP_TIME = "class_reminder_up_time";
     public static final String CLASS_REMINDER_DOWN_TIME = "class_reminder_down_time";
+    public static final String PHONE_MUTE_STATUS = "phone_mute_status";
     public static final String PHONE_MUTE_BEFORE_TIME = "phone_mute_before_time";
     public static final String PHONE_MUTE_AFTER_TIME = "phone_mute_after_time";
     public static final String DEFAULT_SHOW_MAIN_FRAGMENT = "default_show_main_fragment";
@@ -64,6 +72,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 case "phone_mute": {
                     phoneMuteBeforeTime = (ListPreference) findPreference(PHONE_MUTE_BEFORE_TIME);
                     phoneMuteAfterTime = (ListPreference) findPreference(PHONE_MUTE_AFTER_TIME);
+                    Preference phoneMuteStatus = findPreference(PHONE_MUTE_STATUS);
+                    phoneMuteStatus.setOnPreferenceChangeListener((preference, newValue) -> {
+                        if ((boolean) newValue) {
+                            NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            assert notificationManager != null;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
+                                Toast.makeText(requireContext(), "请授予免打扰权限", Toast.LENGTH_LONG).show();
+                                Toast.makeText(requireContext(), "权限授予后请重新开启自动静音", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                        return true;
+                    });
                     phoneMuteBeforeTime.setSummary(phoneMuteBeforeTime.getEntry());
                     phoneMuteAfterTime.setSummary(phoneMuteAfterTime.getEntry());
                     break;
