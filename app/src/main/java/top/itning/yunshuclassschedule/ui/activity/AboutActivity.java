@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.MenuItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +56,18 @@ public class AboutActivity extends BaseActivity {
             supportActionBar.setTitle("关于");
         }
         tvVersion.setText(ApkInstallUtils.getPackageVersionName(this));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                break;
+            }
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

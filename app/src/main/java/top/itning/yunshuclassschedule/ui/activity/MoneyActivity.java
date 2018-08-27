@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
@@ -63,6 +64,18 @@ public class MoneyActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                break;
+            }
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick({R.id.cv_z, R.id.cv_v})
