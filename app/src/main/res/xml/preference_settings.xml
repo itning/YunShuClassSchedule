@@ -160,10 +160,11 @@
                 android:action="android.intent.action.VIEW"
                 android:data="http://www.baidu.com" />
         </Preference>
+        <Preference android:title="捐赠">
+            <intent android:action="top.itning.yunshuclassschedule.MONEY" />
+        </Preference>
         <Preference android:title="关于">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="http://www.baidu.com" />
+            <intent android:action="top.itning.yunshuclassschedule.ABOUT" />
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

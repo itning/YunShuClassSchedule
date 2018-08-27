@@ -59,6 +59,22 @@
         <activity
             android:name=".ui.activity.SettingActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.AboutActivity">
+            <intent-filter>
+                <action android:name="top.itning.yunshuclassschedule.ABOUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.MoneyActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="top.itning.yunshuclassschedule.MONEY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".service.ApkDownloadService"
@@ -82,7 +98,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name="top.itning.yunshuclassschedule.receiver.RemindReceiver" />
+        <receiver android:name=".receiver.RemindReceiver" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
