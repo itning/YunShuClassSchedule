@@ -158,7 +158,7 @@
         <Preference android:title="反馈建议">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="http://www.baidu.com" />
+                android:data="mqqwpa://im/chat?chat_type=wpa&amp;uin=3579677768" />
         </Preference>
         <Preference android:title="捐赠">
             <intent android:action="top.itning.yunshuclassschedule.MONEY" />
