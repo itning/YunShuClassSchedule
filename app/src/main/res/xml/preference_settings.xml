@@ -150,11 +150,6 @@
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="其它">
-        <Preference android:title="权限说明">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="http://www.baidu.com" />
-        </Preference>
         <Preference android:title="反馈建议">
             <intent
                 android:action="android.intent.action.VIEW"
