@@ -65,7 +65,7 @@
             android:persistent="false"
             android:summary="设置上课手机自动静音"
             android:title="手机自动静音">
-            <PreferenceCategory android:title="手机自动静音">
+            <PreferenceCategory android:title="上课时手机自动静音">
                 <SwitchPreference
                     android:defaultValue="false"
                     android:key="phone_mute_status"
