@@ -49,7 +49,6 @@ public class LoginActivity extends BaseActivity {
      * 加载登陆班级数据
      */
     private static final String LOADING_CLASS_DATA = "1";
-    private long firstPressedTime;
 
     @BindView(R.id.btn_login)
     AppCompatButton btnLogin;
@@ -208,16 +207,6 @@ public class LoginActivity extends BaseActivity {
                 break;
             }
             default:
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (System.currentTimeMillis() - firstPressedTime < ConstantPool.Int.EXIT_DELAY.get()) {
-            finish();
-        } else {
-            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
-            firstPressedTime = System.currentTimeMillis();
         }
     }
 
