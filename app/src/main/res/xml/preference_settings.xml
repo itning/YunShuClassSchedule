@@ -15,6 +15,11 @@
             android:entryValues="@array/entries_values_class_schedule_update_frequency"
             android:key="class_schedule_update_frequency"
             android:title="课程数据更新频率" />
+        <Preference
+            android:summary="选择专业班级进行登陆"
+            android:title="重新选择班级">
+            <intent android:action="top.itning.yunshuclassschedule.LOGIN" />
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="上下课提醒与静音">
         <PreferenceScreen

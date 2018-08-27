@@ -33,6 +33,7 @@ import top.itning.yunshuclassschedule.entity.ClassEntity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.entity.Profession;
 import top.itning.yunshuclassschedule.http.ClassScheduleMetaData;
+import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.util.HttpUtils;
 
 /**
@@ -72,6 +73,7 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         progressDialog = new ProgressDialog(this);
+        startService(new Intent(this, DataDownloadService.class));
         initData();
     }
 
