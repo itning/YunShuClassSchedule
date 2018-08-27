@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -39,15 +40,21 @@ import top.itning.yunshuclassschedule.util.download.progress.ProgressHelper;
 public class ApkDownloadService extends Service {
     private static final String TAG = "ApkDownloadService";
     private String apkName;
+    private PowerManager.WakeLock wakeLock;
 
     @Override
     public void onCreate() {
         EventBus.getDefault().register(this);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        assert powerManager != null;
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ApkDownloadService");
+        wakeLock.acquire(20 * 60 * 1000);
     }
 
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        wakeLock.release();
     }
 
     @Override

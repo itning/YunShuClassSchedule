@@ -3,6 +3,7 @@ package top.itning.yunshuclassschedule.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -31,15 +32,21 @@ import top.itning.yunshuclassschedule.util.HttpUtils;
  */
 public class DataDownloadService extends Service {
     private static final String TAG = "DataDownloadService";
+    private PowerManager.WakeLock wakeLock;
 
     @Override
     public void onCreate() {
         EventBus.getDefault().register(this);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        assert powerManager != null;
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DataDownloadService");
+        wakeLock.acquire(20 * 60 * 1000);
     }
 
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        wakeLock.release();
     }
 
 
