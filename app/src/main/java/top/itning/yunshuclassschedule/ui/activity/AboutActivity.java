@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import butterknife.OnClick;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
@@ -31,6 +33,8 @@ public class AboutActivity extends BaseActivity {
     CardView cvHref;
     @BindView(R.id.cv_introduction)
     CardView cvIntroduction;
+    @BindView(R.id.tv_version)
+    AppCompatTextView tvVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class AboutActivity extends BaseActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle("关于");
         }
+        tvVersion.setText(ApkInstallUtils.getPackageVersionName(this));
     }
 
     @Override
