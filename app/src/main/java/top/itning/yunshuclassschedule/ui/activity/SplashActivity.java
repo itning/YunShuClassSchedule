@@ -148,7 +148,7 @@ public class SplashActivity extends BaseActivity {
                 break;
             }
             case START_CHECK_APP_UPDATE: {
-                if (ApkInstallUtils.getPackageVersionCode(this) != appUpdate.getVersionCode()) {
+                if (ApkInstallUtils.getPackageVersionCode(this) < appUpdate.getVersionCode()) {
                     //需要升级
                     startService(new Intent(this, ApkDownloadService.class));
                     applicationUpdate();
