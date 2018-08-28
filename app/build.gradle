@@ -16,6 +16,9 @@ android {
                 arguments = [eventBusIndex: 'top.itning.yunshuclassschedule.AppActivityIndex']
             }
         }
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
     }
     buildTypes {
         release {
