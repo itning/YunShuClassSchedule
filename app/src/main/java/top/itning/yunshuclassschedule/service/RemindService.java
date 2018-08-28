@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -28,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
@@ -108,7 +110,8 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 .setContentTitle("云舒课表")
                 .setContentText("提醒服务正在运行")
                 .setVisibility(Notification.VISIBILITY_SECRET)
-                .setSmallIcon(this.getApplicationInfo().icon)
+                .setSmallIcon(R.mipmap.logo_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
@@ -397,7 +400,8 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setSmallIcon(this.getApplicationInfo().icon)
+                .setSmallIcon(R.mipmap.logo_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)

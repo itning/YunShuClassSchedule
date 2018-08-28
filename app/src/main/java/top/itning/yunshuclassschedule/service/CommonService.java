@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.receiver.TimeTickReceiver;
 import top.itning.yunshuclassschedule.ui.activity.MainActivity;
@@ -98,7 +100,8 @@ public class CommonService extends Service implements SharedPreferences.OnShared
                 .setContentTitle("云舒课表")
                 .setContentText("提醒服务正在运行")
                 .setVisibility(Notification.VISIBILITY_SECRET)
-                .setSmallIcon(this.getApplicationInfo().icon)
+                .setSmallIcon(R.mipmap.logo_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
