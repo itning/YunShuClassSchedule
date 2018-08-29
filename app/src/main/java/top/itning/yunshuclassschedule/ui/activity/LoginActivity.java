@@ -186,6 +186,7 @@ public class LoginActivity extends BaseActivity {
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case END_CHECK_CLASS_SCHEDULE_UPDATE: {
+                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.DESTROY_ACTIVITY));
                 changeLoadingState(false, "登陆中");
                 startActivity(new Intent(this, MainActivity.class));
                 finish();

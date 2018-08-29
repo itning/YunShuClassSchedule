@@ -81,6 +81,10 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
                 ThemeChangeUtil.changeSettingTheme(this);
                 break;
             }
+            case DESTROY_ACTIVITY: {
+                finish();
+                break;
+            }
             default:
         }
     }

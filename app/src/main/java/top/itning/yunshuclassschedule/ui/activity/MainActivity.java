@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toolbar.setTitle(ACTION_BAR_TITLE_FORMAT.format(new Date()));
         //设置导航
         setSupportActionBar(toolbar);
-        ThemeChangeUtil.initColor(this,drawerLayout);
+        ThemeChangeUtil.initColor(this, drawerLayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -164,6 +164,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case APP_COLOR_CHANGE: {
                 Log.d(TAG, "app color change , now afresh view");
                 ThemeChangeUtil.initColor(this, drawerLayout);
+                break;
+            }
+            case DESTROY_ACTIVITY: {
+                finish();
                 break;
             }
             default:

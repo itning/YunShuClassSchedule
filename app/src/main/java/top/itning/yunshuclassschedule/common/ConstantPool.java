@@ -152,7 +152,11 @@ public class ConstantPool {
         /**
          * 本周课程背景变化
          */
-        NOTIFICATION_BACKGROUND_CHANGE(131);
+        NOTIFICATION_BACKGROUND_CHANGE(131),
+        /**
+         * 销毁Activity(在重新选择专业时需要销毁MainActivity和SettingActivity)
+         */
+        DESTROY_ACTIVITY(132);
 
         private int value;
 
