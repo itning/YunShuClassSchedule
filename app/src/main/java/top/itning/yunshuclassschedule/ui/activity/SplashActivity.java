@@ -58,6 +58,10 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!isTaskRoot()) {
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
@@ -130,7 +134,7 @@ public class SplashActivity extends BaseActivity {
         Intent intent;
         if (App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
             //第一次进入APP
-            intent = new Intent(this, GuideActivity.class);
+            intent = new Intent(this, LoginActivity.class);
         } else {
             //非第一次,肯定已经登陆
             intent = new Intent(this, MainActivity.class);
