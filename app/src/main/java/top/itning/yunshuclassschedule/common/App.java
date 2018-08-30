@@ -14,6 +14,7 @@ import org.greenrobot.greendao.database.Database;
 import top.itning.yunshuclassschedule.AppActivityIndex;
 import top.itning.yunshuclassschedule.entity.DaoMaster;
 import top.itning.yunshuclassschedule.entity.DaoSession;
+import top.itning.yunshuclassschedule.util.GlideApp;
 
 /**
  * 应用基类
@@ -53,6 +54,7 @@ public class App extends Application {
     public void onLowMemory() {
         // 低内存的时候执行
         Log.d(TAG, "onLowMemory");
+        GlideApp.get(this).clearMemory();
         super.onLowMemory();
     }
 
@@ -60,6 +62,10 @@ public class App extends Application {
     public void onTrimMemory(int level) {
         // 程序在内存清理的时候执行
         Log.d(TAG, "onTrimMemory:" + level);
+        if (level == TRIM_MEMORY_UI_HIDDEN) {
+            GlideApp.get(this).clearMemory();
+        }
+        GlideApp.get(this).trimMemory(level);
         super.onTrimMemory(level);
     }
 
