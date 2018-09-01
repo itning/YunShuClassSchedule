@@ -257,6 +257,7 @@ public class LoginActivity extends BaseActivity {
     public void onLoginBtnClicked() {
         changeLoadingState(true, "登陆中");
         App.sharedPreferences.edit()
+                .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
                 .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
                 .putString(ConstantPool.Str.USER_CLASS_ID.get(), classEntityList.get(classSelect).getId())
                 .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
