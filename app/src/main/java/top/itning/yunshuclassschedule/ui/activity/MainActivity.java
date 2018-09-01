@@ -284,7 +284,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void startSelectImageActivity() {
         Matisse.from(MainActivity.this)
                 //图片类型
-                .choose(MimeType.ofImage())
+                .choose(MimeType.of(MimeType.JPEG, MimeType.PNG, MimeType.BMP))
                 //true:选中后显示数字;false:选中后显示对号
                 .countable(true)
                 //可选的最大数
