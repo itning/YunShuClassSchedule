@@ -181,6 +181,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
     private void initData() {
         Log.d(TAG, "start init data");
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "initData");
+        wakeLock.setReferenceCounted(false);
         wakeLock.acquire(5 * 60 * 1000);
         classReminderUpStatus = sharedPreferences.getBoolean(CLASS_REMINDER_UP_STATUS, true);
         classReminderDownStatus = sharedPreferences.getBoolean(CLASS_REMINDER_DOWN_STATUS, true);
@@ -197,7 +198,9 @@ public class RemindService extends Service implements SharedPreferences.OnShared
             initPendingIntentList();
             addToAlarm();
         }
-        wakeLock.release();
+        if (wakeLock.isHeld()) {
+            wakeLock.release();
+        }
     }
 
     private void clearAlarm() {

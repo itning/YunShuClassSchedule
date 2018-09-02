@@ -36,17 +36,22 @@ public class DataDownloadService extends Service {
 
     @Override
     public void onCreate() {
+        Log.d(TAG, "on Create");
         EventBus.getDefault().register(this);
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         assert powerManager != null;
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DataDownloadService");
+        wakeLock.setReferenceCounted(false);
         wakeLock.acquire(20 * 60 * 1000);
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "on Destroy");
         EventBus.getDefault().unregister(this);
-        wakeLock.release();
+        if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
+        }
     }
 
 

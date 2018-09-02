@@ -48,13 +48,16 @@ public class ApkDownloadService extends Service {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         assert powerManager != null;
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ApkDownloadService");
+        wakeLock.setReferenceCounted(false);
         wakeLock.acquire(20 * 60 * 1000);
     }
 
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        wakeLock.release();
+        if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
+        }
     }
 
     @Override
