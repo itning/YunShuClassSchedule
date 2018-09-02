@@ -8,4 +8,5 @@
     <string name="action_set_text_size">设置字体大小</string>
     <string name="login_name">登陆</string>
     <string name="action_set_background_image">更换背景图片</string>
+    <string name="action_show_teacher_info">显示授课教师</string>
 </resources>

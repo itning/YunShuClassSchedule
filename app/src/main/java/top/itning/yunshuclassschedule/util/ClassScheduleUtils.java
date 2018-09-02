@@ -227,7 +227,12 @@ public class ClassScheduleUtils {
      */
     @CheckResult
     private static String showText(ClassSchedule classSchedule) {
-        return classSchedule.getName() + "@" + classSchedule.getLocation();
+        if (App.sharedPreferences.getBoolean(ConstantPool.Str.TEACHER_INFO_STATUS.get(), false)) {
+            return classSchedule.getName() + "@" + classSchedule.getLocation() + "\n" + classSchedule.getTeacher();
+        } else {
+            return classSchedule.getName() + "@" + classSchedule.getLocation();
+        }
+
     }
 
     /**

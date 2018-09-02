@@ -205,6 +205,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.action_show_teacher_info)
+                .setTitle(
+                        App.sharedPreferences.getBoolean(ConstantPool.Str.TEACHER_INFO_STATUS.get(), false)
+                                ? "隐藏授课教师" : "显示授课教师");
         return true;
     }
 
@@ -220,6 +224,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 if (checkPermission()) {
                     startSelectImageActivity();
                 }
+                return true;
+            }
+            case R.id.action_show_teacher_info: {
+                if (App.sharedPreferences.getBoolean(ConstantPool.Str.TEACHER_INFO_STATUS.get(), false)) {
+                    App.sharedPreferences.edit().putBoolean(ConstantPool.Str.TEACHER_INFO_STATUS.get(), false).apply();
+                    item.setTitle("显示授课教师");
+                } else {
+                    App.sharedPreferences.edit().putBoolean(ConstantPool.Str.TEACHER_INFO_STATUS.get(), true).apply();
+                    item.setTitle("隐藏授课教师");
+                }
+                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA));
                 return true;
             }
             default:

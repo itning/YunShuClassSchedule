@@ -43,7 +43,11 @@ public class ConstantPool {
         /**
          * 上一次的日期
          */
-        LAST_DATE("last-date");
+        LAST_DATE("last-date"),
+        /**
+         * 是否显示授课教师信息
+         */
+        TEACHER_INFO_STATUS("teacher_week_status");
 
         private String value;
 
