@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="preferenceTheme">@style/AppTheme</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.NightTheme" parent="Theme.AppCompat">
@@ -19,7 +19,7 @@
     </style>
 
     <style name="AppTheme.NightTheme.Setting" parent="AppTheme.NightTheme">
-        <item name="preferenceTheme">@style/AppTheme.NightTheme.Setting</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
