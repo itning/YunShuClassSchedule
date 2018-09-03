@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
     android:orientation="vertical"
     tools:context=".ui.activity.SplashActivity">
 
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/iv_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

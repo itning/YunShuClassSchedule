@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,13 +20,16 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
+import android.view.Display;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +45,7 @@ import top.itning.yunshuclassschedule.service.ApkDownloadService;
 import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.service.JobSchedulerService;
 import top.itning.yunshuclassschedule.util.ApkInstallUtils;
+import top.itning.yunshuclassschedule.util.GlideApp;
 import top.itning.yunshuclassschedule.util.HttpUtils;
 import top.itning.yunshuclassschedule.util.NetWorkUtils;
 
@@ -55,6 +60,9 @@ public class SplashActivity extends BaseActivity {
     private static long startTime;
     private AppUpdate appUpdate;
 
+    @BindView(R.id.iv_splash)
+    AppCompatImageView ivSplash;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        initBackGroundImage();
         startService(new Intent(this, DataDownloadService.class));
         initJobScheduler();
         if (NetWorkUtils.isNetworkConnected(this)) {
@@ -84,6 +93,21 @@ public class SplashActivity extends BaseActivity {
             Toast.makeText(this, "没有网络", Toast.LENGTH_LONG).show();
             new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get());
         }
+    }
+
+    /**
+     * 初始化背景图片
+     */
+    private void initBackGroundImage() {
+        Display display = this.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        GlideApp
+                .with(this)
+                .load(R.drawable.splash_background)
+                .override(size.x, size.y)
+                .centerCrop()
+                .into(ivSplash);
     }
 
     /**
@@ -236,7 +260,7 @@ public class SplashActivity extends BaseActivity {
                     upgradeApplication();
                 }
             } else {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     new AlertDialog.Builder(this).setTitle("需要权限安装升级文件")
                             .setMessage("我们需要安装权限")
                             .setCancelable(false)
