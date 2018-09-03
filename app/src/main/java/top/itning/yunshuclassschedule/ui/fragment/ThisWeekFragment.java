@@ -1,5 +1,6 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,8 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.FileUtils;
 import top.itning.yunshuclassschedule.util.GlideApp;
+
+import static top.itning.yunshuclassschedule.util.FileUtils.MAX_IMAGE_FILE_SIZE;
 
 
 /**
@@ -108,9 +112,26 @@ public class ThisWeekFragment extends Fragment {
     private void setViewBackground() {
         File file = requireContext().getFileStreamPath("background_img");
         if (file.exists() && file.isFile() && file.length() != 0) {
+            // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+            long fileSizeInKB = file.length() / 1024;
+            // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+            long fileSizeInMB = fileSizeInKB / 1024;
+            Log.d(TAG, "file size :" + fileSizeInKB + "KB");
+            if (fileSizeInMB > MAX_IMAGE_FILE_SIZE) {
+                boolean delete = file.delete();
+                Log.d(TAG, "delete :" + delete);
+                view.setBackgroundResource(R.drawable.this_week_background);
+                return;
+            }
+            Display display = requireActivity().getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            Log.d(TAG, "screen width:" + size.x + " height:" + size.y);
             GlideApp
                     .with(this)
                     .load(file)
+                    .override(size.x, size.y)
+                    .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(new CustomViewTarget<View, Drawable>(view) {

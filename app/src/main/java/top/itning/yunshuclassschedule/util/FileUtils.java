@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,13 +23,27 @@ import java.nio.channels.FileChannel;
 @SuppressWarnings("unused")
 public class FileUtils {
     private static final String TAG = "FileUtils";
+    public static final int MAX_IMAGE_FILE_SIZE = 20;
 
     private FileUtils() {
     }
 
     public static void transferFile(@NonNull Context context, @NonNull Uri fromUri, @NonNull String fileName) {
         try {
-            FileChannel inChannel = new FileInputStream(new File(getRealPathFromUri(context, fromUri))).getChannel();
+            File file = new File(getRealPathFromUri(context, fromUri));
+            // Get length of file in bytes
+            long fileSizeInBytes = file.length();
+            // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+            long fileSizeInKB = fileSizeInBytes / 1024;
+            // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+            long fileSizeInMB = fileSizeInKB / 1024;
+            Log.d(TAG, "file size :" + fileSizeInKB + "KB");
+            if (fileSizeInMB > MAX_IMAGE_FILE_SIZE) {
+                Log.d(TAG, "this image too large :" + fileSizeInMB + "MB");
+                Toast.makeText(context, "图片太大了", Toast.LENGTH_LONG).show();
+                return;
+            }
+            FileChannel inChannel = new FileInputStream(file).getChannel();
             FileChannel fileOutputStreamChannel = context.openFileOutput(fileName, Context.MODE_PRIVATE).getChannel();
             fileOutputStreamChannel.transferFrom(inChannel, 0, inChannel.size());
             fileOutputStreamChannel.close();
