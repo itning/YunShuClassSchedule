@@ -63,6 +63,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     /*status bar util*/
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    /*material date time picker*/
+    implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
