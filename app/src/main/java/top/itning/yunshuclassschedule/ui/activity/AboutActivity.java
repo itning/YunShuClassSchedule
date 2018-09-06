@@ -1,9 +1,13 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -19,7 +23,6 @@ import butterknife.OnClick;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
@@ -55,7 +58,23 @@ public class AboutActivity extends BaseActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle("关于");
         }
-        tvVersion.setText(ApkInstallUtils.getPackageVersionName(this));
+        tvVersion.setText(getPackageVersionName(this));
+    }
+
+    /**
+     * 获取当前应用版本
+     *
+     * @param appCompatActivity {@link AppCompatActivity}
+     * @return 版本信息
+     */
+    @CheckResult
+    private String getPackageVersionName(@NonNull AppCompatActivity appCompatActivity) {
+        try {
+            return appCompatActivity.getPackageManager().getPackageInfo(appCompatActivity.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.w("SplashActivity", "Package name not found:", e);
+            return "";
+        }
     }
 
     @Override

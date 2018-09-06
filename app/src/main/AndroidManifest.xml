@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -85,10 +84,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".service.ApkDownloadService"
-            android:enabled="true"
-            android:exported="false" />
         <service
             android:name=".service.CommonService"
             android:enabled="true"

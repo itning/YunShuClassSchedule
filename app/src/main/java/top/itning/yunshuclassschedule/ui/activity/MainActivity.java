@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -40,7 +39,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,10 +53,8 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.service.ApkDownloadService;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
-import top.itning.yunshuclassschedule.util.ApkInstallUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
 import top.itning.yunshuclassschedule.util.Glide4Engine;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
@@ -139,15 +135,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
-            case INSTALL_APK: {
-                EventBus.getDefault().removeStickyEvent(eventEntity);
-                stopService(new Intent(this, ApkDownloadService.class));
-                ApkInstallUtils.installApk(new File(Environment.getExternalStorageDirectory(), eventEntity.getMsg()), this, true, true);
-                break;
-            }
             case TIME_TICK_CHANGE: {
                 if (DateUtils.isNewDay()) {
                     fragmentSparseArray.remove(R.id.nav_class_schedule);

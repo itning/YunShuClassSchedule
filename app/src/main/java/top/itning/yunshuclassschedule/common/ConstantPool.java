@@ -78,26 +78,6 @@ public class ConstantPool {
          */
         ENTER_HOME_ACTIVITY(112),
         /**
-         * 开始检查APP是否有更新
-         */
-        START_CHECK_APP_UPDATE(113),
-        /**
-         * 外置存储权限请求码
-         */
-        WRITE_EXTERNAL_STORAGE_REQUEST_CODE(114),
-        /**
-         * 设置权限页面请求码
-         */
-        APP_SETTING_REQUEST_CODE(115),
-        /**
-         * 开始下载升级文件
-         */
-        START_DOWNLOAD_UPDATE_APK(116),
-        /**
-         * 安装APK
-         */
-        INSTALL_APK(117),
-        /**
          * 退出间隔延迟
          */
         EXIT_DELAY(2000),
@@ -121,14 +101,6 @@ public class ConstantPool {
          * 登陆加载班级数据
          */
         LOGIN_LOADING_CLASS_DATA(122),
-        /**
-         * 安装APK权限请求码
-         */
-        INSTALL_PACKAGES_REQUEST_CODE(123),
-        /**
-         * 设置安装位置来源
-         */
-        APP_INSTALL_UNKNOWN_APK_SETTING(124),
         /**
          * 刷新本周课程fragment数据
          */
