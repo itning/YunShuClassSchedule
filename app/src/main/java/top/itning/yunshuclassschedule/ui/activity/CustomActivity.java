@@ -28,6 +28,7 @@ import butterknife.OnClick;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 
 /**
@@ -153,6 +154,12 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                 break;
             }
             case R.id.done: {
+                App.sharedPreferences.edit()
+                        .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
+                        .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
+                        .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
+                        .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
+                        .apply();
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 break;

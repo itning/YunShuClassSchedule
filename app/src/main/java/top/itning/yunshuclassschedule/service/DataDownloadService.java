@@ -77,7 +77,12 @@ public class DataDownloadService extends Service {
      * 检查课程表数据更新
      */
     private void checkClassScheduleUpdate() {
-        HttpUtils.getRetrofit().create(CheckClassScheduleVersion.class).checkVersion(App.sharedPreferences.getString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")).enqueue(new retrofit2.Callback<String>() {
+        String version = App.sharedPreferences.getString(ConstantPool.Str.USER_CLASS_ID.get(), "-1");
+        if ("-1".equals(version)) {
+            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.END_CHECK_CLASS_SCHEDULE_UPDATE));
+            return;
+        }
+        HttpUtils.getRetrofit().create(CheckClassScheduleVersion.class).checkVersion(version).enqueue(new retrofit2.Callback<String>() {
 
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

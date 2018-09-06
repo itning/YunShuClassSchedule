@@ -109,6 +109,9 @@ public class ThisWeekFragment extends Fragment {
         }
     }
 
+    /**
+     * 设置视图背景
+     */
     private void setViewBackground() {
         File file = requireContext().getFileStreamPath("background_img");
         if (file.exists() && file.isFile() && file.length() != 0) {

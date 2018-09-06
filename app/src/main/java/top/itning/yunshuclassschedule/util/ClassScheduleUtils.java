@@ -1,5 +1,6 @@
 package top.itning.yunshuclassschedule.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -7,24 +8,33 @@ import android.graphics.Point;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
+import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
+import top.itning.yunshuclassschedule.entity.EventEntity;
 
 /**
  * 课程表工具类
@@ -37,6 +47,7 @@ public class ClassScheduleUtils {
     private static final int CLASS_SECTION = 5;
     private static final int CLASS_WEEK = 7;
     private static float weekFont;
+    private static ClassSchedule selectClassSchedule;
 
     private ClassScheduleUtils() {
 
@@ -74,13 +85,94 @@ public class ClassScheduleUtils {
         gridLayout.removeViews(13, gridLayout.getChildCount() - 13);
         for (int i = 0; i < CLASS_SECTION; i++) {
             for (int j = 0; j < CLASS_WEEK; j++) {
-                gridLayout.addView(setNull(context), setParams(i + 1, j + 1, size));
+                gridLayout.addView(setNull(context, i + 1, j + 1), setParams(i + 1, j + 1, size));
             }
         }
         if (classScheduleList != null) {
             for (ClassSchedule classSchedule : classScheduleList) {
-                gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.getName()), context), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
+                gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.getName()), context, classSchedule.getSection(), classSchedule.getWeek()), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
             }
+        }
+
+        int childCount = gridLayout.getChildCount();
+        ClassScheduleDao classScheduleDao = ((App) activity.getApplication()).getDaoSession().getClassScheduleDao();
+        for (int i = 0; i < childCount; i++) {
+            View view = gridLayout.getChildAt(i);
+            view.setOnLongClickListener(v -> {
+                @SuppressLint("InflateParams")
+                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_class_schedule, null);
+                TextInputLayout tlteacher = inflate.findViewById(R.id.tl_teacher);
+                TextInputEditText tvteacher = inflate.findViewById(R.id.tv_teacher);
+                TextInputLayout tllocation = inflate.findViewById(R.id.tl_location);
+                TextInputEditText tvlocation = inflate.findViewById(R.id.tv_location);
+                TextInputLayout tlname = inflate.findViewById(R.id.tl_name);
+                TextInputEditText tvname = inflate.findViewById(R.id.tv_name);
+                String[] classSplit = v.getTag().toString().split("-");
+                if (classScheduleList != null && !classScheduleList.isEmpty()) {
+                    selectClassSchedule = null;
+                    for (ClassSchedule classSchedule : classScheduleList) {
+                        if ((classSchedule.getSection() + "").equals(classSplit[0]) && (classSchedule.getWeek() + "").equals(classSplit[1])) {
+                            selectClassSchedule = classSchedule;
+                            tvteacher.setText(classSchedule.getTeacher());
+                            tvname.setText(classSchedule.getName());
+                            tvlocation.setText(classSchedule.getLocation());
+                        }
+                    }
+                }
+                AlertDialog alertDialog = new AlertDialog.Builder(context).setView(inflate)
+                        .setTitle("星期" + classSplit[1] + "第" + classSplit[0] + "节课")
+                        .setPositiveButton("确定", null)
+                        .setNegativeButton("取消", null)
+                        .setNeutralButton("删除", (dialog, which) -> {
+                            if (selectClassSchedule != null) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("删除确认")
+                                        .setMessage("确定删除星期" + selectClassSchedule.getWeek() + "的第" + selectClassSchedule.getSection() + "节课么?")
+                                        .setPositiveButton("确定", (a, b) -> {
+                                            classScheduleDao.delete(selectClassSchedule);
+                                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA));
+                                        })
+                                        .setNegativeButton("取消", null)
+                                        .show();
+                            }
+                        })
+                        .show();
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(vv -> {
+                    tlname.setError(null);
+                    tllocation.setError(null);
+                    tlteacher.setError(null);
+                    if ("".equals(tvname.getText().toString())) {
+                        tlname.setError("请输入课程名");
+                        return;
+                    }
+                    if ("".equals(tvlocation.getText().toString())) {
+                        tllocation.setError("请输入地点");
+                        return;
+                    }
+                    if ("".equals(tvteacher.getText().toString())) {
+                        tlteacher.setError("请输入教师");
+                        return;
+                    }
+                    if (selectClassSchedule != null) {
+                        selectClassSchedule.setName(tvname.getText().toString().trim());
+                        selectClassSchedule.setLocation(tvlocation.getText().toString().trim());
+                        selectClassSchedule.setTeacher(tvteacher.getText().toString().trim());
+                        classScheduleDao.update(selectClassSchedule);
+                    } else {
+                        ClassSchedule classSchedule = new ClassSchedule();
+                        classSchedule.setId(UUID.randomUUID().toString());
+                        classSchedule.setName(tvname.getText().toString().trim());
+                        classSchedule.setLocation(tvlocation.getText().toString().trim());
+                        classSchedule.setTeacher(tvteacher.getText().toString().trim());
+                        classSchedule.setSection(Integer.parseInt(classSplit[0]));
+                        classSchedule.setWeek(Integer.parseInt(classSplit[1]));
+                        classScheduleDao.insert(classSchedule);
+                    }
+                    alertDialog.dismiss();
+                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA));
+                });
+                return true;
+            });
         }
     }
 
@@ -90,10 +182,12 @@ public class ClassScheduleUtils {
      * @param text            课程字符串
      * @param backgroundColor 背景颜色
      * @param context         {@link Context}
+     * @param x               坐标
+     * @param y               坐标
      * @return {@link View}
      */
     @CheckResult
-    private static View setClass(String text, @ColorInt int backgroundColor, @NonNull Context context) {
+    private static View setClass(String text, @ColorInt int backgroundColor, @NonNull Context context, int x, int y) {
         CardView cardView = new CardView(context);
         cardView.setCardBackgroundColor(Color.TRANSPARENT);
         TextView textView = new TextView(context);
@@ -103,6 +197,7 @@ public class ClassScheduleUtils {
         textView.setBackgroundColor(backgroundColor);
         textView.setTextSize(weekFont);
         cardView.addView(textView);
+        cardView.setTag(x + "-" + y);
         return cardView;
     }
 
@@ -110,11 +205,15 @@ public class ClassScheduleUtils {
      * 设置空课
      *
      * @param context {@link Context}
+     * @param x       坐标
+     * @param y       坐标
      * @return {@link View}
      */
     @CheckResult
-    private static View setNull(@NonNull Context context) {
-        return new TextView(context);
+    private static View setNull(@NonNull Context context, int x, int y) {
+        TextView textView = new TextView(context);
+        textView.setTag(x + "-" + y);
+        return textView;
     }
 
 
