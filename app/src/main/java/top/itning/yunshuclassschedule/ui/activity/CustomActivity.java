@@ -175,12 +175,6 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
 
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
-    }
-
     @OnClick({R.id.rl_1_s, R.id.rl_1_x, R.id.rl_2_s, R.id.rl_2_x, R.id.rl_3_s, R.id.rl_3_x, R.id.rl_4_s, R.id.rl_4_x, R.id.rl_5_s, R.id.rl_5_x})
     public void onViewClicked(View view) {
         String msg;

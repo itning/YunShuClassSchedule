@@ -86,6 +86,16 @@ public class ClassScheduleFragment extends Fragment {
             view.setTag(holder);
         }
         ThemeChangeUtil.setTabLayoutColor(requireContext(), holder.tl);
+        initData(holder);
+        //设置默认展示页面
+        if (!TODAY.equals(PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY))) {
+            holder.vp.setCurrentItem(1);
+            Objects.requireNonNull(holder.tl.getTabAt(1)).select();
+        }
+        return view;
+    }
+
+    private void initData(ViewHolder holder) {
         holder.vp.setAdapter(null);
         //预加载
         holder.vp.setOffscreenPageLimit(fragmentList.size());
@@ -114,12 +124,6 @@ public class ClassScheduleFragment extends Fragment {
 
         });
         holder.tl.setupWithViewPager(holder.vp);
-        //设置默认展示页面
-        if (!TODAY.equals(PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY))) {
-            holder.vp.setCurrentItem(1);
-            Objects.requireNonNull(holder.tl.getTabAt(1)).select();
-        }
-        return view;
     }
 
     @Override
@@ -141,6 +145,14 @@ public class ClassScheduleFragment extends Fragment {
         switch (eventEntity.getId()) {
             case APP_COLOR_CHANGE: {
                 ThemeChangeUtil.setTabLayoutColor(requireContext(), ((ViewHolder) view.getTag()).tl);
+                break;
+            }
+            case REFRESH_CLASS_SCHEDULE_FRAGMENT: {
+                ViewHolder holder = (ViewHolder) view.getTag();
+                initData(holder);
+                //设置默认展示页面
+                holder.vp.setCurrentItem(1);
+                Objects.requireNonNull(holder.tl.getTabAt(1)).select();
                 break;
             }
             default:

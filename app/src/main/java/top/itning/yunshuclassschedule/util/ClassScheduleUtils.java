@@ -130,7 +130,7 @@ public class ClassScheduleUtils {
                                         .setMessage("确定删除星期" + selectClassSchedule.getWeek() + "的第" + selectClassSchedule.getSection() + "节课么?")
                                         .setPositiveButton("确定", (a, b) -> {
                                             classScheduleDao.delete(selectClassSchedule);
-                                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA));
+                                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT));
                                         })
                                         .setNegativeButton("取消", null)
                                         .show();
@@ -169,7 +169,7 @@ public class ClassScheduleUtils {
                         classScheduleDao.insert(classSchedule);
                     }
                     alertDialog.dismiss();
-                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA));
+                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT));
                 });
                 return true;
             });
