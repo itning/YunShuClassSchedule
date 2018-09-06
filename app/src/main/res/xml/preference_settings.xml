@@ -20,6 +20,11 @@
             android:title="重新选择班级">
             <intent android:action="top.itning.yunshuclassschedule.LOGIN" />
         </Preference>
+        <Preference
+            android:summary="设置上下课时间"
+            android:title="重新设置课时">
+            <intent android:action="top.itning.yunshuclassschedule.CUSTOM" />
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="上下课提醒与静音">
         <PreferenceScreen

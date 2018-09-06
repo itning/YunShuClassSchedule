@@ -58,6 +58,8 @@ public class LoginActivity extends BaseActivity {
     AppCompatSpinner acsProfession;
     @BindView(R.id.acs_class)
     AppCompatSpinner acsClass;
+    @BindView(R.id.btn_custom)
+    AppCompatButton btnCustom;
     private int professSelect;
     private int classSelect;
     private List<Profession> professionList;
@@ -80,6 +82,15 @@ public class LoginActivity extends BaseActivity {
      * 加载专业数据
      */
     private void initData() {
+        if ("".equals(App.sharedPreferences.getString("1", ""))) {
+            App.sharedPreferences.edit()
+                    .putString("1", "08:20-09:50")
+                    .putString("2", "10:05-11:35")
+                    .putString("3", "12:55-14:25")
+                    .putString("4", "14:40-16:10")
+                    .putString("5", "17:30-20:00")
+                    .apply();
+        }
         changeLoadingState(true, "加载专业信息");
         classScheduleMetaData.getProfession().enqueue(new Callback<List<Profession>>() {
             @Override
@@ -271,5 +282,14 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.btn_refresh)
     public void onRefreshBtnClicked() {
         this.initData();
+    }
+
+    /**
+     * 自定义课程
+     */
+    @OnClick(R.id.btn_custom)
+    public void onCustomBtnClicked() {
+        startActivity(new Intent(this, CustomActivity.class));
+        finish();
     }
 }

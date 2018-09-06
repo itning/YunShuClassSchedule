@@ -27,11 +27,11 @@ public class DateUtils {
     private static final Calendar CAL = Calendar.getInstance();
 
     static {
-        TIME_LIST.add("08:20-09:50");
-        TIME_LIST.add("10:05-11:35");
-        TIME_LIST.add("12:55-14:25");
-        TIME_LIST.add("14:40-16:10");
-        TIME_LIST.add("17:30-20:00");
+        TIME_LIST.add(App.sharedPreferences.getString("1", "08:20-09:50"));
+        TIME_LIST.add(App.sharedPreferences.getString("2", "10:05-11:35"));
+        TIME_LIST.add(App.sharedPreferences.getString("3", "12:55-14:25"));
+        TIME_LIST.add(App.sharedPreferences.getString("4", "14:40-16:10"));
+        TIME_LIST.add(App.sharedPreferences.getString("5", "17:30-20:00"));
     }
 
     private DateUtils() {

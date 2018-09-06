@@ -75,6 +75,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.CustomActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="top.itning.yunshuclassschedule.CUSTOM" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".service.ApkDownloadService"
