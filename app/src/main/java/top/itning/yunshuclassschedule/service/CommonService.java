@@ -66,14 +66,10 @@ public class CommonService extends Service implements SharedPreferences.OnShared
     private void initNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Build.VERSION.SDK_INT :" + Build.VERSION.SDK_INT + " now create Notification Channel");
-            String channelId = "download";
-            String channelName = "下载通知";
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            createNotificationChannel(channelId, channelName, importance);
 
-            channelId = "class_reminder";
-            channelName = "课程提醒";
-            importance = NotificationManager.IMPORTANCE_HIGH;
+            String channelId = "class_reminder";
+            String channelName = "课程提醒";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             createNotificationChannel(channelId, channelName, importance);
 
             channelId = "foreground_service";
