@@ -330,7 +330,7 @@ public class TodayFragment extends Fragment {
                 if (daoSession.getClassScheduleDao().count() == 0) {
                     line1 = "";
                     line2 = "没有课程数据";
-                    line3 = "请在右侧长按添加课程";
+                    line3 = "请滑动到右侧长按空白处添加课程";
                     line4 = "";
                 } else {
                     line2 = "今天没有课";

@@ -160,6 +160,10 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                         .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
                         .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
                         .apply();
+                if (!isTaskRoot()) {
+                    finish();
+                    break;
+                }
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 break;
