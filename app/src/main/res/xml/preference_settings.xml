@@ -104,28 +104,6 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="个性化设置">
         <PreferenceScreen
-            android:key="sound_and_vibrate"
-            android:persistent="false"
-            android:summary="设置应用声音和震动"
-            android:title="声音与震动">
-            <PreferenceCategory android:title="声音">
-                <SwitchPreference
-                    android:defaultValue="true"
-                    android:key="sound_status"
-                    android:summaryOff="应用声音已关闭"
-                    android:summaryOn="应用声音已开启"
-                    android:title="开启声音" />
-            </PreferenceCategory>
-            <PreferenceCategory android:title="震动">
-                <SwitchPreference
-                    android:defaultValue="true"
-                    android:key="vibrate_status"
-                    android:summaryOff="应用震动已关闭"
-                    android:summaryOn="应用震动已开启"
-                    android:title="开启震动" />
-            </PreferenceCategory>
-        </PreferenceScreen>
-        <PreferenceScreen
             android:key="theme_color"
             android:persistent="false"
             android:summary="设置应用主题"

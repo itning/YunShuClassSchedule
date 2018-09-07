@@ -12,6 +12,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.util.SparseIntArray;
@@ -20,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -54,7 +56,7 @@ public class ClassScheduleUtils {
     }
 
     private static final List<ClassSchedule> ORDER_LIST = new ArrayList<>();
-
+    private static final List<String> COPY_LIST = new ArrayList<>();
     /**
      * 颜色数组
      */
@@ -107,6 +109,23 @@ public class ClassScheduleUtils {
                 TextInputEditText tvlocation = inflate.findViewById(R.id.tv_location);
                 TextInputLayout tlname = inflate.findViewById(R.id.tl_name);
                 TextInputEditText tvname = inflate.findViewById(R.id.tv_name);
+                AppCompatButton copyBtn = inflate.findViewById(R.id.btn_copy);
+                AppCompatButton pasteBtn = inflate.findViewById(R.id.btn_paste);
+                copyBtn.setOnClickListener(v1 -> {
+                    COPY_LIST.clear();
+                    COPY_LIST.add(tvname.getText().toString().trim());
+                    COPY_LIST.add(tvlocation.getText().toString().trim());
+                    COPY_LIST.add(tvteacher.getText().toString().trim());
+                    Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show();
+                });
+                pasteBtn.setOnClickListener(v12 -> {
+                    if (COPY_LIST.size() == 3) {
+                        tvname.setText(COPY_LIST.get(0));
+                        tvlocation.setText(COPY_LIST.get(1));
+                        tvteacher.setText(COPY_LIST.get(2));
+                        Toast.makeText(context, "已粘贴", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 String[] classSplit = v.getTag().toString().split("-");
                 if (classScheduleList != null && !classScheduleList.isEmpty()) {
                     selectClassSchedule = null;
@@ -131,6 +150,7 @@ public class ClassScheduleUtils {
                                         .setPositiveButton("确定", (a, b) -> {
                                             classScheduleDao.delete(selectClassSchedule);
                                             EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT));
+                                            selectClassSchedule = null;
                                         })
                                         .setNegativeButton("取消", null)
                                         .show();

@@ -171,6 +171,9 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 initData();
                 break;
             }
+            case REFRESH_CLASS_SCHEDULE_FRAGMENT: {
+                initData();
+            }
             default:
         }
     }

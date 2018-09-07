@@ -17,10 +17,11 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
  */
 public class TimeTickReceiver extends BroadcastReceiver {
     private static final String TAG = "TimeTickReceiver";
+    private static final EventEntity EVENT_ENTITY = new EventEntity(ConstantPool.Int.TIME_TICK_CHANGE);
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "send time change event");
-        EventBus.getDefault().post(new EventEntity(ConstantPool.Int.TIME_TICK_CHANGE));
+        EventBus.getDefault().post(EVENT_ENTITY);
     }
 }
