@@ -328,10 +328,10 @@ public class TodayFragment extends Fragment {
             } else {
                 DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
                 if (daoSession.getClassScheduleDao().count() == 0) {
-                    line1 = "";
+                    line1 = "(ヾﾉ･ω･`)";
                     line2 = "没有课程数据";
-                    line3 = "请滑动到右侧长按空白处添加课程";
-                    line4 = "";
+                    line3 = "请滑动到右侧";
+                    line4 = "长按空白处添加课程";
                 } else {
                     line2 = "今天没有课";
                     line3 = "ヾ(≧∇≦*)ゝ";
