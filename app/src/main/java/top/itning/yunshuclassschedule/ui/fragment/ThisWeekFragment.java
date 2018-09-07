@@ -151,9 +151,10 @@ public class ThisWeekFragment extends Fragment {
 
                         @Override
                         protected void onResourceCleared(@Nullable Drawable placeholder) {
-                            view.setBackgroundResource(R.drawable.this_week_background);
                         }
                     });
+        } else {
+            view.setBackgroundResource(R.drawable.this_week_background);
         }
     }
 }
