@@ -141,19 +141,24 @@ public class ThisWeekFragment extends Fragment {
 
                         @Override
                         public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            Log.d(TAG, "on Load Failed : " + errorDrawable);
                             Toast.makeText(requireContext(), "图片加载失败", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            Log.d(TAG, "on Resource Ready : " + resource);
                             view.setBackground(resource);
                         }
 
                         @Override
                         protected void onResourceCleared(@Nullable Drawable placeholder) {
+                            Log.d(TAG, "on Resource Cleared : " + placeholder);
+                            view.setBackground(placeholder);
                         }
                     });
         } else {
+            Log.d(TAG, "file is not exists , now use default background");
             view.setBackgroundResource(R.drawable.this_week_background);
         }
     }
