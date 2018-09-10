@@ -349,13 +349,20 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                 if (!"".equals(s)) {
                     if (CLASS_UP.equals(infoArray[1])) {
                         String[] times = s.split("-")[1].split(":");
-                        timePickerDialog.setMaxTime(new Timepoint(Integer.parseInt(times[0]), Integer.parseInt(times[1]) - 1));
+                        int i = Integer.parseInt(times[1]) - 1;
+                        int j = Integer.parseInt(times[0]);
+                        if (-1 == i) {
+                            i = 59;
+                            j = j - 1;
+                        }
+                        timePickerDialog.setMaxTime(new Timepoint(j, i));
                         String x = App.sharedPreferences.getString((Integer.parseInt(infoArray[0]) - 1) + "", "");
                         if (!"".equals(x)) {
                             String[] timeX = x.split("-")[1].split(":");
                             timePickerDialog.setMinTime(new Timepoint(Integer.parseInt(timeX[0]), Integer.parseInt(timeX[1]) + 1));
                         }
                     } else {
+                        //某节下课时间
                         String[] times = s.split("-")[0].split(":");
                         timePickerDialog.setMinTime(new Timepoint(Integer.parseInt(times[0]), Integer.parseInt(times[1]) + 1));
                         String x = App.sharedPreferences.getString((Integer.parseInt(infoArray[0]) + 1) + "", "");
