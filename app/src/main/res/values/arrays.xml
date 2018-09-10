@@ -35,17 +35,6 @@
         <item>10</item>
         <item>30</item>
     </string-array>
-    <!--课程数据更新频率-->
-    <string-array name="entries_list_class_schedule_update_frequency">
-        <item>每次启动应用时</item>
-        <item>每天</item>
-        <item>每周</item>
-    </string-array>
-    <string-array name="entries_values_class_schedule_update_frequency">
-        <item>each_start_app</item>
-        <item>every_day</item>
-        <item>every_week</item>
-    </string-array>
     <!--上课前静音时间设置-->
     <string-array name="entries_list_phone_mute_before_time">
         <item>上课时</item>

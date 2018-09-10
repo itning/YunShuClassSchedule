@@ -39,12 +39,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public static final String APP_COLOR_ACCENT = "app_color_accent";
     public static final String APP_COLOR_PROGRESS = "app_color_progress";
     public static final String FOREGROUND_SERVICE_STATUS = "foreground_service_status";
-    private static final String CLASS_SCHEDULE_UPDATE_FREQUENCY = "class_schedule_update_frequency";
     private static boolean LAST_FOREGROUND_SERVICE_STATUS = true;
 
     private SharedPreferences prefs;
     private ListPreference defaultShowMainFragmentListPreference;
-    private ListPreference classScheduleUpdateFrequency;
     private ListPreference classReminderUpTime;
     private ListPreference classReminderDownTime;
     private ListPreference phoneMuteBeforeTime;
@@ -59,8 +57,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (bundle == null) {
             defaultShowMainFragmentListPreference = (ListPreference) findPreference(DEFAULT_SHOW_MAIN_FRAGMENT);
             defaultShowMainFragmentListPreference.setSummary(defaultShowMainFragmentListPreference.getEntry());
-            classScheduleUpdateFrequency = (ListPreference) findPreference(CLASS_SCHEDULE_UPDATE_FREQUENCY);
-            classScheduleUpdateFrequency.setSummary(classScheduleUpdateFrequency.getEntry());
             Preference foregroundServiceStatus = findPreference(FOREGROUND_SERVICE_STATUS);
             foregroundServiceStatus.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (!(boolean) newValue) {
@@ -156,10 +152,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         switch (key) {
             case DEFAULT_SHOW_MAIN_FRAGMENT: {
                 defaultShowMainFragmentListPreference.setSummary(defaultShowMainFragmentListPreference.getEntry());
-                break;
-            }
-            case CLASS_SCHEDULE_UPDATE_FREQUENCY: {
-                classScheduleUpdateFrequency.setSummary(classScheduleUpdateFrequency.getEntry());
                 break;
             }
             case CLASS_REMINDER_UP_TIME: {
