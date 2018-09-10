@@ -373,7 +373,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         Log.d(TAG, "hourOfDay:" + hourOfDay + " minute:" + minute);
-        if (hourOfDay != -1 && second != -1) {
+        if (hourOfDay != -1 && minute != -1) {
             //2-s -> 2 s
             String[] typeInfo = msg.split("-");
             String h = hourOfDay + "";
