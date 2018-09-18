@@ -136,7 +136,31 @@ public class ConstantPool {
         /**
          * 需要重新初始化课程Fragment
          */
-        REFRESH_CLASS_SCHEDULE_FRAGMENT(133);
+        REFRESH_CLASS_SCHEDULE_FRAGMENT(133),
+        /**
+         * 获取验证码和Cookie成功
+         */
+        GET_COOKIE_AND_IMAGE_OK(134),
+        /**
+         * 获取验证码和Cookie失败
+         */
+        GET_COOKIE_AND_IMAGE_FAILED(135),
+        /**
+         * 重新登陆
+         */
+        RE_LOGIN_SCORE(136),
+        /**
+         * 登陆时消息
+         */
+        SCORE_LOGIN_MSG(137),
+        /**
+         * 成绩查询成功
+         */
+        SCORE_LOGIN_SUCCESS(138),
+        /**
+         * 回到登陆页面
+         */
+        RETURN_LOGIN_FRAGMENT(139);
 
         private int value;
 

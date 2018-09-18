@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_id"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:gravity="center"
         android:padding="16dp"
-        tools:text="1" />
+        tools:text="10" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -26,9 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginBottom="2dp"
-            app:autoSizeMaxTextSize="18dp"
-            app:autoSizeMinTextSize="8dp"
-            app:autoSizeTextType="uniform"
             tools:text="马克思主义基本原理概论" />
 
         <android.support.v7.widget.AppCompatTextView
