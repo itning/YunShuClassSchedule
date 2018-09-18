@@ -42,3 +42,4 @@ Android的开源课程表应用
 - glide
 - statusbarutil
 - materialdatetimepicker
+- jsoup
