@@ -21,13 +21,14 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.entity.Score;
 import top.itning.yunshuclassschedule.ui.fragment.checkscore.CheckScoreLoginFragment;
 import top.itning.yunshuclassschedule.ui.fragment.checkscore.CheckScoreShowFragment;
+import top.itning.yunshuclassschedule.util.EventReceiver;
 
 /**
  * 查成绩
  *
  * @author itning
  */
-public class CheckScoreFragment extends Fragment {
+public class CheckScoreFragment extends Fragment implements EventReceiver {
     private static final String TAG = "CheckScoreFragment";
     private FragmentManager fragmentManager;
 
@@ -70,6 +71,7 @@ public class CheckScoreFragment extends Fragment {
                 checkScoreShowFragment.setArguments(bundle);
                 fragmentManager.beginTransaction()
                         .replace(R.id.frame_container, checkScoreShowFragment)
+                        .addToBackStack("checkScoreShowFragment")
                         .commit();
                 break;
             }
@@ -84,5 +86,15 @@ public class CheckScoreFragment extends Fragment {
             }
             default:
         }
+    }
+
+    @Override
+    public boolean eventTrigger() {
+        int backStackEntryCount = fragmentManager.getBackStackEntryCount();
+        if (backStackEntryCount == 1) {
+            fragmentManager.popBackStackImmediate();
+            return true;
+        }
+        return false;
     }
 }

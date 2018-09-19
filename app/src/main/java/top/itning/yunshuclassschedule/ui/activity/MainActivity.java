@@ -183,12 +183,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (System.currentTimeMillis() - firstPressedTime < ConstantPool.Int.EXIT_DELAY.get()) {
-                moveTaskToBack(false);
-            } else {
-                Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
-                firstPressedTime = System.currentTimeMillis();
+            if (!isConsumption()) {
+                if (System.currentTimeMillis() - firstPressedTime < ConstantPool.Int.EXIT_DELAY.get()) {
+                    moveTaskToBack(false);
+                } else {
+                    Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                    firstPressedTime = System.currentTimeMillis();
+                }
             }
+        }
+    }
+
+    /**
+     * fragment 是否消费返回事件
+     *
+     * @return 已消费返回真
+     */
+    private boolean isConsumption() {
+        Fragment f = supportFragmentManager.findFragmentById(R.id.frame_container);
+        //查询成绩页面
+        if (f instanceof CheckScoreFragment) {
+            CheckScoreFragment checkScoreFragment = (CheckScoreFragment) f;
+            return checkScoreFragment.eventTrigger();
+        } else {
+            return false;
         }
     }
 

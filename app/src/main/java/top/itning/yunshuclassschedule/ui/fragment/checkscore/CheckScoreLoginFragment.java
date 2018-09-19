@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -61,6 +62,20 @@ import top.itning.yunshuclassschedule.util.ImageHash;
  */
 public class CheckScoreLoginFragment extends Fragment {
     private static final String TAG = "CheckScoreLoginFragment";
+
+    private static final int NUMBER_OF_COPIES = 6;
+    private static final int END_NUMBER = 9;
+    private static final int START_ASCII = 97;
+    private static final int END_ASCII = 122;
+    private static final String WIFI_NAME = "\"HXGNET\"";
+    private static final String UNKNOWN_SSID = "<unknown ssid>";
+    private static final String CODE_ERROR_STR = "验证码有误";
+    private static final String NAME_ERROR_STR = "你的用户名不存在";
+    private static final String PWD_ERROR_STR = "密码不正确";
+    private static final String REMEMBER_ID = "remember_id";
+    private static final String REMEMBER_NAME = "remember_name";
+    private static final String REMEMBER_STATUS = "remember_id_name";
+
     @BindView(R.id.et_name)
     TextInputEditText etName;
     @BindView(R.id.tl_name)
@@ -186,12 +201,15 @@ public class CheckScoreLoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_score_login, container, false);
         unbinder = ButterKnife.bind(this, view);
-        etId.setText(App.sharedPreferences.getString("remember_id", ""));
-        etName.setText(App.sharedPreferences.getString("remember_name", ""));
-        checkBox.setChecked(App.sharedPreferences.getBoolean("remember_id_name", false));
+        etId.setText(App.sharedPreferences.getString(REMEMBER_ID, ""));
+        etName.setText(App.sharedPreferences.getString(REMEMBER_NAME, ""));
+        checkBox.setChecked(App.sharedPreferences.getBoolean(REMEMBER_STATUS, false));
         return view;
     }
 
+    /**
+     * 开始连接服务器
+     */
     private void startConnectionServer() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(requireContext());
@@ -206,6 +224,11 @@ public class CheckScoreLoginFragment extends Fragment {
         EventBus.getDefault().post(2);
     }
 
+    /**
+     * 检查所需网络环境是否满足
+     *
+     * @return 满足返回真
+     */
     @CheckResult
     private boolean netStatusOk() {
         if (wifiMgr != null) {
@@ -214,7 +237,7 @@ public class CheckScoreLoginFragment extends Fragment {
                 WifiInfo info = wifiMgr.getConnectionInfo();
                 String ssid = info.getSSID();
                 Log.d(TAG, "get Wifi SSID:" + ssid);
-                if ("<unknown ssid>".equals(ssid)) {
+                if (UNKNOWN_SSID.equals(ssid)) {
                     if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         new AlertDialog.Builder(requireContext()).setTitle("权限说明")
                                 .setMessage("由于Android系统限制,您必须授予定位权限才可以进行成绩查询")
@@ -222,10 +245,27 @@ public class CheckScoreLoginFragment extends Fragment {
                                 .setPositiveButton("授予权限", (dialog, which) -> requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1))
                                 .setNegativeButton("不用了", null)
                                 .show();
+                    } else {
+                        LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
+                        assert locationManager != null;
+                        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
+                        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                        // 通过WLAN或移动网络(3G/2G)确定的位置（也称作AGPS，辅助GPS定位。主要用于在室内或遮盖物（建筑群或茂密的深林等）密集的地方定位）
+                        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                        if (gps || network) {
+                            return true;
+                        } else {
+                            new AlertDialog.Builder(requireContext()).setTitle("权限说明")
+                                    .setMessage("由于Android系统限制,您必须打开GPS才可以进行成绩查询")
+                                    .setCancelable(false)
+                                    .setPositiveButton("打开GPS", (dialog, which) -> startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS)))
+                                    .setNegativeButton("不用了", null)
+                                    .show();
+                        }
                     }
                     return false;
                 }
-                if ("\"HXGNET\"".equals(ssid)) {
+                if (WIFI_NAME.equals(ssid)) {
                     return true;
                 } else {
                     showAlert();
@@ -239,6 +279,9 @@ public class CheckScoreLoginFragment extends Fragment {
         return false;
     }
 
+    /**
+     * 显示Dialog
+     */
     private void showAlert() {
         new AlertDialog.Builder(requireContext()).setTitle("需要连接WIFI")
                 .setMessage("需要连接名为HXGNET的WIFI并且登陆后才能进行成绩查询")
@@ -258,7 +301,7 @@ public class CheckScoreLoginFragment extends Fragment {
     private String startCompared(@NonNull Bitmap sourceBitmap) {
         StringBuilder stringBuilder = new StringBuilder();
         int sWidth = sourceBitmap.getWidth() / 6;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < NUMBER_OF_COPIES; i++) {
             Bitmap bitmap = Bitmap.createBitmap(sourceBitmap, sWidth * i, 0, sourceBitmap.getWidth() / 6, sourceBitmap.getHeight());
             String hash1 = ImageHash.calculateFingerPrint(bitmap);
             DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
@@ -290,12 +333,12 @@ public class CheckScoreLoginFragment extends Fragment {
      */
     private void insert(AssetManager assets) {
         try {
-            for (int i = 97; i <= 122; i++) {
+            for (int i = START_ASCII; i <= END_ASCII; i++) {
                 char c = (char) (i);
                 String hash1 = ImageHash.calculateFingerPrint(BitmapFactory.decodeStream(assets.open(c + ".bmp")));
                 doInsert(hash1, c + "");
             }
-            for (int i = 0; i <= 9; i++) {
+            for (int i = 0; i <= END_NUMBER; i++) {
                 String hash2 = ImageHash.calculateFingerPrint(BitmapFactory.decodeStream(assets.open(i + ".bmp")));
                 doInsert(hash2, i + "");
             }
@@ -343,6 +386,7 @@ public class CheckScoreLoginFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.d(TAG, "on Resume");
         super.onResume();
         if (bitmap == null || code == null) {
             if (netStatusOk()) {
@@ -387,13 +431,13 @@ public class CheckScoreLoginFragment extends Fragment {
         int index = body.indexOf("已登陆");
         if (index == -1) {
             Log.w(TAG, "登陆失败 " + response.statusCode());
-            if (body.contains("验证码有误")) {
+            if (body.contains(CODE_ERROR_STR)) {
                 Log.w(TAG, "验证码有误 " + verifyCode);
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "验证码有误,请重新登陆"));
-            } else if (body.contains("你的用户名不存在")) {
+            } else if (body.contains(NAME_ERROR_STR)) {
                 Log.w(TAG, "该学生未录入");
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "你的用户名不存在,请重新登陆"));
-            } else if (body.contains("密码不正确")) {
+            } else if (body.contains(PWD_ERROR_STR)) {
                 Log.w(TAG, "学号输入错误");
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.HTTP_ERROR, "学号不正确,请重新登陆"));
             } else {
@@ -462,16 +506,16 @@ public class CheckScoreLoginFragment extends Fragment {
         this.name = etName.getText().toString();
         this.id = etId.getText().toString();
         boolean remember = checkBox.isChecked();
-        App.sharedPreferences.edit().putBoolean("remember_id_name", remember).apply();
+        App.sharedPreferences.edit().putBoolean(REMEMBER_STATUS, remember).apply();
         if (remember) {
             App.sharedPreferences.edit()
-                    .putString("remember_id", this.id)
-                    .putString("remember_name", this.name)
+                    .putString(REMEMBER_ID, this.id)
+                    .putString(REMEMBER_NAME, this.name)
                     .apply();
         } else {
             App.sharedPreferences.edit()
-                    .remove("remember_id")
-                    .remove("remember_name")
+                    .remove(REMEMBER_ID)
+                    .remove(REMEMBER_NAME)
                     .apply();
         }
         if (progressDialog != null) {

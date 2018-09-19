@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,10 +19,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import top.itning.yunshuclassschedule.R;
-import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.entity.Score;
 import top.itning.yunshuclassschedule.ui.adapter.ScoreRecyclerViewAdapter;
@@ -38,8 +35,6 @@ public class CheckScoreShowFragment extends Fragment {
     @BindView(R.id.rv)
     RecyclerView rv;
     Unbinder unbinder;
-    @BindView(R.id.btn_return)
-    AppCompatButton btnReturn;
     private List<Score> scoreList;
 
     @Override
@@ -90,10 +85,5 @@ public class CheckScoreShowFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @OnClick(R.id.btn_return)
-    public void onReturnBtnClicked() {
-        EventBus.getDefault().post(new EventEntity(ConstantPool.Int.RETURN_LOGIN_FRAGMENT));
     }
 }
