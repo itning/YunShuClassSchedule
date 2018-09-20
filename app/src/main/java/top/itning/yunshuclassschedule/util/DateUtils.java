@@ -201,4 +201,23 @@ public class DateUtils {
     private static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
         return nowTime.getTime() >= beginTime.getTime() && nowTime.getTime() < endTime.getTime();
     }
+
+    /**
+     * 时间区间合法
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 合法返回真
+     */
+    @CheckResult
+    public static boolean isTimeIintervalLegitimate(String startTime, String endTime) {
+        try {
+            long start = DF.parse(startTime).getTime();
+            long end = DF.parse(endTime).getTime();
+            return start < end;
+        } catch (ParseException e) {
+            Log.e(TAG, "time format error: ", e);
+            return false;
+        }
+    }
 }

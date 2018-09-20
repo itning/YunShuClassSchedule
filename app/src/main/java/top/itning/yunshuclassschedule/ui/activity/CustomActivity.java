@@ -1,6 +1,7 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
@@ -14,13 +15,14 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +32,7 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.util.DateUtils;
 
 /**
  * 自定义课程
@@ -43,6 +46,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
     public static final int MIN_TIME = 10;
 
     private String msg;
+    private Map<String, String> timeMap;
 
     @BindView(R.id.rl_1_s)
     RelativeLayout rl1S;
@@ -99,11 +103,29 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
      * 初始化数据
      */
     private void initData() {
-        String[] a1 = App.sharedPreferences.getString("1", "08:20-09:50").split("-");
-        String[] a2 = App.sharedPreferences.getString("2", "10:05-11:35").split("-");
-        String[] a3 = App.sharedPreferences.getString("3", "12:55-14:25").split("-");
-        String[] a4 = App.sharedPreferences.getString("4", "14:40-16:10").split("-");
-        String[] a5 = App.sharedPreferences.getString("5", "17:30-20:00").split("-");
+        String time1 = App.sharedPreferences.getString("1", "08:20-09:50");
+        String time2 = App.sharedPreferences.getString("2", "10:05-11:35");
+        String time3 = App.sharedPreferences.getString("3", "12:55-14:25");
+        String time4 = App.sharedPreferences.getString("4", "14:40-16:10");
+        String time5 = App.sharedPreferences.getString("5", "17:30-20:00");
+        timeMap = new TreeMap<>();
+        timeMap.put("1", time1);
+        timeMap.put("2", time2);
+        timeMap.put("3", time3);
+        timeMap.put("4", time4);
+        timeMap.put("5", time5);
+        setText();
+    }
+
+    /**
+     * 设置面板
+     */
+    private void setText() {
+        String[] a1 = timeMap.get("1").split("-");
+        String[] a2 = timeMap.get("2").split("-");
+        String[] a3 = timeMap.get("3").split("-");
+        String[] a4 = timeMap.get("4").split("-");
+        String[] a5 = timeMap.get("5").split("-");
         s1.setText(a1[0]);
         s2.setText(a2[0]);
         s3.setText(a3[0]);
@@ -154,23 +176,84 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                 break;
             }
             case R.id.done: {
-                App.sharedPreferences.edit()
-                        .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
-                        .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
-                        .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
-                        .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
-                        .apply();
-                if (!isTaskRoot()) {
+                if (isDataLegitimate()) {
+                    updateSharedPreferences();
+                    App.sharedPreferences.edit()
+                            .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
+                            .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
+                            .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
+                            .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
+                            .apply();
+                    if (!isTaskRoot()) {
+                        finish();
+                        break;
+                    }
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                     break;
                 }
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                break;
             }
             default:
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 更新SharedPreferences
+     */
+    private void updateSharedPreferences() {
+        SharedPreferences.Editor edit = App.sharedPreferences.edit();
+        for (Map.Entry<String, String> entry : timeMap.entrySet()) {
+            edit.putString(entry.getKey(), entry.getValue());
+        }
+        edit.apply();
+    }
+
+    /**
+     * 数据合法性检查
+     *
+     * @return 合法返回真
+     */
+    private boolean isDataLegitimate() {
+        Map.Entry<String, String> lastEntry = null;
+        for (Map.Entry<String, String> entry : timeMap.entrySet()) {
+            String[] timeArray = entry.getValue().split("-");
+            //检查每节课上下课时间合法性
+            if (!DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
+                Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1]);
+                showTimeErrorDialog(entry.getKey(), 1);
+                return false;
+            }
+            if (lastEntry != null && !"5".equals(entry.getKey())) {
+                String[] lastTimeArray = lastEntry.getValue().split("-");
+                if (!DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
+                    Log.d(TAG, "error2: " + lastTimeArray[1] + "-->" + timeArray[0]);
+                    showTimeErrorDialog(lastEntry.getKey(), 2);
+                    return false;
+                }
+            }
+            lastEntry = entry;
+        }
+        return true;
+    }
+
+    /**
+     * 显示错误Dialog
+     *
+     * @param whichClass 哪节课
+     * @param type       类型
+     */
+    private void showTimeErrorDialog(String whichClass, int type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("错误");
+        if (type == 1) {
+            builder.setMessage("第" + whichClass + "节课上下课时间冲突,请检查");
+
+        } else {
+            builder.setMessage("第" + whichClass + "节课下课和" + (Integer.parseInt(whichClass) + 1) + "节课时间冲突,请检查");
+        }
+        builder.setPositiveButton("确定", null)
+                .show();
     }
 
     @Override
@@ -229,52 +312,52 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
         String title;
         switch (msg) {
             case "1-s": {
-                time = App.sharedPreferences.getString("1", "");
+                time = timeMap.get("1");
                 title = "第一节上课";
                 break;
             }
             case "1-x": {
-                time = App.sharedPreferences.getString("1", "");
+                time = timeMap.get("1");
                 title = "第一节下课";
                 break;
             }
             case "2-s": {
-                time = App.sharedPreferences.getString("2", "");
+                time = timeMap.get("2");
                 title = "第二节上课";
                 break;
             }
             case "2-x": {
-                time = App.sharedPreferences.getString("2", "");
+                time = timeMap.get("2");
                 title = "第二节下课";
                 break;
             }
             case "3-s": {
-                time = App.sharedPreferences.getString("3", "");
+                time = timeMap.get("3");
                 title = "第三节上课";
                 break;
             }
             case "3-x": {
-                time = App.sharedPreferences.getString("3", "");
+                time = timeMap.get("3");
                 title = "第三节下课";
                 break;
             }
             case "4-s": {
-                time = App.sharedPreferences.getString("4", "");
+                time = timeMap.get("4");
                 title = "第四节上课";
                 break;
             }
             case "4-x": {
-                time = App.sharedPreferences.getString("4", "");
+                time = timeMap.get("4");
                 title = "第四节下课";
                 break;
             }
             case "5-s": {
-                time = App.sharedPreferences.getString("5", "");
+                time = timeMap.get("5");
                 title = "第五节上课";
                 break;
             }
             case "5-x": {
-                time = App.sharedPreferences.getString("5", "");
+                time = timeMap.get("5");
                 title = "第五节下课";
                 break;
             }
@@ -283,7 +366,6 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                 title = "";
         }
         TimePickerDialog timePickerDialog = getTimePickerDialog(type, time);
-        setMinAndMaxTime(timePickerDialog);
         timePickerDialog.setTitle(title);
         timePickerDialog.show(getFragmentManager(), "TimePickerDialog");
     }
@@ -318,65 +400,6 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
         return TimePickerDialog.newInstance(this, hour, minute, true);
     }
 
-    /**
-     * 设置时间限制
-     *
-     * @param timePickerDialog {@link TimePickerDialog}
-     */
-    private void setMinAndMaxTime(TimePickerDialog timePickerDialog) {
-        switch (msg) {
-            case "1-s": {
-                String s = App.sharedPreferences.getString("1", "");
-                if (!"".equals(s)) {
-                    String[] times = s.split("-")[1].split(":");
-                    timePickerDialog.setMaxTime(new Timepoint(Integer.parseInt(times[0]), Integer.parseInt(times[1]) - 1));
-                }
-                break;
-            }
-            case "5-x": {
-                String s = App.sharedPreferences.getString("5", "");
-                if (!"".equals(s)) {
-                    String[] times = s.split("-")[0].split(":");
-                    timePickerDialog.setMinTime(new Timepoint(Integer.parseInt(times[0]), Integer.parseInt(times[1]) + 1));
-                }
-                break;
-            }
-            default: {
-                //2-s -> 2 s
-                String[] infoArray = msg.split("-");
-                //10:05-11:35
-                String s = App.sharedPreferences.getString(infoArray[0], "");
-                if (!"".equals(s)) {
-                    if (CLASS_UP.equals(infoArray[1])) {
-                        String[] times = s.split("-")[1].split(":");
-                        int i = Integer.parseInt(times[1]) - 1;
-                        int j = Integer.parseInt(times[0]);
-                        if (-1 == i) {
-                            i = 59;
-                            j = j - 1;
-                        }
-                        timePickerDialog.setMaxTime(new Timepoint(j, i));
-                        String x = App.sharedPreferences.getString((Integer.parseInt(infoArray[0]) - 1) + "", "");
-                        if (!"".equals(x)) {
-                            String[] timeX = x.split("-")[1].split(":");
-                            timePickerDialog.setMinTime(new Timepoint(Integer.parseInt(timeX[0]), Integer.parseInt(timeX[1]) + 1));
-                        }
-                    } else {
-                        //某节下课时间
-                        String[] times = s.split("-")[0].split(":");
-                        timePickerDialog.setMinTime(new Timepoint(Integer.parseInt(times[0]), Integer.parseInt(times[1]) + 1));
-                        String x = App.sharedPreferences.getString((Integer.parseInt(infoArray[0]) + 1) + "", "");
-                        if (!"".equals(x)) {
-                            String[] timeX = x.split("-")[0].split(":");
-                            timePickerDialog.setMaxTime(new Timepoint(Integer.parseInt(timeX[0]), Integer.parseInt(timeX[1]) - 1));
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }
-
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         Log.d(TAG, "hourOfDay:" + hourOfDay + " minute:" + minute);
@@ -392,7 +415,10 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                 m = "0" + m;
             }
             String time = h + ":" + m;
-            String s = App.sharedPreferences.getString(typeInfo[0], "");
+            String s = timeMap.get(typeInfo[0]);
+            if (s == null) {
+                return;
+            }
             if (!"".equals(s)) {
                 String insertStr;
                 if (CLASS_UP.equals(typeInfo[1])) {
@@ -401,9 +427,8 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                     insertStr = s.split("-")[0] + "-" + time;
                 }
                 Log.d(TAG, "insert :" + insertStr);
-                if (App.sharedPreferences.edit().putString(typeInfo[0], insertStr).commit()) {
-                    initData();
-                }
+                timeMap.put(typeInfo[0], insertStr);
+                setText();
             }
         }
     }
