@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -54,6 +54,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.entity.Hash;
 import top.itning.yunshuclassschedule.entity.Score;
 import top.itning.yunshuclassschedule.util.ImageHash;
+import top.itning.yunshuclassschedule.util.NetWorkUtils;
 
 /**
  * 登陆
@@ -96,6 +97,7 @@ public class CheckScoreLoginFragment extends Fragment {
     private String code;
     private Bitmap bitmap;
     private WifiManager wifiMgr;
+    private AlertDialog alertDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -231,6 +233,10 @@ public class CheckScoreLoginFragment extends Fragment {
      */
     @CheckResult
     private boolean netStatusOk() {
+        if (NetWorkUtils.getConnectedType(requireContext()) != ConnectivityManager.TYPE_WIFI) {
+            showAlert();
+            return false;
+        }
         if (wifiMgr != null) {
             int wifiState = wifiMgr.getWifiState();
             if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
@@ -241,23 +247,15 @@ public class CheckScoreLoginFragment extends Fragment {
                     if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         new AlertDialog.Builder(requireContext()).setTitle("权限说明")
                                 .setMessage("由于Android系统限制,您必须授予定位权限才可以进行成绩查询")
-                                .setCancelable(false)
                                 .setPositiveButton("授予权限", (dialog, which) -> requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1))
                                 .setNegativeButton("不用了", null)
                                 .show();
                     } else {
-                        LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
-                        assert locationManager != null;
-                        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
-                        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                        // 通过WLAN或移动网络(3G/2G)确定的位置（也称作AGPS，辅助GPS定位。主要用于在室内或遮盖物（建筑群或茂密的深林等）密集的地方定位）
-                        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                        if (gps || network) {
+                        if (NetWorkUtils.isGPSEnabled(requireContext())) {
                             return true;
                         } else {
                             new AlertDialog.Builder(requireContext()).setTitle("权限说明")
                                     .setMessage("由于Android系统限制,您必须打开GPS才可以进行成绩查询")
-                                    .setCancelable(false)
                                     .setPositiveButton("打开GPS", (dialog, which) -> startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS)))
                                     .setNegativeButton("不用了", null)
                                     .show();
@@ -283,9 +281,8 @@ public class CheckScoreLoginFragment extends Fragment {
      * 显示Dialog
      */
     private void showAlert() {
-        new AlertDialog.Builder(requireContext()).setTitle("需要连接WIFI")
+        alertDialog = new AlertDialog.Builder(requireContext()).setTitle("需要连接WIFI")
                 .setMessage("需要连接名为HXGNET的WIFI并且登陆后才能进行成绩查询")
-                .setCancelable(false)
                 .setPositiveButton("打开设置页面", (dialog, which) -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)))
                 .setNegativeButton("不用了", null)
                 .show();
@@ -400,6 +397,9 @@ public class CheckScoreLoginFragment extends Fragment {
         Log.d(TAG, "on Pause");
         if (progressDialog != null) {
             progressDialog.cancel();
+        }
+        if (alertDialog != null) {
+            alertDialog.cancel();
         }
         super.onPause();
     }
