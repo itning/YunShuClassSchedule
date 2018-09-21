@@ -2,12 +2,16 @@ package top.itning.yunshuclassschedule.ui.fragment.checkscore;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -98,11 +102,19 @@ public class CheckScoreLoginFragment extends Fragment {
     private Bitmap bitmap;
     private WifiManager wifiMgr;
     private AlertDialog alertDialog;
+    private GpsAndWifiStatusReceiver gpsAndWifiStatusReceiver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         wifiMgr = (WifiManager) requireContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        gpsAndWifiStatusReceiver = new GpsAndWifiStatusReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        requireActivity().registerReceiver(gpsAndWifiStatusReceiver, intentFilter);
         EventBus.getDefault().register(this);
         EventBus.getDefault().post(1);
     }
@@ -117,6 +129,21 @@ public class CheckScoreLoginFragment extends Fragment {
         if (bitmap != null) {
             bitmap.recycle();
             bitmap = null;
+        }
+        if (alertDialog != null) {
+            alertDialog.cancel();
+            alertDialog = null;
+        }
+        if (progressDialog != null) {
+            progressDialog.cancel();
+            progressDialog = null;
+        }
+        if (wifiMgr != null) {
+            wifiMgr = null;
+        }
+        requireActivity().unregisterReceiver(gpsAndWifiStatusReceiver);
+        if (gpsAndWifiStatusReceiver != null) {
+            gpsAndWifiStatusReceiver = null;
         }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
@@ -164,15 +191,10 @@ public class CheckScoreLoginFragment extends Fragment {
                 break;
             }
             case GET_COOKIE_AND_IMAGE_FAILED: {
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("服务器连接失败")
-                        .setMessage("请检查HXGNET网络正常连接,并且已经登陆")
-                        .setPositiveButton("重新连接", (a, b) -> {
-                            EventBus.getDefault().post(2);
-                            progressDialog.show();
-                        })
-                        .setNegativeButton("确定", null)
-                        .show();
+                showAlert("服务器连接失败", "请检查HXGNET网络正常连接,并且已经登陆", "重新连接", "确定", (a, b) -> {
+                    EventBus.getDefault().post(2);
+                    progressDialog.show();
+                });
                 break;
             }
             case RE_LOGIN_SCORE: {
@@ -234,7 +256,8 @@ public class CheckScoreLoginFragment extends Fragment {
     @CheckResult
     private boolean netStatusOk() {
         if (NetWorkUtils.getConnectedType(requireContext()) != ConnectivityManager.TYPE_WIFI) {
-            showAlert();
+            showAlert("需要连接WIFI", "需要连接名为HXGNET的WIFI并且登陆后才能进行成绩查询",
+                    "打开设置页面", "不用了", (dialog, which) -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)));
             return false;
         }
         if (wifiMgr != null) {
@@ -245,20 +268,14 @@ public class CheckScoreLoginFragment extends Fragment {
                 Log.d(TAG, "get Wifi SSID:" + ssid);
                 if (UNKNOWN_SSID.equals(ssid)) {
                     if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        new AlertDialog.Builder(requireContext()).setTitle("权限说明")
-                                .setMessage("由于Android系统限制,您必须授予定位权限才可以进行成绩查询")
-                                .setPositiveButton("授予权限", (dialog, which) -> requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1))
-                                .setNegativeButton("不用了", null)
-                                .show();
+                        showAlert("权限说明", "由于Android系统限制,您必须授予定位权限才可以进行成绩查询",
+                                "授予权限", "不用了", (dialog, which) -> requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1));
                     } else {
                         if (NetWorkUtils.isGPSEnabled(requireContext())) {
                             return true;
                         } else {
-                            new AlertDialog.Builder(requireContext()).setTitle("权限说明")
-                                    .setMessage("由于Android系统限制,您必须打开GPS才可以进行成绩查询")
-                                    .setPositiveButton("打开GPS", (dialog, which) -> startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS)))
-                                    .setNegativeButton("不用了", null)
-                                    .show();
+                            showAlert("权限说明", "由于Android系统限制,您必须打开GPS才可以进行成绩查询",
+                                    "打开GPS", "不用了", (dialog, which) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
                         }
                     }
                     return false;
@@ -266,11 +283,13 @@ public class CheckScoreLoginFragment extends Fragment {
                 if (WIFI_NAME.equals(ssid)) {
                     return true;
                 } else {
-                    showAlert();
+                    showAlert("需要连接WIFI", "需要连接名为HXGNET的WIFI并且登陆后才能进行成绩查询",
+                            "打开设置页面", "不用了", (dialog, which) -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)));
                     return false;
                 }
             } else {
-                showAlert();
+                showAlert("需要连接WIFI", "需要连接名为HXGNET的WIFI并且登陆后才能进行成绩查询",
+                        "打开设置页面", "不用了", (dialog, which) -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)));
                 return false;
             }
         }
@@ -280,11 +299,14 @@ public class CheckScoreLoginFragment extends Fragment {
     /**
      * 显示Dialog
      */
-    private void showAlert() {
-        alertDialog = new AlertDialog.Builder(requireContext()).setTitle("需要连接WIFI")
-                .setMessage("需要连接名为HXGNET的WIFI并且登陆后才能进行成绩查询")
-                .setPositiveButton("打开设置页面", (dialog, which) -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)))
-                .setNegativeButton("不用了", null)
+    private void showAlert(String title, String message, String positiveButtonStr, String negativeButtonStr, final DialogInterface.OnClickListener listener) {
+        if (alertDialog != null && alertDialog.isShowing()) {
+            return;
+        }
+        alertDialog = new AlertDialog.Builder(requireContext()).setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveButtonStr, listener)
+                .setNegativeButton(negativeButtonStr, null)
                 .show();
     }
 
@@ -523,5 +545,22 @@ public class CheckScoreLoginFragment extends Fragment {
             progressDialog.show();
         }
         EventBus.getDefault().post(3);
+    }
+
+    /**
+     * GPS and Wifi Status Change Receiver
+     *
+     * @author itning
+     */
+    private class GpsAndWifiStatusReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (alertDialog != null) {
+                alertDialog.cancel();
+                if (netStatusOk()) {
+                    startConnectionServer();
+                }
+            }
+        }
     }
 }
