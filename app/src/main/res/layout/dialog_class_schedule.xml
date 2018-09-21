@@ -12,6 +12,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
+        android:hint="@string/dialog_class_schedule_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,7 +21,6 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="课程名"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -32,6 +32,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
+        android:hint="@string/dialog_class_schedule_location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,6 @@
             android:id="@+id/tv_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="地点"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -53,6 +53,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
+        android:hint="@string/dialog_class_schedule_teacher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_location">
@@ -61,7 +62,6 @@
             android:id="@+id/tv_teacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="教师"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:text="粘贴该课程"
+        android:text="@string/dialog_class_schedule_paste"
         android:textColor="#fff"
         android:theme="@style/AppTheme"
         app:backgroundTint="@color/colorAccent"
@@ -85,7 +85,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="复制该课程"
+        android:text="@string/dialog_class_schedule_copy"
         android:textColor="#fff"
         android:theme="@style/AppTheme"
         app:backgroundTint="@color/colorAccent"

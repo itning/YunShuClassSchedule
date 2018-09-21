@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +11,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/custom_all_title"
-            android:text="上午课程时间" />
+            android:text="@string/time_morning" />
 
         <RelativeLayout
             android:id="@+id/rl_1_s"
@@ -20,13 +21,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第1节上课" />
+                android:text="@string/time_1s" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/s-1"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="08:20" />
+                tools:text="08:20" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -37,13 +38,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第1节下课" />
+                android:text="@string/time_1x" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/x-1"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="09:50" />
+                tools:text="09:50" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -54,13 +55,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第2节上课" />
+                android:text="@string/time_2s" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/s-2"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="10:05" />
+                tools:text="10:05" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -71,18 +72,18 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第2节下课" />
+                android:text="@string/time_2x" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/x-2"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="11:35" />
+                tools:text="11:35" />
         </RelativeLayout>
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/custom_all_title"
-            android:text="下午课程时间" />
+            android:text="@string/time_afternoon" />
 
         <RelativeLayout
             android:id="@+id/rl_3_s"
@@ -92,13 +93,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第3节上课" />
+                android:text="@string/time_3s" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/s-3"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="12:55" />
+                tools:text="12:55" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -109,13 +110,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第3节下课" />
+                android:text="@string/time_3x" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/x-3"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="14:25" />
+                tools:text="14:25" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -126,13 +127,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第4节上课" />
+                android:text="@string/time_4s" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/s-4"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="14:40" />
+                tools:text="14:40" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -143,18 +144,18 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第4节下课" />
+                android:text="@string/time_4x" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/x-4"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="16:10" />
+                tools:text="16:10" />
         </RelativeLayout>
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/custom_all_title"
-            android:text="晚自习时间" />
+            android:text="@string/time_night" />
 
         <RelativeLayout
             android:id="@+id/rl_5_s"
@@ -164,13 +165,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第5节上课" />
+                android:text="@string/time_5s" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/s-5"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="17:30" />
+                tools:text="17:30" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -181,13 +182,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/custom_all"
-                android:text="第5节下课" />
+                android:text="@string/time_5x" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/x-5"
                 style="@style/custom_all"
                 android:layout_alignParentEnd="true"
-                android:text="20:00" />
+                tools:text="20:00" />
         </RelativeLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

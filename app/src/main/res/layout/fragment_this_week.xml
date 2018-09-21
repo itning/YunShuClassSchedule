@@ -21,36 +21,36 @@
 
         <TextView
             style="@style/week_first_column"
-            android:text="1"
+            android:text="@string/week_course_1"
             app:layout_column="0"
             app:layout_gravity="center_vertical" />
 
         <TextView
             style="@style/week_first_column"
-            android:text="2"
+            android:text="@string/week_course_2"
             app:layout_column="0"
             app:layout_gravity="center_vertical" />
 
         <TextView
             style="@style/week_first_column"
-            android:text="3"
+            android:text="@string/week_course_3"
             app:layout_column="0"
             app:layout_gravity="center_vertical" />
 
         <TextView
             style="@style/week_first_column"
-            android:text="4"
+            android:text="@string/week_course_4"
             app:layout_column="0"
             app:layout_gravity="center_vertical" />
 
         <TextView
             style="@style/week_first_column"
-            android:text="5"
+            android:text="@string/week_course_5"
             app:layout_column="0"
             app:layout_gravity="center_vertical" />
 
         <TextView
-            android:text="星期一"
+            android:text="@string/week_1"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="1"
             app:layout_columnWeight="1"
@@ -58,7 +58,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="星期二"
+            android:text="@string/week_2"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="2"
             app:layout_columnWeight="1"
@@ -66,7 +66,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="星期三"
+            android:text="@string/week_3"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="3"
             app:layout_columnWeight="1"
@@ -74,7 +74,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="星期四"
+            android:text="@string/week_4"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="4"
             app:layout_columnWeight="1"
@@ -82,7 +82,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="星期五"
+            android:text="@string/week_5"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="5"
             app:layout_columnWeight="1"
@@ -90,7 +90,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="星期六"
+            android:text="@string/week_6"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="6"
             app:layout_columnWeight="1"
@@ -98,7 +98,7 @@
             app:layout_row="0" />
 
         <TextView
-            android:text="星期日"
+            android:text="@string/week_7"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="7"
             app:layout_columnWeight="1"

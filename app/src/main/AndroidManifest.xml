@@ -44,10 +44,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.GuideActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/login_name"
             android:screenOrientation="portrait">
