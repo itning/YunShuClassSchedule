@@ -221,14 +221,14 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
         for (Map.Entry<String, String> entry : timeMap.entrySet()) {
             String[] timeArray = entry.getValue().split("-");
             //检查每节课上下课时间合法性
-            if (!DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
+            if (DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
                 Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1]);
                 showTimeErrorDialog(entry.getKey(), 1);
                 return false;
             }
             if (lastEntry != null && !"5".equals(entry.getKey())) {
                 String[] lastTimeArray = lastEntry.getValue().split("-");
-                if (!DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
+                if (DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
                     Log.d(TAG, "error2: " + lastTimeArray[1] + "-->" + timeArray[0]);
                     showTimeErrorDialog(lastEntry.getKey(), 2);
                     return false;
