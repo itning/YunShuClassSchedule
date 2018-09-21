@@ -92,6 +92,7 @@ public class ClassScheduleUtils {
         }
         if (classScheduleList != null) {
             for (ClassSchedule classSchedule : classScheduleList) {
+                gridLayout.removeView(gridLayout.findViewWithTag(classSchedule.getSection() + "-" + classSchedule.getWeek()));
                 gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.getName()), context, classSchedule.getSection(), classSchedule.getWeek()), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
             }
         }
@@ -231,9 +232,9 @@ public class ClassScheduleUtils {
      */
     @CheckResult
     private static View setNull(@NonNull Context context, int x, int y) {
-        TextView textView = new TextView(context);
-        textView.setTag(x + "-" + y);
-        return textView;
+        View view = new View(context);
+        view.setTag(x + "-" + y);
+        return view;
     }
 
 
