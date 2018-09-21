@@ -70,7 +70,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeSettingTheme(this);
+        ThemeChangeUtil.simpleSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);

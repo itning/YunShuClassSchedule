@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeTheme(this);
+        ThemeChangeUtil.changeMainActivityTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

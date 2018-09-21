@@ -92,7 +92,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeSettingTheme(this);
+        ThemeChangeUtil.simpleSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
         ButterKnife.bind(this);

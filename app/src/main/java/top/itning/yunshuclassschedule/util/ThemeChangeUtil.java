@@ -44,6 +44,11 @@ public class ThemeChangeUtil {
     private static int defaultColorAccent;
     private static int defaultColorProgress;
 
+    /**
+     * 更换夜间模式
+     *
+     * @param activity {@link AppCompatActivity}
+     */
     public synchronized static void changeNightMode(@NonNull AppCompatActivity activity) {
         ThemeChangeUtil.isChange = !ThemeChangeUtil.isChange;
         App.sharedPreferences.edit().putBoolean("night_mode", ThemeChangeUtil.isChange).apply();
@@ -51,11 +56,20 @@ public class ThemeChangeUtil {
         activity.finish();
     }
 
+    /**
+     * 更新颜色事件
+     */
     public synchronized static void changeColor() {
         Log.d(TAG, "app color change , send event");
         EventBus.getDefault().post(new EventEntity(ConstantPool.Int.APP_COLOR_CHANGE));
     }
 
+    /**
+     * 初始化有DrawerLayout的Activity的颜色
+     *
+     * @param activity     {@link AppCompatActivity}
+     * @param drawerLayout {@link DrawerLayout}
+     */
     public static void initColor(@NonNull AppCompatActivity activity, DrawerLayout drawerLayout) {
         if (!isChange) {
             ActionBar supportActionBar = activity.getSupportActionBar();
@@ -69,7 +83,12 @@ public class ThemeChangeUtil {
         }
     }
 
-    public static void changeTheme(@NonNull AppCompatActivity activity) {
+    /**
+     * 更新主Activity主题
+     *
+     * @param activity {@link AppCompatActivity}
+     */
+    public static void changeMainActivityTheme(@NonNull AppCompatActivity activity) {
         initDefaultColor(activity);
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme);
@@ -79,13 +98,37 @@ public class ThemeChangeUtil {
         }
     }
 
+    /**
+     * 简单设置主题
+     *
+     * @param activity {@link AppCompatActivity}
+     */
+    public static void simpleSetTheme(@NonNull AppCompatActivity activity) {
+        if (isChange) {
+            activity.setTheme(R.style.AppTheme_NightTheme_Setting);
+        }
+    }
+
+    /**
+     * 初始化默认颜色
+     *
+     * @param activity {@link AppCompatActivity}
+     */
     private static void initDefaultColor(@NonNull AppCompatActivity activity) {
+        if (defaultColorPrimary != 0) {
+            return;
+        }
         defaultColorPrimary = ContextCompat.getColor(activity, R.color.colorPrimary);
         defaultColorPrimaryDark = ContextCompat.getColor(activity, R.color.colorPrimaryDark);
         defaultColorAccent = ContextCompat.getColor(activity, R.color.colorAccent);
         defaultColorProgress = ContextCompat.getColor(activity, R.color.color_progress);
     }
 
+    /**
+     * 更新设置页面主题
+     *
+     * @param activity {@link AppCompatActivity}
+     */
     public static void changeSettingTheme(@NonNull AppCompatActivity activity) {
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme_Setting);
@@ -101,6 +144,12 @@ public class ThemeChangeUtil {
         StatusBarUtil.setColor(activity, appColorPrimaryDark, 30);
     }
 
+    /**
+     * 设置TabLayout颜色
+     *
+     * @param context   {@link Context}
+     * @param tabLayout {@link TabLayout}
+     */
     public static void setTabLayoutColor(@NonNull Context context, @NonNull TabLayout tabLayout) {
         int colorNormal = ContextCompat.getColor(context, android.R.color.white);
         if (isChange) {
@@ -118,6 +167,12 @@ public class ThemeChangeUtil {
         tabLayout.setTabTextColors(colorNormal, appColorAccent);
     }
 
+    /**
+     * 设置背景Resource
+     *
+     * @param context {@link Context}
+     * @param views   {@link View}
+     */
     public static void setBackgroundResources(@NonNull Context context, @NonNull View... views) {
         if (isChange) {
             for (View v : views) {
@@ -135,6 +190,12 @@ public class ThemeChangeUtil {
         }
     }
 
+    /**
+     * 设置进度条颜色
+     *
+     * @param context {@link Context}
+     * @param view    {@link View}
+     */
     public static void setProgressBackgroundResource(@NonNull Context context, @NonNull View view) {
         if (isChange) {
             view.setBackgroundResource(R.color.color_progress_night);
