@@ -33,6 +33,7 @@ import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 自定义课程
@@ -91,6 +92,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeChangeUtil.changeSettingTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
         ButterKnife.bind(this);

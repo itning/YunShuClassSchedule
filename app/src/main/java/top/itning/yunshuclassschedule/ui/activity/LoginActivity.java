@@ -35,6 +35,7 @@ import top.itning.yunshuclassschedule.entity.Profession;
 import top.itning.yunshuclassschedule.http.ClassScheduleMetaData;
 import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.util.HttpUtils;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 登陆
@@ -69,6 +70,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeChangeUtil.changeSettingTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
