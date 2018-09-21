@@ -43,3 +43,4 @@ Android的开源课程表应用
 - statusbarutil
 - materialdatetimepicker
 - jsoup
+- bubbleseekbar

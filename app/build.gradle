@@ -70,6 +70,8 @@ dependencies {
     implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation 'org.jsoup:jsoup:1.11.3'
+    /*bubble seekbar*/
+    implementation 'com.xw.repo:bubbleseekbar:3.19-lite'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

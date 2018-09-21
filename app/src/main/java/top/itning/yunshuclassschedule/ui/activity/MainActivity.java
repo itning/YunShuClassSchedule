@@ -18,7 +18,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,10 +26,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xw.repo.BubbleSeekBar;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
@@ -351,26 +350,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         float setFont = App.sharedPreferences.getFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12);
         tvFontPreview.setText(MessageFormat.format("字体大小:{0}", setFont));
         tvFontPreview.setTextSize(setFont);
-        AppCompatSeekBar seekBar = view.findViewById(R.id.seekBar);
-        seekBar.setProgress((int) setFont - 10);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            private int progress;
-
+        BubbleSeekBar bubbleSeekBar = view.findViewById(R.id.bubble_seekBar);
+        bubbleSeekBar.setProgress(setFont);
+        bubbleSeekBar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                this.progress = progress + 10;
-                tvFontPreview.setText(MessageFormat.format("字体大小:{0}", this.progress));
-                tvFontPreview.setTextSize(this.progress);
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+                tvFontPreview.setText(MessageFormat.format("字体大小:{0}", progress));
+                tvFontPreview.setTextSize(progress);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
                 App.sharedPreferences.edit().putFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), progress).apply();
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
             }
         });
         new AlertDialog.Builder(this)
