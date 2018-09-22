@@ -83,7 +83,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     private SwitchCompat drawerSwitch;
-    private InputMethodManager inputMethodManager;
 
 
     @Override
@@ -101,7 +100,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * 初始化数据
      */
     private void initData() {
-        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         fragmentSparseArray = new SparseArray<>();
         fragmentSparseArray.put(R.id.nav_class_schedule, new ClassScheduleFragment());
         fragmentSparseArray.put(R.id.nav_check_score, new CheckScoreFragment());
@@ -135,6 +133,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onDrawerStateChanged(int newState) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (inputMethodManager != null) {
                     inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 }
@@ -196,9 +195,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         if (supportFragmentManager != null) {
             supportFragmentManager = null;
-        }
-        if (inputMethodManager != null) {
-            inputMethodManager = null;
         }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
