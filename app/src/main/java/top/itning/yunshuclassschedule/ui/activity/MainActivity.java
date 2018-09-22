@@ -66,8 +66,8 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE_CHOOSE = 101;
-    public static final int REQUEST_CODE = 103;
-    public static final int SETTING_REQUEST_CODE = 104;
+    private static final int REQUEST_CODE = 103;
+    private static final int SETTING_REQUEST_CODE = 104;
 
     private FragmentManager supportFragmentManager;
     private SparseArray<Fragment> fragmentSparseArray;

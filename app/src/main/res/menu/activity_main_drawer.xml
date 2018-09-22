@@ -8,23 +8,23 @@
         <item
             android:id="@+id/nav_class_schedule"
             android:icon="@drawable/baseline_today_24"
-            android:title="课程表" />
+            android:title="@string/drawer_class_schedule" />
         <item
             android:id="@+id/nav_check_score"
             android:icon="@drawable/baseline_score_24"
-            android:title="查成绩" />
+            android:title="@string/drawer_check_score" />
     </group>
 
-    <item android:title="其它">
+    <item android:title="@string/drawer_another">
         <menu>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/baseline_settings_applications_24"
-                android:title="设置" />
+                android:title="@string/drawer_settings" />
             <item
                 android:id="@+id/nav_day_night"
                 android:icon="@drawable/baseline_brightness_4_24"
-                android:title="夜间模式"
+                android:title="@string/drawer_day_night"
                 app:actionLayout="@layout/drawer_switch" />
         </menu>
     </item>

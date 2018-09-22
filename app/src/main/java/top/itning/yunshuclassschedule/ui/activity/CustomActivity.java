@@ -43,8 +43,8 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 public class CustomActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "CustomActivity";
 
-    public static final String CLASS_UP = "s";
-    public static final int MIN_TIME = 10;
+    private static final String CLASS_UP = "s";
+    private static final int MIN_TIME = 10;
 
     private String msg;
     private Map<String, String> timeMap;

@@ -53,4 +53,10 @@
     <string name="week_5">星期五</string>
     <string name="week_6">星期六</string>
     <string name="week_7">星期日</string>
+    <string name="drawer_class_schedule">课程表</string>
+    <string name="drawer_check_score">查成绩</string>
+    <string name="drawer_another">其它</string>
+    <string name="drawer_settings">设置</string>
+    <string name="drawer_day_night">夜间模式</string>
+    <string name="custom_done">完成</string>
 </resources>

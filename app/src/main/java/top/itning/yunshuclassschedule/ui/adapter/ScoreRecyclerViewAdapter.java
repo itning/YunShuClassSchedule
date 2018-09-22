@@ -18,7 +18,7 @@ import top.itning.yunshuclassschedule.entity.Score;
  * @author itning
  */
 public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter {
-    private List<Score> scoreList;
+    private final List<Score> scoreList;
 
     public ScoreRecyclerViewAdapter(@NonNull List<Score> scoreList) {
         this.scoreList = scoreList;

@@ -49,7 +49,7 @@ public class ConstantPool {
          */
         TEACHER_INFO_STATUS("teacher_week_status");
 
-        private String value;
+        private final String value;
 
         Str(String value) {
             this.value = value;
@@ -162,7 +162,7 @@ public class ConstantPool {
          */
         RETURN_LOGIN_FRAGMENT(139);
 
-        private int value;
+        private final int value;
 
         Int(int value) {
             this.value = value;

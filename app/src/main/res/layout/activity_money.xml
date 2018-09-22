@@ -14,12 +14,13 @@
             android:id="@+id/ll_login"
             android:layout_width="wrap_content"
             android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/money_login" />
+                android:src="@drawable/money_logo" />
         </LinearLayout>
 
         <LinearLayout
@@ -38,7 +39,7 @@
                 app:contentPadding="5dp">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/money_z" />
             </android.support.v7.widget.CardView>
@@ -51,7 +52,7 @@
                 app:contentPadding="5dp">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/money_v" />
             </android.support.v7.widget.CardView>
