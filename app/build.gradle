@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'bugly'
 
 android {
     compileSdkVersion 27
@@ -34,6 +35,10 @@ android {
         greendao {
             schemaVersion 2
         }
+    }
+    bugly {
+        appId = '439037c8de'
+        appKey = '037c8d58-2f72-4412-84bc-ba0b2340b7d3'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
