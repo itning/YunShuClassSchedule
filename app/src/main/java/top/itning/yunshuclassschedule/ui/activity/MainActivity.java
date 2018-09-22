@@ -2,6 +2,7 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +83,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     private SwitchCompat drawerSwitch;
+    private InputMethodManager inputMethodManager;
 
 
     @Override
@@ -98,6 +101,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * 初始化数据
      */
     private void initData() {
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         fragmentSparseArray = new SparseArray<>();
         fragmentSparseArray.put(R.id.nav_class_schedule, new ClassScheduleFragment());
         fragmentSparseArray.put(R.id.nav_check_score, new CheckScoreFragment());
@@ -115,6 +119,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if (inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                }
+            }
+        });
         toggle.syncState();
         //默认选中第一项
         navView.getMenu().getItem(0).setChecked(true);
@@ -165,6 +190,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onDestroy() {
+        if (fragmentSparseArray != null) {
+            fragmentSparseArray.clear();
+            fragmentSparseArray = null;
+        }
+        if (supportFragmentManager != null) {
+            supportFragmentManager = null;
+        }
+        if (inputMethodManager != null) {
+            inputMethodManager = null;
+        }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

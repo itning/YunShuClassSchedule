@@ -133,10 +133,6 @@ public class ClassScheduleFragment extends Fragment {
         Log.d(TAG, "on Create");
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        InputMethodManager inputMethodManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(requireActivity().getWindow().getDecorView().getWindowToken(), 0);
-        }
     }
 
     @Override
