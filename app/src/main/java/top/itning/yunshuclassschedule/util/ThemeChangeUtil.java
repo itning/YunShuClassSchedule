@@ -133,6 +133,7 @@ public class ThemeChangeUtil {
      * @param activity {@link AppCompatActivity}
      */
     public static void changeTheme(@NonNull AppCompatActivity activity) {
+        initDefaultColor(activity);
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme_Setting);
             return;

@@ -44,3 +44,4 @@ Android的开源课程表应用
 - materialdatetimepicker
 - jsoup
 - bubbleseekbar
+- zxing-library
