@@ -33,10 +33,12 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.DaoSession;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.FileUtils;
 import top.itning.yunshuclassschedule.util.GlideApp;
 
+import static top.itning.yunshuclassschedule.util.ClassScheduleUtils.COPY_LIST;
 import static top.itning.yunshuclassschedule.util.FileUtils.MAX_IMAGE_FILE_SIZE;
 
 
@@ -49,6 +51,7 @@ public class ThisWeekFragment extends Fragment {
     private static final String TAG = "ThisWeekFragment";
 
     private View view;
+    private ClassScheduleItemLongClickListener clickListener;
 
     static class ViewHolder {
         @BindView(R.id.schedule_gridlayout)
@@ -74,7 +77,8 @@ public class ThisWeekFragment extends Fragment {
         setViewBackground();
         DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
         List<ClassSchedule> classScheduleList = daoSession.getClassScheduleDao().loadAll();
-        ClassScheduleUtils.loadingView(classScheduleList, holder.scheduleGridlayout, requireContext(), requireActivity());
+        clickListener = new ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST);
+        ClassScheduleUtils.loadingView(classScheduleList, holder.scheduleGridlayout, clickListener, requireActivity());
         return view;
     }
 
@@ -88,6 +92,9 @@ public class ThisWeekFragment extends Fragment {
     public void onDestroy() {
         Log.d(TAG, "on Destroy");
         EventBus.getDefault().unregister(this);
+        if (clickListener != null) {
+            clickListener = null;
+        }
         super.onDestroy();
     }
 
@@ -97,12 +104,17 @@ public class ThisWeekFragment extends Fragment {
             case REFRESH_WEEK_FRAGMENT_DATA: {
                 DaoSession daoSession = ((App) requireActivity().getApplication()).getDaoSession();
                 List<ClassSchedule> classScheduleList = daoSession.getClassScheduleDao().loadAll();
-                ClassScheduleUtils.loadingView(classScheduleList, ((ViewHolder) view.getTag()).scheduleGridlayout, requireContext(), requireActivity());
+                clickListener = new ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST);
+                ClassScheduleUtils.loadingView(classScheduleList, ((ViewHolder) view.getTag()).scheduleGridlayout, clickListener, requireActivity());
                 break;
             }
             case NOTIFICATION_BACKGROUND_CHANGE: {
                 FileUtils.transferFile(requireContext(), (Uri) eventEntity.getData(), "background_img");
                 setViewBackground();
+                break;
+            }
+            case APP_COLOR_CHANGE: {
+                clickListener.updateBtnBackgroundTintList();
                 break;
             }
             default:

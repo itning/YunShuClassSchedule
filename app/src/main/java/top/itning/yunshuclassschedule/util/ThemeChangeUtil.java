@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.CheckResult;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.jaeger.library.StatusBarUtil;
 
@@ -129,7 +132,7 @@ public class ThemeChangeUtil {
      *
      * @param activity {@link AppCompatActivity}
      */
-    public static void changeSettingTheme(@NonNull AppCompatActivity activity) {
+    public static void changeTheme(@NonNull AppCompatActivity activity) {
         if (isChange) {
             activity.setTheme(R.style.AppTheme_NightTheme_Setting);
             return;
@@ -204,5 +207,40 @@ public class ThemeChangeUtil {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         int appColorProgress = sharedPreferences.getInt(APP_COLOR_PROGRESS, defaultColorProgress);
         view.setBackgroundColor(appColorProgress);
+    }
+
+    /**
+     * 获取当前强调色颜色
+     *
+     * @param context {@link Context}
+     * @return 颜色数值
+     */
+    @CheckResult
+    @ColorInt
+    public static int getNowThemeColorAccent(@NonNull Context context) {
+        if (isChange) {
+            return ContextCompat.getColor(context, R.color.nightThemeColorAccent);
+        } else {
+            return PreferenceManager.getDefaultSharedPreferences(context).getInt(APP_COLOR_ACCENT, defaultColorAccent);
+        }
+    }
+
+    /**
+     * 设置TextView 颜色
+     *
+     * @param context   {@link Context}
+     * @param textViews {@link TextView}
+     */
+    public static void setTextViewsColorByTheme(@NonNull Context context, @NonNull TextView... textViews) {
+        final boolean isChange = ThemeChangeUtil.isChange;
+        final int whiteColor = ContextCompat.getColor(context, android.R.color.white);
+        final int blackColor = ContextCompat.getColor(context, android.R.color.black);
+        for (TextView textView : textViews) {
+            if (isChange) {
+                textView.setTextColor(whiteColor);
+            } else {
+                textView.setTextColor(blackColor);
+            }
+        }
     }
 }

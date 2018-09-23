@@ -44,7 +44,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeSettingTheme(this);
+        ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
@@ -78,7 +78,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case APP_COLOR_CHANGE: {
-                ThemeChangeUtil.changeSettingTheme(this);
+                ThemeChangeUtil.changeTheme(this);
                 break;
             }
             case DESTROY_ACTIVITY: {

@@ -89,10 +89,37 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
     AppCompatTextView s5;
     @BindView(R.id.x_5)
     AppCompatTextView x5;
+    @BindView(R.id.tv_morning)
+    AppCompatTextView tvMorning;
+    @BindView(R.id.tv_afternoon)
+    AppCompatTextView tvAfternoon;
+    @BindView(R.id.tv_at_night)
+    AppCompatTextView tvAtNight;
+
+    @BindView(R.id.a1)
+    AppCompatTextView a1;
+    @BindView(R.id.a2)
+    AppCompatTextView a2;
+    @BindView(R.id.a3)
+    AppCompatTextView a3;
+    @BindView(R.id.a4)
+    AppCompatTextView a4;
+    @BindView(R.id.a5)
+    AppCompatTextView a5;
+    @BindView(R.id.a6)
+    AppCompatTextView a6;
+    @BindView(R.id.a7)
+    AppCompatTextView a7;
+    @BindView(R.id.a8)
+    AppCompatTextView a8;
+    @BindView(R.id.a9)
+    AppCompatTextView a9;
+    @BindView(R.id.a10)
+    AppCompatTextView a10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.simpleSetTheme(this);
+        ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
         ButterKnife.bind(this);
@@ -150,9 +177,15 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle("课时设置");
         }
+        int nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this);
+        tvMorning.setTextColor(nowThemeColorAccent);
+        tvAfternoon.setTextColor(nowThemeColorAccent);
+        tvAtNight.setTextColor(nowThemeColorAccent);
+        ThemeChangeUtil.setTextViewsColorByTheme(this,
+                s1, x1, s2, x2, s3, x3, s4, x4, s5, x5,
+                a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
         new AlertDialog.Builder(this).setTitle("关于课节")
                 .setMessage("我们将两节小课合成为1节课,这样上午有2节课,下午有2节课,晚自习(如果有)1节课\n全天共计5节课")
-                .setCancelable(false)
                 .setPositiveButton("我知道了", null)
                 .show();
     }

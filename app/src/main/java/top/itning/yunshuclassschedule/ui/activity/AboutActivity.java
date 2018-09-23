@@ -42,7 +42,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeSettingTheme(this);
+        ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);

@@ -10,6 +10,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_morning"
             style="@style/custom_all_title"
             android:text="@string/time_morning" />
 
@@ -20,6 +21,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a1"
                 style="@style/custom_all"
                 android:text="@string/time_1s" />
 
@@ -37,6 +39,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a2"
                 style="@style/custom_all"
                 android:text="@string/time_1x" />
 
@@ -54,6 +57,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a3"
                 style="@style/custom_all"
                 android:text="@string/time_2s" />
 
@@ -71,6 +75,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a4"
                 style="@style/custom_all"
                 android:text="@string/time_2x" />
 
@@ -82,6 +87,7 @@
         </RelativeLayout>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_afternoon"
             style="@style/custom_all_title"
             android:text="@string/time_afternoon" />
 
@@ -92,6 +98,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a5"
                 style="@style/custom_all"
                 android:text="@string/time_3s" />
 
@@ -109,6 +116,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a6"
                 style="@style/custom_all"
                 android:text="@string/time_3x" />
 
@@ -126,6 +134,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a7"
                 style="@style/custom_all"
                 android:text="@string/time_4s" />
 
@@ -143,6 +152,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a8"
                 style="@style/custom_all"
                 android:text="@string/time_4x" />
 
@@ -154,6 +164,7 @@
         </RelativeLayout>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_at_night"
             style="@style/custom_all_title"
             android:text="@string/time_night" />
 
@@ -164,6 +175,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a9"
                 style="@style/custom_all"
                 android:text="@string/time_5s" />
 
@@ -181,6 +193,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/a10"
                 style="@style/custom_all"
                 android:text="@string/time_5x" />
 

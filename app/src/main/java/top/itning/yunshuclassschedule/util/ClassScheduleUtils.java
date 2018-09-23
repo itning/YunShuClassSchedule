@@ -1,6 +1,5 @@
 package top.itning.yunshuclassschedule.util;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -8,35 +7,25 @@ import android.graphics.Point;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
-import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
-import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener;
 
 /**
  * 课程表工具类
@@ -49,14 +38,13 @@ public class ClassScheduleUtils {
     private static final int CLASS_SECTION = 5;
     private static final int CLASS_WEEK = 7;
     private static float weekFont;
-    private static ClassSchedule selectClassSchedule;
 
     private ClassScheduleUtils() {
 
     }
 
     private static final List<ClassSchedule> ORDER_LIST = new ArrayList<>();
-    private static final List<String> COPY_LIST = new ArrayList<>();
+    public static final List<String> COPY_LIST = new ArrayList<>();
     /**
      * 颜色数组
      */
@@ -75,11 +63,10 @@ public class ClassScheduleUtils {
      *
      * @param classScheduleList 课程
      * @param gridLayout        {@link GridLayout}
-     * @param context           {@link Context}
      * @param activity          {@link Activity}
      */
-    public static void loadingView(List<ClassSchedule> classScheduleList, @NonNull GridLayout gridLayout, @NonNull Context context, @NonNull Activity activity) {
-        initColorArray(context);
+    public static void loadingView(List<ClassSchedule> classScheduleList, @NonNull GridLayout gridLayout, @NonNull ClassScheduleItemLongClickListener clickListener, @NonNull Activity activity) {
+        initColorArray(activity);
         initFontSize();
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -87,113 +74,21 @@ public class ClassScheduleUtils {
         gridLayout.removeViews(13, gridLayout.getChildCount() - 13);
         for (int i = 0; i < CLASS_SECTION; i++) {
             for (int j = 0; j < CLASS_WEEK; j++) {
-                gridLayout.addView(setNull(context, i + 1, j + 1), setParams(i + 1, j + 1, size));
+                gridLayout.addView(setNull(activity, i + 1, j + 1), setParams(i + 1, j + 1, size));
             }
         }
         if (classScheduleList != null) {
             for (ClassSchedule classSchedule : classScheduleList) {
                 gridLayout.removeView(gridLayout.findViewWithTag(classSchedule.getSection() + "-" + classSchedule.getWeek()));
-                gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.getName()), context, classSchedule.getSection(), classSchedule.getWeek()), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
+                gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.getName()), activity, classSchedule.getSection(), classSchedule.getWeek()), setParams(classSchedule.getSection(), classSchedule.getWeek(), size));
             }
         }
 
         int childCount = gridLayout.getChildCount();
-        ClassScheduleDao classScheduleDao = ((App) activity.getApplication()).getDaoSession().getClassScheduleDao();
+        clickListener.updateBtnBackgroundTintList();
         for (int i = 0; i < childCount; i++) {
             View view = gridLayout.getChildAt(i);
-            view.setOnLongClickListener(v -> {
-                @SuppressLint("InflateParams")
-                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_class_schedule, null);
-                TextInputLayout tlteacher = inflate.findViewById(R.id.tl_teacher);
-                TextInputEditText tvteacher = inflate.findViewById(R.id.tv_teacher);
-                TextInputLayout tllocation = inflate.findViewById(R.id.tl_location);
-                TextInputEditText tvlocation = inflate.findViewById(R.id.tv_location);
-                TextInputLayout tlname = inflate.findViewById(R.id.tl_name);
-                TextInputEditText tvname = inflate.findViewById(R.id.tv_name);
-                AppCompatButton copyBtn = inflate.findViewById(R.id.btn_copy);
-                AppCompatButton pasteBtn = inflate.findViewById(R.id.btn_paste);
-                copyBtn.setOnClickListener(v1 -> {
-                    COPY_LIST.clear();
-                    COPY_LIST.add(tvname.getText().toString().trim());
-                    COPY_LIST.add(tvlocation.getText().toString().trim());
-                    COPY_LIST.add(tvteacher.getText().toString().trim());
-                    Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show();
-                });
-                pasteBtn.setOnClickListener(v12 -> {
-                    if (COPY_LIST.size() == 3) {
-                        tvname.setText(COPY_LIST.get(0));
-                        tvlocation.setText(COPY_LIST.get(1));
-                        tvteacher.setText(COPY_LIST.get(2));
-                        Toast.makeText(context, "已粘贴", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                String[] classSplit = v.getTag().toString().split("-");
-                if (classScheduleList != null && !classScheduleList.isEmpty()) {
-                    selectClassSchedule = null;
-                    for (ClassSchedule classSchedule : classScheduleList) {
-                        if ((classSchedule.getSection() + "").equals(classSplit[0]) && (classSchedule.getWeek() + "").equals(classSplit[1])) {
-                            selectClassSchedule = classSchedule;
-                            tvteacher.setText(classSchedule.getTeacher());
-                            tvname.setText(classSchedule.getName());
-                            tvlocation.setText(classSchedule.getLocation());
-                        }
-                    }
-                }
-                AlertDialog alertDialog = new AlertDialog.Builder(context).setView(inflate)
-                        .setTitle("星期" + classSplit[1] + "第" + classSplit[0] + "节课")
-                        .setPositiveButton("确定", null)
-                        .setNegativeButton("取消", null)
-                        .setNeutralButton("删除", (dialog, which) -> {
-                            if (selectClassSchedule != null) {
-                                new AlertDialog.Builder(context)
-                                        .setTitle("删除确认")
-                                        .setMessage("确定删除星期" + selectClassSchedule.getWeek() + "的第" + selectClassSchedule.getSection() + "节课么?")
-                                        .setPositiveButton("确定", (a, b) -> {
-                                            classScheduleDao.delete(selectClassSchedule);
-                                            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT));
-                                            selectClassSchedule = null;
-                                        })
-                                        .setNegativeButton("取消", null)
-                                        .show();
-                            }
-                        })
-                        .show();
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(vv -> {
-                    tlname.setError(null);
-                    tllocation.setError(null);
-                    tlteacher.setError(null);
-                    if ("".equals(tvname.getText().toString())) {
-                        tlname.setError("请输入课程名");
-                        return;
-                    }
-                    if ("".equals(tvlocation.getText().toString())) {
-                        tllocation.setError("请输入地点");
-                        return;
-                    }
-                    if ("".equals(tvteacher.getText().toString())) {
-                        tlteacher.setError("请输入教师");
-                        return;
-                    }
-                    if (selectClassSchedule != null) {
-                        selectClassSchedule.setName(tvname.getText().toString().trim());
-                        selectClassSchedule.setLocation(tvlocation.getText().toString().trim());
-                        selectClassSchedule.setTeacher(tvteacher.getText().toString().trim());
-                        classScheduleDao.update(selectClassSchedule);
-                    } else {
-                        ClassSchedule classSchedule = new ClassSchedule();
-                        classSchedule.setId(UUID.randomUUID().toString());
-                        classSchedule.setName(tvname.getText().toString().trim());
-                        classSchedule.setLocation(tvlocation.getText().toString().trim());
-                        classSchedule.setTeacher(tvteacher.getText().toString().trim());
-                        classSchedule.setSection(Integer.parseInt(classSplit[0]));
-                        classSchedule.setWeek(Integer.parseInt(classSplit[1]));
-                        classScheduleDao.insert(classSchedule);
-                    }
-                    alertDialog.dismiss();
-                    EventBus.getDefault().post(new EventEntity(ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT));
-                });
-                return true;
-            });
+            view.setOnLongClickListener(clickListener);
         }
     }
 

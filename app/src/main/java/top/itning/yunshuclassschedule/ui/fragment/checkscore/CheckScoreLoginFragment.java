@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.LocationManager;
@@ -59,6 +60,7 @@ import top.itning.yunshuclassschedule.entity.Hash;
 import top.itning.yunshuclassschedule.entity.Score;
 import top.itning.yunshuclassschedule.util.ImageHash;
 import top.itning.yunshuclassschedule.util.NetWorkUtils;
+import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
  * 登陆
@@ -216,6 +218,10 @@ public class CheckScoreLoginFragment extends Fragment {
                 progressDialog.setMessage(eventEntity.getMsg());
                 break;
             }
+            case APP_COLOR_CHANGE: {
+                btnLogin.setBackgroundTintList(ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(requireContext())));
+                break;
+            }
             default:
         }
     }
@@ -225,6 +231,7 @@ public class CheckScoreLoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_check_score_login, container, false);
         unbinder = ButterKnife.bind(this, view);
+        btnLogin.setBackgroundTintList(ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(requireContext())));
         etId.setText(App.sharedPreferences.getString(REMEMBER_ID, ""));
         etName.setText(App.sharedPreferences.getString(REMEMBER_NAME, ""));
         checkBox.setChecked(App.sharedPreferences.getBoolean(REMEMBER_STATUS, false));

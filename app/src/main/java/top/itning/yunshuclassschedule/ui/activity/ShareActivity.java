@@ -1,19 +1,15 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.CardView;
-import android.util.Log;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.MenuItem;
 import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.net.URISyntaxException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,34 +20,47 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 /**
+ * 课程表分享活动
+ *
  * @author itning
  */
-public class MoneyActivity extends BaseActivity {
-
-    private static final String TAG = "MoneyActivity";
-    @BindView(R.id.cv_z)
-    CardView cvZ;
-    @BindView(R.id.cv_v)
-    CardView cvV;
+public class ShareActivity extends BaseActivity {
+    @BindView(R.id.tv_import_title)
+    AppCompatTextView tvImportTitle;
+    @BindView(R.id.tv_import_file)
+    AppCompatTextView tvImportFile;
+    @BindView(R.id.tv_import_qr_code)
+    AppCompatTextView tvImportQrCode;
+    @BindView(R.id.tv_export_title)
+    AppCompatTextView tvExportTitle;
+    @BindView(R.id.tv_export_file)
+    AppCompatTextView tvExportFile;
+    @BindView(R.id.tv_export_qr_code)
+    AppCompatTextView tvExportQrCode;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeTheme(this);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        ThemeChangeUtil.simpleSetTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_money);
+        setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initView();
     }
 
+    /**
+     * 初始化视图
+     */
     private void initView() {
-        Log.d(TAG, "init view");
-        //设置返回箭头
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle("捐赠");
+            supportActionBar.setTitle("分享课程表");
         }
+        int nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this);
+        tvImportTitle.setTextColor(nowThemeColorAccent);
+        tvExportTitle.setTextColor(nowThemeColorAccent);
+        ThemeChangeUtil.setTextViewsColorByTheme(this, tvImportFile, tvImportQrCode, tvExportFile, tvExportQrCode);
     }
 
     @Override
@@ -78,25 +87,16 @@ public class MoneyActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.cv_z, R.id.cv_v})
-    public void onQRCodeClicked(View view) {
+    @OnClick({R.id.tv_import_file, R.id.tv_import_qr_code, R.id.tv_export_file, R.id.tv_export_qr_code})
+    public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.cv_z:
-                String s = "intent://platformapi/startapp?saId=10000007&" +
-                        "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ftsx04810zmikyotlvzoyk80%3F_s" +
-                        "%3Dweb-other&_t=1472443966571#Intent;" +
-                        "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
-                try {
-                    Intent intent = Intent.parseUri(
-                            s,
-                            Intent.URI_INTENT_SCHEME
-                    );
-                    startActivity(intent);
-                } catch (URISyntaxException | ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
+            case R.id.tv_import_file:
                 break;
-            case R.id.cv_v:
+            case R.id.tv_import_qr_code:
+                break;
+            case R.id.tv_export_file:
+                break;
+            case R.id.tv_export_qr_code:
                 break;
             default:
         }

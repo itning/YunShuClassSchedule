@@ -81,6 +81,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.ShareActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="top.itning.yunshuclassschedule.SHARE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".service.CommonService"

@@ -2,6 +2,7 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatButton;
@@ -70,11 +71,15 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.simpleSetTheme(this);
+        ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        int nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this);
+        btnLogin.setBackgroundTintList(ColorStateList.valueOf(nowThemeColorAccent));
+        btnRefresh.setBackgroundTintList(ColorStateList.valueOf(nowThemeColorAccent));
+        btnCustom.setBackgroundTintList(ColorStateList.valueOf(nowThemeColorAccent));
         progressDialog = new ProgressDialog(this);
         startService(new Intent(this, DataDownloadService.class));
         initData();
