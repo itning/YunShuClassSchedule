@@ -1,10 +1,15 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresPermission;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
@@ -56,6 +61,7 @@ public class ShareActivity extends BaseActivity {
     private static final int FILE_SELECT_CODE = 1;
     private static final int WRITE_REQUEST_CODE = 2;
     private static final int SCAN_CODE_REQUEST_CODE = 3;
+    private static final int QR_CODE_REQUEST_CODE = 4;
 
     @BindView(R.id.tv_import_title)
     AppCompatTextView tvImportTitle;
@@ -126,16 +132,36 @@ public class ShareActivity extends BaseActivity {
                 importFile();
                 break;
             case R.id.tv_import_qr_code:
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, QR_CODE_REQUEST_CODE);
+                    break;
+                }
                 startScanQrCode();
                 break;
             case R.id.tv_export_file:
                 exportFile();
                 break;
             case R.id.tv_export_qr_code:
-
+                Toast.makeText(this, "程序员正在思考", Toast.LENGTH_LONG).show();
                 break;
             default:
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case QR_CODE_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        startScanQrCode();
+                    }
+                }
+                break;
+            }
+            default:
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
@@ -171,6 +197,7 @@ public class ShareActivity extends BaseActivity {
     /**
      * 开启扫描二维码
      */
+    @RequiresPermission(Manifest.permission.CAMERA)
     private void startScanQrCode() {
         Intent intent = new Intent(ShareActivity.this, ScanCodeActivity.class);
         startActivityForResult(intent, SCAN_CODE_REQUEST_CODE);
