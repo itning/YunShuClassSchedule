@@ -1,6 +1,8 @@
 package top.itning.yunshuclassschedule.util;
 
+import android.content.Context;
 import android.support.annotation.CheckResult;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -10,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;
@@ -116,6 +120,18 @@ public class DateUtils {
     }
 
     /**
+     * 刷新时间数据集合
+     */
+    public static void refreshTimeList() {
+        TIME_LIST.clear();
+        TIME_LIST.add(App.sharedPreferences.getString("1", "08:20-09:50"));
+        TIME_LIST.add(App.sharedPreferences.getString("2", "10:05-11:35"));
+        TIME_LIST.add(App.sharedPreferences.getString("3", "12:55-14:25"));
+        TIME_LIST.add(App.sharedPreferences.getString("4", "14:40-16:10"));
+        TIME_LIST.add(App.sharedPreferences.getString("5", "17:30-20:00"));
+    }
+
+    /**
      * 获取星期
      *
      * @return 1~7
@@ -219,5 +235,52 @@ public class DateUtils {
             Log.e(TAG, "time format error: ", e);
             return true;
         }
+    }
+
+    /**
+     * 数据合法性检查
+     *
+     * @return 合法返回真
+     */
+    public static boolean isDataLegitimate(TreeMap<String, String> timeMap, Context context) {
+        Map.Entry<String, String> lastEntry = null;
+        for (Map.Entry<String, String> entry : timeMap.entrySet()) {
+            String[] timeArray = entry.getValue().split("-");
+            //检查每节课上下课时间合法性
+            if (DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
+                Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1]);
+                showTimeErrorDialog(entry.getKey(), 1, context);
+                return false;
+            }
+            if (lastEntry != null && !"5".equals(entry.getKey())) {
+                String[] lastTimeArray = lastEntry.getValue().split("-");
+                if (DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
+                    Log.d(TAG, "error2: " + lastTimeArray[1] + "-->" + timeArray[0]);
+                    showTimeErrorDialog(lastEntry.getKey(), 2, context);
+                    return false;
+                }
+            }
+            lastEntry = entry;
+        }
+        return true;
+    }
+
+    /**
+     * 显示错误Dialog
+     *
+     * @param whichClass 哪节课
+     * @param type       类型
+     */
+    private static void showTimeErrorDialog(String whichClass, int type, Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle("错误");
+        if (type == 1) {
+            builder.setMessage("第" + whichClass + "节课上下课时间冲突,请检查");
+
+        } else {
+            builder.setMessage("第" + whichClass + "节课下课和" + (Integer.parseInt(whichClass) + 1) + "节课时间冲突,请检查");
+        }
+        builder.setPositiveButton("确定", null)
+                .show();
     }
 }

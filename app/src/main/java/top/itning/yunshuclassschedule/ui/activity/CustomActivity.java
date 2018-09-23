@@ -47,7 +47,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
     private static final int MIN_TIME = 10;
 
     private String msg;
-    private Map<String, String> timeMap;
+    private TreeMap<String, String> timeMap;
 
     @BindView(R.id.rl_1_s)
     RelativeLayout rl1S;
@@ -211,7 +211,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                 break;
             }
             case R.id.done: {
-                if (isDataLegitimate()) {
+                if (DateUtils.isDataLegitimate(timeMap, this)) {
                     updateSharedPreferences();
                     App.sharedPreferences.edit()
                             .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
@@ -220,6 +220,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
                             .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
                             .apply();
                     if (!isTaskRoot()) {
+                        EventBus.getDefault().post(new EventEntity(ConstantPool.Int.TIME_TICK_CHANGE, ""));
                         finish();
                         break;
                     }
@@ -242,53 +243,7 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
             edit.putString(entry.getKey(), entry.getValue());
         }
         edit.apply();
-    }
-
-    /**
-     * 数据合法性检查
-     *
-     * @return 合法返回真
-     */
-    private boolean isDataLegitimate() {
-        Map.Entry<String, String> lastEntry = null;
-        for (Map.Entry<String, String> entry : timeMap.entrySet()) {
-            String[] timeArray = entry.getValue().split("-");
-            //检查每节课上下课时间合法性
-            if (DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
-                Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1]);
-                showTimeErrorDialog(entry.getKey(), 1);
-                return false;
-            }
-            if (lastEntry != null && !"5".equals(entry.getKey())) {
-                String[] lastTimeArray = lastEntry.getValue().split("-");
-                if (DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
-                    Log.d(TAG, "error2: " + lastTimeArray[1] + "-->" + timeArray[0]);
-                    showTimeErrorDialog(lastEntry.getKey(), 2);
-                    return false;
-                }
-            }
-            lastEntry = entry;
-        }
-        return true;
-    }
-
-    /**
-     * 显示错误Dialog
-     *
-     * @param whichClass 哪节课
-     * @param type       类型
-     */
-    private void showTimeErrorDialog(String whichClass, int type) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("错误");
-        if (type == 1) {
-            builder.setMessage("第" + whichClass + "节课上下课时间冲突,请检查");
-
-        } else {
-            builder.setMessage("第" + whichClass + "节课下课和" + (Integer.parseInt(whichClass) + 1) + "节课时间冲突,请检查");
-        }
-        builder.setPositiveButton("确定", null)
-                .show();
+        DateUtils.refreshTimeList();
     }
 
     @Override

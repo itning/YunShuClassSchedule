@@ -162,7 +162,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
-                if (DateUtils.isNewDay()) {
+                if (DateUtils.isNewDay() || eventEntity.getMsg() != null) {
+                    Log.d(TAG, "time tick event , now new ClassScheduleFragment");
                     fragmentSparseArray.remove(R.id.nav_class_schedule);
                     fragmentSparseArray.put(R.id.nav_class_schedule, new ClassScheduleFragment());
                     if (supportFragmentManager.findFragmentById(R.id.frame_container) instanceof ClassScheduleFragment) {
