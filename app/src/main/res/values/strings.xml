@@ -59,4 +59,6 @@
     <string name="drawer_settings">设置</string>
     <string name="drawer_day_night">夜间模式</string>
     <string name="custom_done">完成</string>
+    <string name="btn_flash_light_str">开灯</string>
+    <string name="btn_select_str">从相册选取二维码</string>
 </resources>

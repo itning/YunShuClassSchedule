@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -39,6 +41,7 @@ public class ShareActivity extends BaseActivity {
 
     private static final int FILE_SELECT_CODE = 1;
     private static final int WRITE_REQUEST_CODE = 2;
+    private static final int SCAN_CODE_REQUEST_CODE = 3;
 
     @BindView(R.id.tv_import_title)
     AppCompatTextView tvImportTitle;
@@ -116,6 +119,7 @@ public class ShareActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_import_qr_code:
+                startScanQrCode();
                 break;
             case R.id.tv_export_file:
                 Intent intent1 = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -128,6 +132,11 @@ public class ShareActivity extends BaseActivity {
                 break;
             default:
         }
+    }
+
+    private void startScanQrCode() {
+        Intent intent = new Intent(ShareActivity.this, ScanCodeActivity.class);
+        startActivityForResult(intent, SCAN_CODE_REQUEST_CODE);
     }
 
     @Override
@@ -159,6 +168,23 @@ public class ShareActivity extends BaseActivity {
                         getContentResolver().openOutputStream(uri);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                    }
+                }
+                break;
+            }
+            case SCAN_CODE_REQUEST_CODE: {
+                //处理扫描结果（在界面上显示）
+                if (null != data) {
+                    Bundle bundle = data.getExtras();
+                    if (bundle == null) {
+                        Log.d(TAG, "bundle is null");
+                        return;
+                    }
+                    if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                        String result = bundle.getString(CodeUtils.RESULT_STRING);
+                        Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                        Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
