@@ -40,6 +40,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,6 +58,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.FileUtils;
 import top.itning.yunshuclassschedule.util.Glide4Engine;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
@@ -295,7 +297,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            boolean granted = true;
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {
+                    granted = false;
+                }
+            }
+            if (granted) {
                 if (checkPermission()) {
                     startSelectImageActivity();
                 }

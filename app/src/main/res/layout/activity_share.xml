@@ -11,7 +11,7 @@
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_import_title"
             style="@style/custom_all_title"
-            android:text="导入课程数据" />
+            android:text="@string/share_import_title" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_import_file"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            android:text="选择文件导入课程数据"
+            android:text="@string/share_import_file"
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -28,13 +28,13 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            android:text="扫描二维码导入"
+            android:text="@string/share_import_qr_code"
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_export_title"
             style="@style/custom_all_title"
-            android:text="导出课程数据" />
+            android:text="@string/share_export_title" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_export_file"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            android:text="课程数据导出到文件"
+            android:text="@string/share_export_file"
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            android:text="生成课程数据二维码"
+            android:text="@string/share_export_qr_code"
             android:textSize="16sp" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
@@ -27,13 +28,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import butterknife.BindView;
@@ -62,6 +62,8 @@ public class ShareActivity extends BaseActivity {
     private static final int WRITE_REQUEST_CODE = 2;
     private static final int SCAN_CODE_REQUEST_CODE = 3;
     private static final int QR_CODE_REQUEST_CODE = 4;
+    private static final int TIME_LIST_SIZE = 5;
+    private static final int SETTING_REQUEST_CODE = 6;
 
     @BindView(R.id.tv_import_title)
     AppCompatTextView tvImportTitle;
@@ -133,7 +135,15 @@ public class ShareActivity extends BaseActivity {
                 break;
             case R.id.tv_import_qr_code:
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, QR_CODE_REQUEST_CODE);
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                        new AlertDialog.Builder(this).setTitle("需要相机权限")
+                                .setMessage("请授予相机权限,才能够扫描二维码")
+                                .setCancelable(false)
+                                .setPositiveButton("确定", (dialog, which) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, QR_CODE_REQUEST_CODE))
+                                .show();
+                    } else {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, QR_CODE_REQUEST_CODE);
+                    }
                     break;
                 }
                 startScanQrCode();
@@ -156,6 +166,13 @@ public class ShareActivity extends BaseActivity {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         startScanQrCode();
                     }
+                } else {
+                    new AlertDialog.Builder(this).setTitle("需要相机权限")
+                            .setMessage("请授予相机权限,才能够扫描二维码")
+                            .setCancelable(false)
+                            .setPositiveButton("确定", (dialog, which) -> startActivityForResult(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getPackageName(), null)), SETTING_REQUEST_CODE))
+                            .setNegativeButton("取消", null)
+                            .show();
                 }
                 break;
             }
@@ -235,6 +252,12 @@ public class ShareActivity extends BaseActivity {
                 }
                 break;
             }
+            case SETTING_REQUEST_CODE: {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    startScanQrCode();
+                }
+                break;
+            }
             default:
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -252,8 +275,7 @@ public class ShareActivity extends BaseActivity {
             return;
         }
         Log.d(TAG, "File Uri: " + uri.toString());
-        try (OutputStream outputStream = getContentResolver().openOutputStream(uri);
-             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream)) {
+        try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(Objects.requireNonNull(getContentResolver().openOutputStream(uri)))) {
             DataEntity dataEntity = new DataEntity((App) getApplication());
             Gson gson = new Gson();
             byte[] bytes = gson.toJson(dataEntity).getBytes();
@@ -278,8 +300,7 @@ public class ShareActivity extends BaseActivity {
             return;
         }
         Log.d(TAG, "File Uri: " + uri.toString());
-        try (InputStream inputStream = getContentResolver().openInputStream(uri);
-             InputStreamReader i = new InputStreamReader(inputStream);
+        try (InputStreamReader i = new InputStreamReader(Objects.requireNonNull(getContentResolver().openInputStream(uri)));
              BufferedReader reader = new BufferedReader(i)) {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -290,7 +311,7 @@ public class ShareActivity extends BaseActivity {
             DataEntity dataEntity = gson.fromJson(stringBuilder.toString(), DataEntity.class);
             List<ClassSchedule> classScheduleList = dataEntity.getClassScheduleList();
             List<String> timeList = dataEntity.getTimeList();
-            if (classScheduleList == null || classScheduleList.isEmpty() || timeList == null || timeList.isEmpty() || timeList.size() != 5) {
+            if (classScheduleList == null || classScheduleList.isEmpty() || timeList == null || timeList.isEmpty() || timeList.size() != TIME_LIST_SIZE) {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show();
                 return;
             }

@@ -11,8 +11,8 @@ import top.itning.yunshuclassschedule.util.DateUtils;
  * @author itning
  */
 public class DataEntity {
-    private List<ClassSchedule> classScheduleList;
-    private List<String> timeList;
+    private final List<ClassSchedule> classScheduleList;
+    private final List<String> timeList;
 
     public DataEntity(App app) {
         classScheduleList = app.getDaoSession().getClassScheduleDao().loadAll();

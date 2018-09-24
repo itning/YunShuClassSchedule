@@ -17,13 +17,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.util.ImageUtils;
+import top.itning.yunshuclassschedule.util.FileUtils;
 
 /**
  * Scan Code Activity
@@ -35,7 +37,7 @@ public class ScanCodeActivity extends BaseActivity {
     /**
      * flash light state flag
      */
-    public static boolean isOpen = false;
+    private static boolean isOpen = false;
     @BindView(R.id.btn_flash_light)
     AppCompatButton btnFlashLight;
     @BindView(R.id.btn_select)
@@ -81,7 +83,7 @@ public class ScanCodeActivity extends BaseActivity {
     /**
      * 二维码解析回调函数
      */
-    CodeUtils.AnalyzeCallback analyzeCallback = new CodeUtils.AnalyzeCallback() {
+    private final CodeUtils.AnalyzeCallback analyzeCallback = new CodeUtils.AnalyzeCallback() {
         @Override
         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
             Intent resultIntent = new Intent();
@@ -131,23 +133,25 @@ public class ScanCodeActivity extends BaseActivity {
         if (requestCode == REQUEST_IMAGE) {
             if (data != null) {
                 Uri uri = data.getData();
-                CodeUtils.analyzeBitmap(ImageUtils.getImageAbsolutePath(this, uri), new CodeUtils.AnalyzeCallback() {
-                    @Override
-                    public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-                        Intent resultIntent = new Intent();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
-                        bundle.putString(CodeUtils.RESULT_STRING, result);
-                        resultIntent.putExtras(bundle);
-                        ScanCodeActivity.this.setResult(CodeUtils.RESULT_SUCCESS, resultIntent);
-                        ScanCodeActivity.this.finish();
-                    }
+                if (uri != null && FileUtils.writeFile2Cache(this, uri)) {
+                    CodeUtils.analyzeBitmap(getCacheDir() + File.separator + "cache", new CodeUtils.AnalyzeCallback() {
+                        @Override
+                        public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
+                            Intent resultIntent = new Intent();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
+                            bundle.putString(CodeUtils.RESULT_STRING, result);
+                            resultIntent.putExtras(bundle);
+                            ScanCodeActivity.this.setResult(CodeUtils.RESULT_SUCCESS, resultIntent);
+                            ScanCodeActivity.this.finish();
+                        }
 
-                    @Override
-                    public void onAnalyzeFailed() {
-                        Toast.makeText(ScanCodeActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onAnalyzeFailed() {
+                            Toast.makeText(ScanCodeActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
             super.onActivityResult(requestCode, resultCode, data);
         }

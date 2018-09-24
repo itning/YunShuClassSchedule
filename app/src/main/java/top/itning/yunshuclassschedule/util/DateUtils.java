@@ -226,7 +226,7 @@ public class DateUtils {
      * @return 不合法返回真
      */
     @CheckResult
-    public static boolean isTimeIintervalLegitimate(String startTime, String endTime) {
+    private static boolean isTimeIintervalLegitimate(String startTime, String endTime) {
         try {
             long start = DF.parse(startTime).getTime();
             long end = DF.parse(endTime).getTime();
