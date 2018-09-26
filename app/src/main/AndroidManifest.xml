@@ -114,9 +114,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.ScanCodeActivity"
-            android:theme="@style/AppTheme.FullScreenNoActionBar" />
 
         <service
             android:name=".service.CommonService"

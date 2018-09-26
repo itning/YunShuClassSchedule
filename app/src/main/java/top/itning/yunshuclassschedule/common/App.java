@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.util.Log;
 
 import com.tencent.bugly.crashreport.CrashReport;
-import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.database.Database;
@@ -41,8 +40,6 @@ public class App extends Application {
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
         sharedPreferences = getSharedPreferences(ConstantPool.Str.SHARED_PREFERENCES_FILENAME.get(), Context.MODE_PRIVATE);
-
-        ZXingLibrary.initDisplayOpinion(this);
         super.onCreate();
     }
 

@@ -23,15 +23,6 @@
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_import_qr_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="16dp"
-            android:text="@string/share_import_qr_code"
-            android:textSize="16sp" />
-
-        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_export_title"
             style="@style/custom_all_title"
             android:text="@string/share_export_title" />
@@ -46,12 +37,12 @@
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_export_qr_code"
+            android:id="@+id/tv_export_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:padding="16dp"
-            android:text="@string/share_export_qr_code"
+            android:text="@string/share_export_share"
             android:textSize="16sp" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

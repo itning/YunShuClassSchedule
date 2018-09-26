@@ -1,16 +1,11 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
@@ -21,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,6 +23,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,23 +58,18 @@ public class ShareActivity extends BaseActivity {
 
     private static final int FILE_SELECT_CODE = 1;
     private static final int WRITE_REQUEST_CODE = 2;
-    private static final int SCAN_CODE_REQUEST_CODE = 3;
-    private static final int QR_CODE_REQUEST_CODE = 4;
     private static final int TIME_LIST_SIZE = 5;
-    private static final int SETTING_REQUEST_CODE = 6;
 
     @BindView(R.id.tv_import_title)
     AppCompatTextView tvImportTitle;
     @BindView(R.id.tv_import_file)
     AppCompatTextView tvImportFile;
-    @BindView(R.id.tv_import_qr_code)
-    AppCompatTextView tvImportQrCode;
     @BindView(R.id.tv_export_title)
     AppCompatTextView tvExportTitle;
     @BindView(R.id.tv_export_file)
     AppCompatTextView tvExportFile;
-    @BindView(R.id.tv_export_qr_code)
-    AppCompatTextView tvExportQrCode;
+    @BindView(R.id.tv_export_share)
+    AppCompatTextView tvExportShare;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +93,7 @@ public class ShareActivity extends BaseActivity {
         int nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this);
         tvImportTitle.setTextColor(nowThemeColorAccent);
         tvExportTitle.setTextColor(nowThemeColorAccent);
-        ThemeChangeUtil.setTextViewsColorByTheme(this, tvImportFile, tvImportQrCode, tvExportFile, tvExportQrCode);
+        ThemeChangeUtil.setTextViewsColorByTheme(this, tvImportFile, tvExportFile, tvExportShare);
     }
 
     @Override
@@ -128,58 +120,45 @@ public class ShareActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.tv_import_file, R.id.tv_import_qr_code, R.id.tv_export_file, R.id.tv_export_qr_code})
+    @OnClick({R.id.tv_import_file, R.id.tv_export_file, R.id.tv_export_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_import_file:
                 importFile();
                 break;
-            case R.id.tv_import_qr_code:
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                        new AlertDialog.Builder(this).setTitle("需要相机权限")
-                                .setMessage("请授予相机权限,才能够扫描二维码")
-                                .setCancelable(false)
-                                .setPositiveButton("确定", (dialog, which) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, QR_CODE_REQUEST_CODE))
-                                .show();
-                    } else {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, QR_CODE_REQUEST_CODE);
-                    }
-                    break;
-                }
-                startScanQrCode();
-                break;
             case R.id.tv_export_file:
                 exportFile();
                 break;
-            case R.id.tv_export_qr_code:
-                Toast.makeText(this, "程序员正在思考", Toast.LENGTH_LONG).show();
+            case R.id.tv_export_share:
+                shareFile();
                 break;
             default:
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case QR_CODE_REQUEST_CODE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        startScanQrCode();
-                    }
-                } else {
-                    new AlertDialog.Builder(this).setTitle("需要相机权限")
-                            .setMessage("请授予相机权限,才能够扫描二维码")
-                            .setCancelable(false)
-                            .setPositiveButton("确定", (dialog, which) -> startActivityForResult(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getPackageName(), null)), SETTING_REQUEST_CODE))
-                            .setNegativeButton("取消", null)
-                            .show();
-                }
-                break;
-            }
-            default:
+    /**
+     * 分享课程数据文件
+     */
+    private void shareFile() {
+        DataEntity dataEntity = new DataEntity((App) getApplication());
+        Gson gson = new Gson();
+        byte[] bytes = gson.toJson(dataEntity).getBytes();
+        String fileName = getCacheDir() + File.separator + "云舒课表课程数据.json";
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+            fileOutputStream.write(bytes, 0, bytes.length);
+            fileOutputStream.flush();
+        } catch (IOException e) {
+            Log.e(TAG, " ", e);
+            Toast.makeText(this, "生成数据失败", Toast.LENGTH_SHORT).show();
+            CrashReport.postCatchedException(e);
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Uri uri = FileProvider.getUriForFile(this, "top.itning.yunshuclassschedule.fileProvider", new File(fileName));
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        share.setType("application/octet-stream");
+        share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(share, "分享课程数据文件"));
     }
 
     /**
@@ -212,15 +191,6 @@ public class ShareActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 开启扫描二维码
-     */
-    @RequiresPermission(Manifest.permission.CAMERA)
-    private void startScanQrCode() {
-        Intent intent = new Intent(ShareActivity.this, ScanCodeActivity.class);
-        startActivityForResult(intent, SCAN_CODE_REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -233,29 +203,6 @@ public class ShareActivity extends BaseActivity {
             case WRITE_REQUEST_CODE: {
                 if (resultCode == RESULT_OK) {
                     doExportFile(data);
-                }
-                break;
-            }
-            case SCAN_CODE_REQUEST_CODE: {
-                //处理扫描结果（在界面上显示）
-                if (null != data) {
-                    Bundle bundle = data.getExtras();
-                    if (bundle == null) {
-                        Log.d(TAG, "bundle is null");
-                        return;
-                    }
-                    if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                        String result = bundle.getString(CodeUtils.RESULT_STRING);
-                        Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                    } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-                        Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
-                    }
-                }
-                break;
-            }
-            case SETTING_REQUEST_CODE: {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    startScanQrCode();
                 }
                 break;
             }

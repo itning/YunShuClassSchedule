@@ -287,7 +287,7 @@ public class ClassScheduleUtils {
             }
         }
         whichClassNow--;
-        while (true) {
+        do {
             for (int i = 0; i < classScheduleList.size(); i++) {
                 int section = classScheduleList.get(i).getSection();
                 if (section == order && section != whichClassNow + 1) {
@@ -296,10 +296,7 @@ public class ClassScheduleUtils {
                 }
             }
             order++;
-            if (ORDER_LIST.size() == classScheduleList.size()) {
-                break;
-            }
-        }
+        } while (ORDER_LIST.size() != classScheduleList.size());
         classScheduleList.clear();
         classScheduleList.addAll(ORDER_LIST);
         ORDER_LIST.clear();

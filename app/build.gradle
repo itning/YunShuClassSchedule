@@ -8,8 +8,8 @@ android {
         applicationId "top.itning.yunshuclassschedule"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 20
-        versionName "2.1.0"
+        versionCode 21
+        versionName "2.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -83,8 +83,6 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.11.3'
     /*https://github.com/wdullaer/MaterialDateTimePicker*/
     implementation 'com.xw.repo:bubbleseekbar:3.19-lite'
-    /*https://github.com/yipianfengye/android-zxingLibrary*/
-    implementation 'cn.yipianfengye.android:zxing-library:2.2'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

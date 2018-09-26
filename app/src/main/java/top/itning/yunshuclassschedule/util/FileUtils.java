@@ -63,7 +63,7 @@ public class FileUtils {
     }
 
     @CheckResult
-    public static boolean writeFile2Cache(@NonNull Context context, @NonNull Uri fromUri) {
+    private static boolean writeFile2Cache(@NonNull Context context, @NonNull Uri fromUri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(fromUri);
              OutputStream os = new FileOutputStream(context.getCacheDir() + File.separator + "cache")) {
             if (inputStream == null) {
