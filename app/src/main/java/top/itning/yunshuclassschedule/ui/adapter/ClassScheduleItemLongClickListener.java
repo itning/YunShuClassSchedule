@@ -8,9 +8,12 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
+
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,6 +34,8 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
  * @author itning
  */
 public final class ClassScheduleItemLongClickListener implements View.OnLongClickListener {
+    private static final String TAG = "CSLongClickListener";
+
     private static final int COPY_SIZE = 3;
     private final Activity activity;
     private final ClassScheduleDao classScheduleDao;
@@ -54,7 +59,16 @@ public final class ClassScheduleItemLongClickListener implements View.OnLongClic
 
     @Override
     public boolean onLongClick(View v) {
-        String[] classSplit = v.getTag().toString().split("-");
+        Log.d(TAG, "onLongClick:the view instance is " + v);
+        Object tag = v.getTag();
+        Log.d(TAG, "onLongClick:the view tag is " + tag);
+        if (tag == null) {
+            CrashReport.postCatchedException(new Throwable("on long clicked , but view tag is null"));
+            Log.e(TAG, "on long clicked , but view tag is null");
+            Toast.makeText(activity, "获取TAG失败,请联系开发者", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        String[] classSplit = tag.toString().split("-");
         TextInputEditText tvteacher = inflate.findViewById(R.id.tv_teacher);
         TextInputEditText tvlocation = inflate.findViewById(R.id.tv_location);
         TextInputEditText tvname = inflate.findViewById(R.id.tv_name);

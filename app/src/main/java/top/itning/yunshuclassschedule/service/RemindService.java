@@ -19,6 +19,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -97,6 +99,9 @@ public class RemindService extends Service implements SharedPreferences.OnShared
      * 开启前台服务
      */
     private void startForegroundServer() {
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
+            return;
+        }
         Log.d(TAG, "start Foreground Server");
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -183,7 +188,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
      */
     private void initData() {
         Log.d(TAG, "start init data");
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "initData");
+        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, ":initData");
         wakeLock.setReferenceCounted(false);
         wakeLock.acquire(5 * 60 * 1000);
         classReminderUpStatus = sharedPreferences.getBoolean(CLASS_REMINDER_UP_STATUS, true);
@@ -282,7 +287,8 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 classScheduleList.addAll(tempList);
                 tempList.clear();
             } catch (ParseException e) {
-                e.printStackTrace();
+                Log.e(TAG, " ", e);
+                CrashReport.postCatchedException(e);
             }
         }
     }
@@ -347,7 +353,8 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 Log.d(TAG, "add down time list " + type + " at " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, " ", e);
+            CrashReport.postCatchedException(e);
         }
     }
 

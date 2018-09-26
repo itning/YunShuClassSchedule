@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -93,7 +94,8 @@ public class MoneyActivity extends BaseActivity {
                     );
                     startActivity(intent);
                 } catch (URISyntaxException | ActivityNotFoundException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, " ", e);
+                    Toast.makeText(this, "没有找到支付宝APP", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.cv_v:

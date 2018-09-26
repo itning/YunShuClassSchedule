@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -284,6 +285,7 @@ public class ShareActivity extends BaseActivity {
             Toast.makeText(this, "导出成功", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Log.e(TAG, " ", e);
+            CrashReport.postCatchedException(e);
             Toast.makeText(this, "导出失败", Toast.LENGTH_LONG).show();
         }
     }

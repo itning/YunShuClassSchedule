@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.Gravity;
@@ -34,6 +35,7 @@ import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListe
  */
 @SuppressWarnings("unused")
 public class ClassScheduleUtils {
+    private static final String TAG = "ClassScheduleUtils";
 
     private static final int CLASS_SECTION = 5;
     private static final int CLASS_WEEK = 7;
@@ -114,6 +116,7 @@ public class ClassScheduleUtils {
         textView.setTextSize(weekFont);
         cardView.addView(textView);
         cardView.setTag(x + "-" + y);
+        Log.d(TAG, "card view tag is " + cardView.getTag());
         return cardView;
     }
 
@@ -129,6 +132,7 @@ public class ClassScheduleUtils {
     private static View setNull(@NonNull Context context, int x, int y) {
         View view = new View(context);
         view.setTag(x + "-" + y);
+        Log.d(TAG, "null view tag is " + view.getTag());
         return view;
     }
 

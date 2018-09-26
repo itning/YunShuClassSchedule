@@ -31,6 +31,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xw.repo.BubbleSeekBar;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -40,7 +41,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,7 +58,6 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 import top.itning.yunshuclassschedule.util.DateUtils;
-import top.itning.yunshuclassschedule.util.FileUtils;
 import top.itning.yunshuclassschedule.util.Glide4Engine;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
@@ -371,6 +370,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 EventBus.getDefault().post(new EventEntity(ConstantPool.Int.NOTIFICATION_BACKGROUND_CHANGE, "", result.get(0)));
             } else {
                 Toast.makeText(this, "背景图片设置失败", Toast.LENGTH_LONG).show();
+                CrashReport.postCatchedException(new Throwable("background image set failure"));
             }
         }
         if (requestCode == SETTING_REQUEST_CODE) {

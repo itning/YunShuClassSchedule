@@ -40,7 +40,7 @@ public class DataDownloadService extends Service {
         EventBus.getDefault().register(this);
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         assert powerManager != null;
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DataDownloadService");
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, ":DataDownloadService");
         wakeLock.setReferenceCounted(false);
         wakeLock.acquire(20 * 60 * 1000);
     }

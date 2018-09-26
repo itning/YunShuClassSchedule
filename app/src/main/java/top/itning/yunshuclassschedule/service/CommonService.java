@@ -83,6 +83,9 @@ public class CommonService extends Service implements SharedPreferences.OnShared
      * 开启前台服务
      */
     private void startForegroundServer() {
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
+            return;
+        }
         Log.d(TAG, "start Foreground Server");
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);

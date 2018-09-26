@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -343,6 +345,7 @@ public class TodayFragment extends Fragment {
             holder.tvRemindTime.setText(line4);
         } catch (ParseException e) {
             Log.e(TAG, "parse exception ", e);
+            CrashReport.postCatchedException(e);
         }
     }
 

@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,6 +37,7 @@ public class FileUtils {
         File file = new File(context.getCacheDir() + File.separator + "cache");
         if (!file.canRead()) {
             Toast.makeText(context, "读取图片失败:", Toast.LENGTH_LONG).show();
+            CrashReport.postCatchedException(new Throwable("read image failure , file.canRead method return false"));
             return;
         }
         // Get length of file in bytes
@@ -54,6 +57,7 @@ public class FileUtils {
             fileOutputStreamChannel.transferFrom(inChannel, 0, inChannel.size());
         } catch (IOException e) {
             Log.e(TAG, " ", e);
+            CrashReport.postCatchedException(e);
             Toast.makeText(context, "图片写入失败", Toast.LENGTH_LONG).show();
         }
     }
@@ -72,6 +76,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             Log.e(TAG, " ", e);
+            CrashReport.postCatchedException(e);
             Toast.makeText(context, "写入缓存失败:" + e.getMessage(), Toast.LENGTH_LONG).show();
             return false;
         }

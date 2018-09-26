@@ -4,7 +4,10 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.FOREGROUND_SERVICE_STATUS;
 
 /**
  * @author itning
@@ -15,7 +18,8 @@ public class JobSchedulerService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "onStartJob(): params = [" + params + "]");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                && PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
             startForegroundService(new Intent(this, CommonService.class));
             startForegroundService(new Intent(this, RemindService.class));
         } else {
