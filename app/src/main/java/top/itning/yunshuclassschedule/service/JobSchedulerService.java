@@ -18,10 +18,11 @@ public class JobSchedulerService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "onStartJob(): params = [" + params + "]");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                && PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-            startForegroundService(new Intent(this, CommonService.class));
-            startForegroundService(new Intent(this, RemindService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
+                startForegroundService(new Intent(this, CommonService.class));
+                startForegroundService(new Intent(this, RemindService.class));
+            }
         } else {
             startService(new Intent(this, CommonService.class));
             startService(new Intent(this, RemindService.class));
