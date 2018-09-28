@@ -77,7 +77,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     /*https://github.com/laobie/StatusBarUtil*/
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
-    /*material date time picker*/
+    /*https://github.com/wdullaer/MaterialDateTimePicker*/
     implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
     /*https://mvnrepository.com/artifact/org.jsoup/jsoup*/
     implementation 'org.jsoup:jsoup:1.11.3'

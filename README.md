@@ -32,16 +32,15 @@ Android的开源课程表应用
 ![](https://github.com/itning/YunShuClassSchedule/blob/master/extra/f.png)
 ![](https://github.com/itning/YunShuClassSchedule/blob/master/extra/g.png)
 ## 项目依赖库
-- retrofit2
-- butterknife
-- eventbus
-- greendao
-- bugly
-- colorpreference
-- matisse
-- glide
-- statusbarutil
-- materialdatetimepicker
-- jsoup
-- bubbleseekbar
-- zxing-library
+- [retrofit2](https://github.com/square/retrofit)
+- [butterknife](https://github.com/JakeWharton/butterknife)
+- [eventbus](https://github.com/greenrobot/EventBus)
+- [greendao](https://github.com/greenrobot/greenDAO)
+- [bugly](https://bugly.qq.com)
+- [colorpreference](https://github.com/kizitonwose/colorpreference)
+- [matisse](https://github.com/zhihu/Matisse)
+- [glide](https://github.com/bumptech/glide)
+- [statusbarutil](https://github.com/laobie/StatusBarUtil)
+- [materialdatetimepicker](https://github.com/wdullaer/MaterialDateTimePicker)
+- [jsoup](https://mvnrepository.com/artifact/org.jsoup/jsoup)
+- [bubbleseekbar](https://github.com/wdullaer/MaterialDateTimePicker)
