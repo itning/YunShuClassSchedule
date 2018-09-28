@@ -42,5 +42,5 @@ Android的开源课程表应用
 - [glide](https://github.com/bumptech/glide)
 - [statusbarutil](https://github.com/laobie/StatusBarUtil)
 - [materialdatetimepicker](https://github.com/wdullaer/MaterialDateTimePicker)
-- [jsoup](https://mvnrepository.com/artifact/org.jsoup/jsoup)
+- [jsoup](https://github.com/jhy/jsoup)
 - [bubbleseekbar](https://github.com/wdullaer/MaterialDateTimePicker)
