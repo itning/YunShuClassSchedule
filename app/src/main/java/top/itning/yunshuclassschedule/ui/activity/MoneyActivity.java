@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,8 +33,6 @@ public class MoneyActivity extends BaseActivity {
     private static final String TAG = "MoneyActivity";
     @BindView(R.id.cv_z)
     CardView cvZ;
-    @BindView(R.id.cv_v)
-    CardView cvV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +52,12 @@ public class MoneyActivity extends BaseActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle("捐赠");
         }
+        new AlertDialog.Builder(this)
+                .setTitle("谢谢")
+                .setMessage("您的支持是我最大的动力(*^_^*)")
+                .setPositiveButton("立即捐赠", (dialog, which) -> openPay())
+                .setNegativeButton("晓得啦", null)
+                .show();
     }
 
     @Override
@@ -79,28 +84,22 @@ public class MoneyActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.cv_z, R.id.cv_v})
+    @OnClick(R.id.cv_z)
     public void onQRCodeClicked(View view) {
-        switch (view.getId()) {
-            case R.id.cv_z:
-                String s = "intent://platformapi/startapp?saId=10000007&" +
-                        "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ftsx04810zmikyotlvzoyk80%3F_s" +
-                        "%3Dweb-other&_t=1472443966571#Intent;" +
-                        "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
-                try {
-                    Intent intent = Intent.parseUri(
-                            s,
-                            Intent.URI_INTENT_SCHEME
-                    );
-                    startActivity(intent);
-                } catch (URISyntaxException | ActivityNotFoundException e) {
-                    Log.e(TAG, " ", e);
-                    Toast.makeText(this, "没有找到支付宝APP", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.cv_v:
-                break;
-            default:
+        openPay();
+    }
+
+    private void openPay() {
+        String s = "intent://platformapi/startapp?saId=10000007&" +
+                "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2FFKX04259Z8PDL9XBQG5PDF%3F_s" +
+                "%3Dweb-other&_t=1472443966571#Intent;" +
+                "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
+        try {
+            Intent intent = Intent.parseUri(s, Intent.URI_INTENT_SCHEME);
+            startActivity(intent);
+        } catch (URISyntaxException | ActivityNotFoundException e) {
+            Log.e(TAG, " ", e);
+            Toast.makeText(this, "没有找到支付宝APP", Toast.LENGTH_SHORT).show();
         }
     }
 }

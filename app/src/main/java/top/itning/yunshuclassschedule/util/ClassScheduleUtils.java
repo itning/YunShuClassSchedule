@@ -54,7 +54,7 @@ public class ClassScheduleUtils {
     /**
      * 存储课程颜色
      */
-    private static SparseIntArray sparseArray = new SparseIntArray();
+    private static final SparseIntArray SPARSE_ARRAY = new SparseIntArray();
     /**
      * 课程计数
      */
@@ -185,13 +185,13 @@ public class ClassScheduleUtils {
     @CheckResult
     private static int getColor(String text) {
         int hashCode = text.hashCode();
-        int i = sparseArray.get(hashCode);
+        int i = SPARSE_ARRAY.get(hashCode);
         if (i != 0) {
             //重复课程
             return i;
         } else {
             int color = colorArray[scheduleCount % colorArray.length];
-            sparseArray.put(hashCode, color);
+            SPARSE_ARRAY.put(hashCode, color);
             scheduleCount++;
             return color;
         }

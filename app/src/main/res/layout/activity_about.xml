@@ -70,18 +70,10 @@
                 android:textSize="15sp" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_graphic_design"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_prototype_design"
-                android:text="@string/about_graphic_design"
-                android:textSize="15sp" />
-
-            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_app_test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_graphic_design"
+                android:layout_below="@id/tv_prototype_design"
                 android:text="@string/about_test"
                 android:textSize="15sp" />
         </RelativeLayout>

@@ -99,7 +99,7 @@ public class CommonService extends Service implements SharedPreferences.OnShared
                 .setContentTitle("云舒课表")
                 .setContentText("提醒服务正在运行")
                 .setVisibility(Notification.VISIBILITY_SECRET)
-                .setSmallIcon(R.mipmap.logo_round)
+                .setSmallIcon(R.mipmap.logo)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(true)
