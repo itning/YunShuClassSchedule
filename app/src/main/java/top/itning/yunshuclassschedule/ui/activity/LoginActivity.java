@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActivity {
             btnLogin.setVisibility(View.VISIBLE);
             acsClass.setVisibility(View.VISIBLE);
         }
-        List<String> classList = new ArrayList<>();
+        List<String> classList = new ArrayList<>(classEntityList.size());
         for (ClassEntity classEntity : classEntityList) {
             classList.add(classEntity.getName());
         }
@@ -170,7 +170,7 @@ public class LoginActivity extends BaseActivity {
             acsProfession.setVisibility(View.VISIBLE);
             acsClass.setVisibility(View.VISIBLE);
         }
-        List<String> professionNameList = new ArrayList<>();
+        List<String> professionNameList = new ArrayList<>(professionList.size());
         for (Profession profession : professionList) {
             professionNameList.add(profession.getName());
         }

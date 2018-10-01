@@ -67,7 +67,7 @@ public class TodayRecyclerViewAdapter extends RecyclerView.Adapter {
         colorArray[6] = ContextCompat.getColor(context, R.color.class_color_7);
         //随机颜色集合构建
         Random random = new Random();
-        showColorList = new ArrayList<>();
+        showColorList = new ArrayList<>(colorArray.length);
         do {
             int number = random.nextInt(colorArray.length);
             if (!showColorList.contains(number)) {
