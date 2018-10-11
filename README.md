@@ -8,7 +8,7 @@ Android的开源课程表应用
 
 [![GitHub license](https://img.shields.io/github/license/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/blob/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/itning/YunShuClassSchedule.svg)]()
-[![GitHub release](https://img.shields.io/github/release/itning/YunShuClassSchedule.svg)]()
+[![GitHub release](https://img.shields.io/github/release/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/releases)
 [![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/YunShuClassSchedule.svg)]()
 [![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
 ## 下载
