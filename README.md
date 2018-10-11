@@ -44,3 +44,4 @@ Android的开源课程表应用
 - [materialdatetimepicker](https://github.com/wdullaer/MaterialDateTimePicker)
 - [jsoup](https://github.com/jhy/jsoup)
 - [bubbleseekbar](https://github.com/wdullaer/MaterialDateTimePicker)
+- [customactivityoncrash](https://github.com/Ereza/CustomActivityOnCrash)

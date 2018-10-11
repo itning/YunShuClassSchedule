@@ -60,4 +60,13 @@
     <string name="share_export_title">导出课程数据</string>
     <string name="share_export_file">导出到文件</string>
     <string name="share_export_share">分享课程数据</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">(╥﹏╥)\n发生了错误</string>
+    <string name="customactivityoncrash_error_activity_restart_app">重新打开APP</string>
+    <string name="customactivityoncrash_error_activity_close_app">关闭APP</string>
+    <string name="customactivityoncrash_error_activity_error_details">详细错误信息</string>
+    <string name="customactivityoncrash_error_activity_error_details_title">详细错误信息</string>
+    <string name="customactivityoncrash_error_activity_error_details_close">关闭</string>
+    <string name="customactivityoncrash_error_activity_error_details_copy">复制错误信息</string>
+    <string name="customactivityoncrash_error_activity_error_details_copied">已复制</string>
+    <string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
 </resources>
