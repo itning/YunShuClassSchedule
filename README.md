@@ -11,6 +11,8 @@ Android的开源课程表应用
 [![GitHub release](https://img.shields.io/github/release/itning/YunShuClassSchedule.svg)]()
 [![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/YunShuClassSchedule.svg)]()
 [![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
+## 下载
+[![Coolapk](https://github.com/itning/YunShuClassSchedule/blob/master/extra/coolapk.png)](https://www.coolapk.com/apk/top.itning.yunshuclassschedule)
 ## 功能
 - 今日课表
 
