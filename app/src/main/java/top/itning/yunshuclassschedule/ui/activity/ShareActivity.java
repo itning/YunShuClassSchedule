@@ -167,7 +167,7 @@ public class ShareActivity extends BaseActivity {
     private void exportFile() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application / octet-stream");
+        intent.setType("*/*");
         String fileName = "云舒课表课程数据" + new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINESE).format(new Date()) + ".json";
         intent.putExtra(Intent.EXTRA_TITLE, fileName);
         try {
@@ -182,7 +182,7 @@ public class ShareActivity extends BaseActivity {
      */
     private void importFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application / octet-stream");
+        intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
             startActivityForResult(Intent.createChooser(intent, "选择课程数据文件进行导入"), FILE_SELECT_CODE);
