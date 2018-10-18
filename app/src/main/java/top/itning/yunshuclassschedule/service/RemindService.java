@@ -115,7 +115,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 .setContentTitle("云舒课表")
                 .setContentText("提醒服务正在运行")
                 .setVisibility(Notification.VISIBILITY_SECRET)
-                .setSmallIcon(R.mipmap.logo)
+                .setSmallIcon(R.mipmap.logo_round)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(true)
