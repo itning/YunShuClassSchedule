@@ -139,7 +139,7 @@
         <Preference android:title="检查更新">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://www.coolapk.com/apk/201645" />
+                android:data="https://www.coolapk.com/apk/top.itning.yunshuclassschedule" />
         </Preference>
         <Preference android:title="捐赠">
             <intent android:action="top.itning.yunshuclassschedule.MONEY" />
