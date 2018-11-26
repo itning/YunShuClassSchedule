@@ -181,10 +181,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 ThemeChangeUtil.initColor(this, drawerLayout);
                 break;
             }
-            case DESTROY_ACTIVITY: {
-                finish();
-                break;
-            }
             default:
         }
     }

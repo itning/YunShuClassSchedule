@@ -1,12 +1,11 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
@@ -99,7 +98,7 @@ public class ClassScheduleFragment extends Fragment {
         holder.vp.setAdapter(null);
         //预加载
         holder.vp.setOffscreenPageLimit(fragmentList.size());
-        holder.vp.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
+        holder.vp.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
 
             @Override
             public int getCount() {
@@ -115,11 +114,6 @@ public class ClassScheduleFragment extends Fragment {
             @Override
             public CharSequence getPageTitle(int position) {
                 return titleList.get(position);
-            }
-
-            @Override
-            public Parcelable saveState() {
-                return null;
             }
 
         });

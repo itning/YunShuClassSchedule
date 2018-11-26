@@ -110,10 +110,6 @@ public class ConstantPool {
          */
         NOTIFICATION_BACKGROUND_CHANGE(131),
         /**
-         * 销毁Activity(在重新选择专业时需要销毁MainActivity和SettingActivity)
-         */
-        DESTROY_ACTIVITY(132),
-        /**
          * 需要重新初始化课程Fragment
          */
         REFRESH_CLASS_SCHEDULE_FRAGMENT(133),
