@@ -90,6 +90,11 @@ public class TodayFragment extends Fragment {
      * 当前正在上的课
      */
     private int whichClassNow;
+    /**
+     * 高度
+     * 由于软键盘弹出影响高度测量,所以暂存
+     */
+    private int height;
 
     static class ViewHolder {
         @BindView(R.id.rv)
@@ -197,7 +202,10 @@ public class TodayFragment extends Fragment {
             int i = classScheduleList.size() == 0 ? holder.rv.getHeight() : holder.rv.getHeight() / classScheduleList.size();
             ViewGroup.LayoutParams lp;
             lp = holder.ll.getLayoutParams();
-            lp.height = view.getHeight() - i;
+            if (height == 0) {
+                height = view.getHeight() - i;
+            }
+            lp.height = height;
             holder.ll.setLayoutParams(lp);
         }));
 
