@@ -286,10 +286,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * 显示弹窗
      */
     private void showDialogToUser() {
-        new AlertDialog.Builder(this).setTitle("需要外置存储权限和相机权限")
-                .setMessage("请授予外置存储权限和相机权限,才能够更换背景图片")
+        new AlertDialog.Builder(this).setTitle("需要外置存储权限")
+                .setMessage("请授予外置存储权限,才能够更换背景图片")
                 .setCancelable(false)
-                .setPositiveButton("确定", (dialog1, which1) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CODE))
+                .setPositiveButton("确定", (dialog1, which1) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE))
                 .show();
     }
 
@@ -307,8 +307,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     startSelectImageActivity();
                 }
             } else {
-                new AlertDialog.Builder(this).setTitle("需要外置存储权限和相机权限")
-                        .setMessage("请授予外置存储权限和相机权限,才能够更换背景图片")
+                new AlertDialog.Builder(this).setTitle("需要外置存储权限")
+                        .setMessage("请授予外置存储权限,才能够更换背景图片")
                         .setCancelable(false)
                         .setPositiveButton("确定", (dialog, which) -> startActivityForResult(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getPackageName(), null)), SETTING_REQUEST_CODE))
                         .setNegativeButton("取消", null)
@@ -323,11 +323,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * @return 权限通过
      */
     private boolean checkPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 showDialogToUser();
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
             }
             return false;
         } else {
@@ -340,8 +340,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      */
     @RequiresPermission(allOf = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA})
+            Manifest.permission.WRITE_EXTERNAL_STORAGE})
     private void startSelectImageActivity() {
         Matisse.from(MainActivity.this)
                 //图片类型
@@ -351,7 +350,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 //可选的最大数
                 .maxSelectable(1)
                 //选择照片时，是否显示拍照
-                .capture(true)
+                .capture(false)
                 //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
                 .captureStrategy(new CaptureStrategy(true, "top.itning.yunshuclassschedule.fileProvider"))
                 //图片加载引擎

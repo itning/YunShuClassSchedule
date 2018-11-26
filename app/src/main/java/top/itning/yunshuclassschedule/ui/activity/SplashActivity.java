@@ -103,7 +103,6 @@ public class SplashActivity extends BaseActivity {
         JobInfo jobInfo = new JobInfo.Builder(1024, new ComponentName(getPackageName(), JobSchedulerService.class.getName()))
                 //10 minutes
                 .setPeriodic(10 * 60 * 1000)
-                .setPersisted(true)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
                 .build();
         int schedule = jobScheduler.schedule(jobInfo);

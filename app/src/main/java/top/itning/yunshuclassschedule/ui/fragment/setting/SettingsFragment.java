@@ -39,7 +39,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public static final String APP_COLOR_ACCENT = "app_color_accent";
     public static final String APP_COLOR_PROGRESS = "app_color_progress";
     public static final String FOREGROUND_SERVICE_STATUS = "foreground_service_status";
-    private static boolean LAST_FOREGROUND_SERVICE_STATUS = true;
 
     private SharedPreferences prefs;
     private ListPreference defaultShowMainFragmentListPreference;
@@ -60,34 +59,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             Preference foregroundServiceStatus = findPreference(FOREGROUND_SERVICE_STATUS);
             foregroundServiceStatus.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (!(boolean) newValue) {
-                    if (LAST_FOREGROUND_SERVICE_STATUS) {
-                        LAST_FOREGROUND_SERVICE_STATUS = false;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            new AlertDialog.Builder(requireContext()).setTitle("注意")
-                                    .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！\n" +
-                                            "您可以选择关闭该通知渠道来取消通知栏通知!")
-                                    .setCancelable(true)
-                                    .setPositiveButton("带我去设置", (dialog1, which1) -> {
-                                        Intent channelIntent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
-                                        channelIntent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
-                                        //渠道id必须是我们之前注册的
-                                        channelIntent.putExtra(Settings.EXTRA_CHANNEL_ID, "foreground_service");
-                                        startActivity(channelIntent);
-                                    })
-                                    .setNegativeButton("不用了", null)
-                                    .show();
-                        } else {
-                            new AlertDialog.Builder(requireContext()).setTitle("注意")
-                                    .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！")
-                                    .setCancelable(true)
-                                    .setPositiveButton("我知道了", null)
-                                    .show();
-                        }
-                        return false;
-                    } else {
-                        LAST_FOREGROUND_SERVICE_STATUS = true;
-                        return true;
-                    }
+                    new AlertDialog.Builder(requireContext()).setTitle("注意")
+                            .setMessage("关闭后台常驻会导致提醒服务，手机自动静音服务不准确。建议您不要关闭！")
+                            .setCancelable(true)
+                            .setPositiveButton("我知道了", null)
+                            .show();
                 }
                 return true;
             });
