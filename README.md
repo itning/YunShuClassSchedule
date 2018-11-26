@@ -34,7 +34,7 @@ Android的开源课程表应用
 ![](https://github.com/itning/YunShuClassSchedule/blob/master/extra/f.png)
 ![](https://github.com/itning/YunShuClassSchedule/blob/master/extra/g.png)
 ## 项目依赖库
-- [retrofit2](https://github.com/square/retrofit)
+- [gson](https://github.com/google/gson)
 - [butterknife](https://github.com/JakeWharton/butterknife)
 - [eventbus](https://github.com/greenrobot/EventBus)
 - [greendao](https://github.com/greenrobot/greenDAO)

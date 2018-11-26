@@ -116,10 +116,6 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".service.DataDownloadService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
             android:name=".service.RemindService"
             android:enabled="true"
             android:exported="false" />

@@ -14,7 +14,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.Display;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,10 +26,8 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
-import top.itning.yunshuclassschedule.service.DataDownloadService;
 import top.itning.yunshuclassschedule.service.JobSchedulerService;
 import top.itning.yunshuclassschedule.util.GlideApp;
-import top.itning.yunshuclassschedule.util.NetWorkUtils;
 
 /**
  * 闪屏页
@@ -56,25 +53,16 @@ public class SplashActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initBackGroundImage();
-        startService(new Intent(this, DataDownloadService.class));
         initJobScheduler();
-        if (NetWorkUtils.isNetworkConnected(this)) {
-            startTime = System.currentTimeMillis();
-            if (!App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
-                //非第一次进入,才进行课程表数据更新检查
-                //event to DataDownloadService
-                EventBus.getDefault().postSticky(new EventEntity(ConstantPool.Int.START_CHECK_CLASS_SCHEDULE_UPDATE));
-                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                assert notificationManager != null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
-                    PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("phone_mute_status", false).apply();
-                }
-            }
-            new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get() - (System.currentTimeMillis() - startTime));
-        } else {
-            Toast.makeText(this, "没有网络", Toast.LENGTH_LONG).show();
-            new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get());
+        startTime = System.currentTimeMillis();
+
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        assert notificationManager != null;
+        //勿扰权限判定
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted()) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("phone_mute_status", false).apply();
         }
+        new Handler().postDelayed(this::enterMainActivity, ConstantPool.Int.DELAY_INTO_MAIN_ACTIVITY_TIME.get() - (System.currentTimeMillis() - startTime));
     }
 
     /**

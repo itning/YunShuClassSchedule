@@ -64,11 +64,7 @@ public class ConstantPool {
         /**
          * 延迟进入主活动时间
          */
-        DELAY_INTO_MAIN_ACTIVITY_TIME(2000),
-        /**
-         * 服务器成功状态码
-         */
-        RESPONSE_SUCCESS_CODE(200),
+        DELAY_INTO_MAIN_ACTIVITY_TIME(1000),
         /**
          * 下载课程表信息错误
          */
@@ -82,25 +78,9 @@ public class ConstantPool {
          */
         EXIT_DELAY(2000),
         /**
-         * 开始检查课程表更新
-         */
-        START_CHECK_CLASS_SCHEDULE_UPDATE(118),
-        /**
-         * 结束检查课程表更新(数据已更新)
-         */
-        END_CHECK_CLASS_SCHEDULE_UPDATE(119),
-        /**
          * 时间改变
          */
         TIME_TICK_CHANGE(120),
-        /**
-         * 登陆加载专业数据
-         */
-        LOGIN_LOADING_PROFESSION_DATA(121),
-        /**
-         * 登陆加载班级数据
-         */
-        LOGIN_LOADING_CLASS_DATA(122),
         /**
          * 刷新本周课程fragment数据
          */

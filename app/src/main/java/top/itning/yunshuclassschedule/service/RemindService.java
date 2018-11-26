@@ -171,11 +171,6 @@ public class RemindService extends Service implements SharedPreferences.OnShared
                 sendNotification("下课提醒", "快要下课了");
                 break;
             }
-            case END_CHECK_CLASS_SCHEDULE_UPDATE: {
-                stopService(new Intent(this, DataDownloadService.class));
-                initData();
-                break;
-            }
             case REFRESH_CLASS_SCHEDULE_FRAGMENT: {
                 initData();
             }
