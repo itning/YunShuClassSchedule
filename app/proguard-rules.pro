@@ -79,15 +79,6 @@ public static java.lang.String TABLENAME;
 -keep public class com.tencent.bugly.**{*;}
 -keep class android.support.**{*;}
 
-# OkHttp3
--dontwarn okhttp3.logging.**
--keep class okhttp3.internal.**{*;}
--dontwarn okio.**
-
-# Retrofit
-# Retrofit does reflection on generic parameters and InnerClass is required to use Signature.
--keepattributes Signature, InnerClasses
-
 # Retain service method parameters when optimizing.
 -keepclassmembers,allowshrinking,allowobfuscation interface * {
     @retrofit2.http.* <methods>;
