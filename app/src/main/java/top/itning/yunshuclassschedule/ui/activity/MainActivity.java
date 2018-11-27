@@ -149,12 +149,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         drawerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> ThemeChangeUtil.changeNightMode(this));
         navView.setNavigationItemSelectedListener(this);
-
         supportFragmentManager = getSupportFragmentManager();
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
-                .commit();
         App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), Calendar.getInstance().get(Calendar.DATE)).apply();
     }
 
@@ -199,7 +194,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onStop() {
+        Fragment fragment = supportFragmentManager.findFragmentById(R.id.frame_container);
+        if (fragment instanceof ClassScheduleFragment) {
+            supportFragmentManager.beginTransaction().remove(fragmentSparseArray.get(R.id.nav_class_schedule)).commitAllowingStateLoss();
+        }
+        super.onStop();
+    }
+
+    @Override
     protected void onStart() {
+        Fragment fragment = supportFragmentManager.findFragmentById(R.id.frame_container);
+        if (fragment == null || fragment instanceof ClassScheduleFragment) {
+            supportFragmentManager = getSupportFragmentManager();
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
+                    .commitAllowingStateLoss();
+        }
         //设置主标题
         toolbar.setTitle(ACTION_BAR_TITLE_FORMAT.format(new Date()));
         super.onStart();
