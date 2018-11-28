@@ -56,9 +56,9 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 public class ShareActivity extends BaseActivity {
     private static final String TAG = "ShareActivity";
 
-    private static final int FILE_SELECT_CODE = 1;
+    public static final int FILE_SELECT_CODE = 1;
+    public static final int TIME_LIST_SIZE = 5;
     private static final int WRITE_REQUEST_CODE = 2;
-    private static final int TIME_LIST_SIZE = 5;
 
     @BindView(R.id.tv_import_title)
     AppCompatTextView tvImportTitle;
