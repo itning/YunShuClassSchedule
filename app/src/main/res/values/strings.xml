@@ -4,7 +4,7 @@
     <string name="navigation_drawer_close">关闭导航抽屉</string>
     <string name="action_set_text_size">设置字体大小</string>
     <string name="login_name">欢迎使用</string>
-    <string name="login_btn_share">导入课程数据</string>
+    <string name="login_btn_share">导入数据</string>
     <string name="action_set_background_image">更换背景图片</string>
     <string name="action_show_teacher_info">显示授课教师</string>
     <string name="check_score_input_name">姓名</string>
@@ -35,7 +35,7 @@
     <string name="time_night">晚自习时间</string>
     <string name="time_5s">第5节上课</string>
     <string name="time_5x">第5节下课</string>
-    <string name="login_btn_custom">自定义课程</string>
+    <string name="login_btn_custom">开始使用</string>
     <string name="week_course_1">1</string>
     <string name="week_course_2">2</string>
     <string name="week_course_3">3</string>

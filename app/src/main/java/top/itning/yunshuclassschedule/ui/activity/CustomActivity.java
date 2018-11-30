@@ -206,7 +206,6 @@ public class CustomActivity extends BaseActivity implements TimePickerDialog.OnT
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                startActivity(new Intent(this, LoginActivity.class));
                 finish();
                 break;
             }

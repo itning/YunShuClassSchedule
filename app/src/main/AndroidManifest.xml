@@ -57,7 +57,8 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/login_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="top.itning.yunshuclassschedule.LOGIN" />
 

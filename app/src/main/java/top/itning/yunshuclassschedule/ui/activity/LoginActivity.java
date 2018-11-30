@@ -2,7 +2,6 @@ package top.itning.yunshuclassschedule.ui.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +34,6 @@ import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
 import top.itning.yunshuclassschedule.entity.DataEntity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.util.DateUtils;
-import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
 import static top.itning.yunshuclassschedule.ui.activity.ShareActivity.FILE_SELECT_CODE;
 import static top.itning.yunshuclassschedule.ui.activity.ShareActivity.TIME_LIST_SIZE;
@@ -56,13 +55,11 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        int nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this);
-        btnCustom.setBackgroundTintList(ColorStateList.valueOf(nowThemeColorAccent));
+        StatusBarUtil.setTransparent(this);
         initData();
     }
 
