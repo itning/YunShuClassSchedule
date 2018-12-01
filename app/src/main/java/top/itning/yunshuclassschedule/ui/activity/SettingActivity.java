@@ -1,10 +1,13 @@
 package top.itning.yunshuclassschedule.ui.activity;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,24 +20,30 @@ import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.service.CourseInfoService;
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
+
+import static top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.FOREGROUND_SERVICE_STATUS;
 
 /**
  * 设置Activity
  *
  * @author itning
  */
-public class SettingActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
+public class SettingActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "SettingActivity";
     private FragmentManager supportFragmentManager;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeChangeUtil.changeTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initView();
@@ -73,6 +82,7 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 
@@ -101,5 +111,14 @@ public class SettingActivity extends BaseActivity implements PreferenceFragmentC
                 .addToBackStack(key)
                 .commit();
         return true;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(FOREGROUND_SERVICE_STATUS)) {
+            if (sharedPreferences.getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
+                startService(new Intent(this, CourseInfoService.class));
+            }
+        }
     }
 }

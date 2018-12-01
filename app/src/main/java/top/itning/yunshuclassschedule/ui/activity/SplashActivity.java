@@ -26,6 +26,7 @@ import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.BaseActivity;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.service.CourseInfoService;
 import top.itning.yunshuclassschedule.service.JobSchedulerService;
 import top.itning.yunshuclassschedule.util.GlideApp;
 
@@ -53,6 +54,9 @@ public class SplashActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initBackGroundImage();
+
+        startService(new Intent(this, CourseInfoService.class));
+
         initJobScheduler();
         startTime = System.currentTimeMillis();
 

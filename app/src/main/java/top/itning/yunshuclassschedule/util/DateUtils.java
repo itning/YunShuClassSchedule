@@ -186,6 +186,22 @@ public class DateUtils {
         }
     }
 
+    @CheckResult
+    public static int getTheRestOfTheTime(Date startTime, String endTime) {
+        try {
+            long end = DF.parse(endTime).getTime();
+            long now = DF.parse(DF.format(startTime)).getTime();
+            int minutes = (int) ((end - now) / (1000 * 60));
+            if (minutes < 0) {
+                return 0;
+            }
+            return minutes;
+        } catch (ParseException e) {
+            Log.e(TAG, "parse exception ", e);
+            return 0;
+        }
+    }
+
     /**
      * 检查当前时间是否在给定的开始结束时间内
      *
@@ -196,7 +212,7 @@ public class DateUtils {
     @CheckResult
     public static boolean isInDateInterval(String start, String end) {
         try {
-            return belongCalendar(DF.parse(DF.format(new Date())), DF.parse(start), DF.parse(end));
+            return isBelongCalendar(DF.parse(DF.format(new Date())), DF.parse(start), DF.parse(end));
         } catch (ParseException e) {
             Log.e(TAG, "parse exception:", e);
             e.printStackTrace();
@@ -214,7 +230,7 @@ public class DateUtils {
      * @return 是返回True
      */
     @CheckResult
-    private static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
+    public static boolean isBelongCalendar(Date nowTime, Date beginTime, Date endTime) {
         return nowTime.getTime() >= beginTime.getTime() && nowTime.getTime() < endTime.getTime();
     }
 
