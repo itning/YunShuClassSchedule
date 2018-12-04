@@ -36,7 +36,7 @@ public class CheckScoreShowFragment extends Fragment {
     private static final String TAG = "CheckScoreShowFragment";
     @BindView(R.id.rv)
     RecyclerView rv;
-    Unbinder unbinder;
+    private Unbinder unbinder;
     private List<Score> scoreList;
 
     @Override

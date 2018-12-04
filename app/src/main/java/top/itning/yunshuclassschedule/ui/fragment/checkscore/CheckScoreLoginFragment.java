@@ -95,7 +95,7 @@ public class CheckScoreLoginFragment extends Fragment {
     AppCompatButton btnLogin;
     @BindView(R.id.checkBox)
     AppCompatCheckBox checkBox;
-    Unbinder unbinder;
+    private Unbinder unbinder;
     private Map<String, String> cookies;
     private String name;
     private String id;

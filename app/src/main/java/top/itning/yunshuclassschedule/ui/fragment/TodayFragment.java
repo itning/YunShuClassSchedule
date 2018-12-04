@@ -1,9 +1,13 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +15,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.tencent.bugly.crashreport.CrashReport;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,10 +41,12 @@ import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
 import top.itning.yunshuclassschedule.entity.DaoSession;
 import top.itning.yunshuclassschedule.entity.EventEntity;
+import top.itning.yunshuclassschedule.service.CourseInfoService;
 import top.itning.yunshuclassschedule.ui.adapter.TodayRecyclerViewAdapter;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
 import top.itning.yunshuclassschedule.util.DateUtils;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
+
 
 /**
  * 今天
@@ -96,6 +99,10 @@ public class TodayFragment extends Fragment {
      */
     private int height;
 
+    private CourseInfoService.CourseInfoBinder courseInfoBinder;
+
+    private final CourseInfoConnection courseInfoConnection = new CourseInfoConnection();
+
     static class ViewHolder {
         @BindView(R.id.rv)
         RecyclerView rv;
@@ -121,6 +128,8 @@ public class TodayFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "on Create");
+        requireActivity().bindService(new Intent(requireActivity(), CourseInfoService.class), courseInfoConnection, Context.BIND_AUTO_CREATE);
         EventBus.getDefault().register(this);
         super.onCreate(savedInstanceState);
     }
@@ -134,8 +143,6 @@ public class TodayFragment extends Fragment {
                 setViewProgress();
                 //检查课程改变
                 checkClassScheduleChange();
-                //设置面板
-                setPanelText((ViewHolder) view.getTag());
                 break;
             }
             case APP_COLOR_CHANGE: {
@@ -152,6 +159,8 @@ public class TodayFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "on Destroy");
+        requireActivity().unbindService(courseInfoConnection);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -213,8 +222,6 @@ public class TodayFragment extends Fragment {
         setFinalIndex();
         //NestedScrollView滑动监听
         nestedScrollViewOnScrollChangeListener(holder);
-        //设置面板文字
-        setPanelText(holder);
         return this.view;
     }
 
@@ -263,97 +270,27 @@ public class TodayFragment extends Fragment {
      * @param holder {@link ViewHolder}
      */
     private void setPanelText(ViewHolder holder) {
-        try {
-            String line1 = "", line2 = "", line3 = "", line4 = "";
-            if (classScheduleList != null && !classScheduleList.isEmpty()) {
-                int whichClassNow = DateUtils.getWhichClassNow();
-                ClassSchedule classSchedule = classScheduleList.get(0);
-                if (whichClassNow == -1) {
-                    ClassSchedule lastCs = classScheduleList.get(classScheduleList.size() - 1);
-                    String[] timeArray = DateUtils.getTimeList().get(lastCs.getSection() - 1).split("-");
-                    if (!DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
-                        //一节课没上判定
-                        String[] firstTimeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
-                        if (DateUtils.DF.parse(DateUtils.DF.format(new Date())).getTime() <= DateUtils.DF.parse(firstTimeArray[0]).getTime()) {
-                            int restOfTheTime = DateUtils.getTheRestOfTheTime(firstTimeArray[0]);
-                            line1 = "下节课";
-                            line2 = classSchedule.getName();
-                            line3 = classSchedule.getLocation();
-                            line4 = "还有" + restOfTheTime + "分钟上课";
-                        } else {
-                            line2 = "今天课全都上完了";
-                            line3 = "(๑•̀ㅂ•́)و✧";
-                        }
-                    }
-                } else {
-                    //两种情况:正在上课,即将上课
-                    String[] timeArray = DateUtils.getTimeList().get(classSchedule.getSection() - 1).split("-");
-                    line1 = "下节课";
-                    if (DateUtils.isInDateInterval(timeArray[0], timeArray[1])) {
-                        //正在上课 非最后一节课
-                        int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[1]);
-                        for (ClassSchedule c : classScheduleList) {
-                            if (c.getSection() == classSchedule.getSection()) {
-                                //当前循环的和正在上的一样
-                                continue;
-                            }
-                            String start = DateUtils.getTimeList().get(c.getSection() - 1).split("-")[0];
-                            if (ClassScheduleUtils.haveClassAfterTime(classScheduleList) && DateUtils.DF.parse(timeArray[0]).getTime() < DateUtils.DF.parse(start).getTime()) {
-                                line2 = c.getName();
-                                line3 = c.getLocation();
-                                line4 = "还有" + restOfTheTime + "分钟下课";
-                                break;
-                            } else {
-                                if (!ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
-                                    line1 = "";
-                                    line2 = "今天课全都上完了";
-                                    line3 = "(๑•̀ㅂ•́)و✧";
-                                    line4 = "";
-                                    break;
-                                }
-                            }
-                        }
-                        //循环结束,没有下节课
-                        if ("".equals(line4)) {
-                            //最后一节课 正在上
-                            line1 = "";
-                            line2 = "这是最后一节课";
-                            line3 = "还有" + restOfTheTime + "分钟下课";
-                        }
-                    } else {
-                        if (ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
-                            //即将上课
-                            int restOfTheTime = DateUtils.getTheRestOfTheTime(timeArray[0]);
-                            line2 = classSchedule.getName();
-                            line3 = classSchedule.getLocation();
-                            line4 = "还有" + restOfTheTime + "分钟上课";
-                        } else {
-                            line1 = "";
-                            line2 = "今天课全都上完了";
-                            line3 = "(๑•̀ㅂ•́)و✧";
-                            line4 = "";
-                        }
-                    }
-                }
-            } else {
-                DaoSession daoSession = ((App) Objects.requireNonNull(getActivity()).getApplication()).getDaoSession();
-                if (daoSession.getClassScheduleDao().count() == 0) {
-                    line1 = "(ヾﾉ･ω･`)";
-                    line2 = "没有课程数据";
-                    line3 = "请滑动到右侧";
-                    line4 = "长按空白处添加课程";
-                } else {
-                    line2 = "今天没有课";
-                    line3 = "ヾ(≧∇≦*)ゝ";
-                }
-            }
-            holder.tvRemindRemind.setText(line1);
-            holder.tvRemindName.setText(line2);
-            holder.tvRemindLocation.setText(line3);
-            holder.tvRemindTime.setText(line4);
-        } catch (ParseException e) {
-            Log.e(TAG, "parse exception ", e);
-            CrashReport.postCatchedException(e);
+        if (courseInfoBinder != null) {
+            SparseArray<String> sparseArray = courseInfoBinder.getNowCourseInfo();
+            holder.tvRemindRemind.setText(sparseArray.get(1));
+            holder.tvRemindName.setText(sparseArray.get(2));
+            holder.tvRemindLocation.setText(sparseArray.get(3));
+            holder.tvRemindTime.setText(sparseArray.get(4));
+        }
+    }
+
+    class CourseInfoConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected: " + service);
+            courseInfoBinder = (CourseInfoService.CourseInfoBinder) service;
+            setPanelText((ViewHolder) view.getTag());
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "onServiceDisconnected");
+            courseInfoBinder = null;
         }
     }
 

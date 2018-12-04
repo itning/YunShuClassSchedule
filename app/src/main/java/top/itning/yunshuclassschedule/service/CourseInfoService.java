@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
@@ -47,14 +48,14 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
     private static final String NO_COURSE_DATA = "没有课程数据";
 
     private SharedPreferences sharedPreferences;
-    private volatile Date nowDate;
-    private SparseArray<String> courseArray = new SparseArray<>();
+    private Date nowDate;
+    private final SparseArray<String> courseArray = new SparseArray<>();
 
     {
         getDate();
     }
 
-    private void getDate() {
+    private synchronized void getDate() {
         try {
             nowDate = DateUtils.DF.parse(DateUtils.DF.format(new Date()));
         } catch (ParseException e) {
@@ -68,12 +69,8 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
         EventBus.getDefault().register(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-            stopSelf();
-            return;
-        }
-        getNowCourseInfoMap();
-        setNotificationContents();
+        getNowCourseInfoArray();
+        setNotificationContentsIfOpen();
         super.onCreate();
     }
 
@@ -94,20 +91,33 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
 
     @Override
     public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Log.d(TAG, "onBind: " + intent);
+        return new CourseInfoBinder();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.d(TAG, "onUnbind: " + intent);
+        return super.onUnbind(intent);
+    }
+
+    public class CourseInfoBinder extends Binder {
+        public SparseArray<String> getNowCourseInfo() {
+            return courseArray;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventEntity eventEntity) {
         switch (eventEntity.getId()) {
             case TIME_TICK_CHANGE: {
-                getNowCourseInfoMap();
-                setNotificationContents();
+                getNowCourseInfoArray();
+                setNotificationContentsIfOpen();
                 break;
             }
             case REFRESH_CLASS_SCHEDULE_FRAGMENT: {
-                getNowCourseInfoMap();
-                setNotificationContents();
+                getNowCourseInfoArray();
+                setNotificationContentsIfOpen();
                 break;
             }
             default:
@@ -117,7 +127,7 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
     /**
      * 获取现在的课程信息
      */
-    private void getNowCourseInfoMap() {
+    private synchronized void getNowCourseInfoArray() {
         getDate();
         try {
             //没有课程数据
@@ -347,7 +357,7 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
     /**
      * 开启前台服务
      */
-    private void setNotificationContents() {
+    private void setNotificationContentsIfOpen() {
         if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
             return;
         }
@@ -396,11 +406,10 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(FOREGROUND_SERVICE_STATUS)) {
             if (sharedPreferences.getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-                getNowCourseInfoMap();
-                setNotificationContents();
+                getNowCourseInfoArray();
+                setNotificationContentsIfOpen();
             } else {
                 stopForeground(true);
-                stopSelf();
             }
         }
     }

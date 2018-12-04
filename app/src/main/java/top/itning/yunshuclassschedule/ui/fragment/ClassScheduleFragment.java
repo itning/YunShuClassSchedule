@@ -1,17 +1,20 @@
 package top.itning.yunshuclassschedule.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -95,10 +98,9 @@ public class ClassScheduleFragment extends Fragment {
     }
 
     private void initData(ViewHolder holder) {
-        holder.vp.setAdapter(null);
         //预加载
         holder.vp.setOffscreenPageLimit(fragmentList.size());
-        holder.vp.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+        holder.vp.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
 
             @Override
             public int getCount() {
@@ -116,6 +118,20 @@ public class ClassScheduleFragment extends Fragment {
                 return titleList.get(position);
             }
 
+            @Override
+            public int getItemPosition(@NonNull Object object) {
+                Log.d(TAG, "getItemPosition: " + object);
+                return POSITION_NONE;
+            }
+
+            @Override
+            public void restoreState(Parcelable state, ClassLoader loader) {
+                try {
+                    super.restoreState(state, loader);
+                } catch (NullPointerException e) {
+                    // null caught
+                }
+            }
         });
         holder.tl.setupWithViewPager(holder.vp);
     }
@@ -143,10 +159,12 @@ public class ClassScheduleFragment extends Fragment {
             }
             case REFRESH_CLASS_SCHEDULE_FRAGMENT: {
                 ViewHolder holder = (ViewHolder) view.getTag();
-                initData(holder);
-                //设置默认展示页面
-                holder.vp.setCurrentItem(1);
-                Objects.requireNonNull(holder.tl.getTabAt(1)).select();
+                PagerAdapter adapter = holder.vp.getAdapter();
+                if (adapter == null) {
+                    Toast.makeText(requireContext(), "未找到适配器，尝试重新打开APP解决此问题", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                adapter.notifyDataSetChanged();
                 break;
             }
             default:

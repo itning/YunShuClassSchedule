@@ -164,28 +164,6 @@ public class DateUtils {
         return last != i;
     }
 
-    /**
-     * 返回现在到给定时间相差的分钟数
-     *
-     * @param endTime 结束时间
-     * @return 相差分钟数
-     */
-    @CheckResult
-    public static int getTheRestOfTheTime(String endTime) {
-        try {
-            long end = DF.parse(endTime).getTime();
-            long now = DF.parse(DF.format(new Date())).getTime();
-            int minutes = (int) ((end - now) / (1000 * 60));
-            if (minutes < 0) {
-                return 0;
-            }
-            return minutes;
-        } catch (ParseException e) {
-            Log.e(TAG, "parse exception ", e);
-            return 0;
-        }
-    }
-
     @CheckResult
     public static int getTheRestOfTheTime(Date startTime, String endTime) {
         try {
@@ -210,7 +188,7 @@ public class DateUtils {
      * @return 在返回true
      */
     @CheckResult
-    public static boolean isInDateInterval(String start, String end) {
+    private static boolean isInDateInterval(String start, String end) {
         try {
             return isBelongCalendar(DF.parse(DF.format(new Date())), DF.parse(start), DF.parse(end));
         } catch (ParseException e) {

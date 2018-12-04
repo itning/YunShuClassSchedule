@@ -58,7 +58,7 @@ public class ScoreRecyclerViewAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_credit)
         AppCompatTextView tvCredit;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

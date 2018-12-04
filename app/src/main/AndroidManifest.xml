@@ -114,7 +114,7 @@
         <service
             android:name=".service.CourseInfoService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".service.JobSchedulerService"
             android:enabled="true"
