@@ -70,12 +70,12 @@ public class CommonService extends Service implements SharedPreferences.OnShared
             String channelId = "class_reminder";
             String channelName = "课程提醒";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            createNotificationChannel(channelId, channelName, importance);
+            createNotificationChannel(channelId, channelName, importance, true);
 
             channelId = "foreground_service";
             channelName = "前台服务";
             importance = NotificationManager.IMPORTANCE_NONE;
-            createNotificationChannel(channelId, channelName, importance);
+            createNotificationChannel(channelId, channelName, importance, false);
         }
     }
 
@@ -147,9 +147,10 @@ public class CommonService extends Service implements SharedPreferences.OnShared
      * @param importance  重要程度 {@link NotificationManager}
      */
     @TargetApi(Build.VERSION_CODES.O)
-    private void createNotificationChannel(@NonNull String channelId, @NonNull String channelName, int importance) {
+    private void createNotificationChannel(@NonNull String channelId, @NonNull String channelName, int importance, boolean showBadge) {
         Log.d(TAG, "created Notification Channel id:" + channelId + " name:" + channelName + " importance:" + importance);
         NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+        channel.setShowBadge(showBadge);
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         assert notificationManager != null;
         notificationManager.createNotificationChannel(channel);
