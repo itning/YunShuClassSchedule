@@ -147,6 +147,7 @@ public class ThisWeekFragment extends Fragment {
                         @Override
                         protected void onResourceCleared(@Nullable Drawable placeholder) {
                             Log.d(TAG, "on Resource Cleared : " + placeholder);
+                            view.setBackground(placeholder);
                         }
                     });
         } else {
