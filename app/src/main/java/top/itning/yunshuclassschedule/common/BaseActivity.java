@@ -2,9 +2,9 @@ package top.itning.yunshuclassschedule.common;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.service.CommonService;
 import top.itning.yunshuclassschedule.service.RemindService;

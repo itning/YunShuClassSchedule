@@ -3,16 +3,13 @@ package top.itning.yunshuclassschedule.ui.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.ColorStateList;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +17,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 import java.util.UUID;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;

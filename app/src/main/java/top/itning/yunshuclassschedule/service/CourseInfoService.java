@@ -9,10 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -27,6 +23,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
@@ -391,7 +391,7 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
                 .setContentTitle(titleBuilder)
                 .setContentText(textBuilder)
-                .setVisibility(Notification.VISIBILITY_SECRET)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                 .setSmallIcon(R.mipmap.logo_round)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)

@@ -2,8 +2,6 @@ package top.itning.yunshuclassschedule.util;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,6 +15,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
+
 /**
  * 文件工具类
  *
@@ -24,7 +25,7 @@ import java.nio.channels.FileChannel;
  */
 public class FileUtils {
     private static final String TAG = "FileUtils";
-    public static final int MAX_IMAGE_FILE_SIZE = 20;
+    private static final int MAX_IMAGE_FILE_SIZE = 20;
     private static final int CACHE_BYTES_SIZE = 4096;
 
     private FileUtils() {

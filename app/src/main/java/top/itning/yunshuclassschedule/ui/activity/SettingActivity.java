@@ -4,11 +4,6 @@ package top.itning.yunshuclassschedule.ui.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -16,6 +11,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.BaseActivity;

@@ -4,25 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.CheckResult;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import androidx.annotation.CheckResult;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;

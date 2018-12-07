@@ -1,8 +1,6 @@
 package top.itning.yunshuclassschedule.util;
 
 import android.content.Context;
-import android.support.annotation.CheckResult;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -15,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import androidx.annotation.CheckResult;
+import androidx.appcompat.app.AlertDialog;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;

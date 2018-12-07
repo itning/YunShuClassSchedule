@@ -1,9 +1,9 @@
 package top.itning.yunshuclassschedule.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 图片哈希

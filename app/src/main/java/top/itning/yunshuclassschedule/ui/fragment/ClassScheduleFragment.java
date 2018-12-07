@@ -2,19 +2,13 @@ package top.itning.yunshuclassschedule.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,6 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.preference.PreferenceManager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
@@ -128,7 +129,7 @@ public class ClassScheduleFragment extends Fragment {
             public void restoreState(Parcelable state, ClassLoader loader) {
                 try {
                     super.restoreState(state, loader);
-                } catch (NullPointerException e) {
+                } catch (Exception e) {
                     // null caught
                 }
             }

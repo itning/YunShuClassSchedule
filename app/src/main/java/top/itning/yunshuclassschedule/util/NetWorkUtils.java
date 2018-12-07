@@ -4,8 +4,9 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
+
+import androidx.annotation.NonNull;
 
 
 /**

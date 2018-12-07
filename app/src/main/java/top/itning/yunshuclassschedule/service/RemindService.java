@@ -14,9 +14,6 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.tencent.bugly.crashreport.CrashReport;
@@ -31,6 +28,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
@@ -114,7 +114,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
                 .setContentTitle("云舒课表")
                 .setContentText("提醒服务正在运行")
-                .setVisibility(Notification.VISIBILITY_SECRET)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                 .setSmallIcon(R.mipmap.logo_round)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)
@@ -407,7 +407,7 @@ public class RemindService extends Service implements SharedPreferences.OnShared
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "class_reminder")
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.mipmap.logo)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_ALL)

@@ -4,8 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,6 +20,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

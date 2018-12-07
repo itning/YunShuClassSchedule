@@ -13,9 +13,6 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,6 +20,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.receiver.TimeTickReceiver;
@@ -98,7 +98,7 @@ public class CommonService extends Service implements SharedPreferences.OnShared
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foreground_service")
                 .setContentTitle("云舒课表")
                 .setContentText("提醒服务正在运行")
-                .setVisibility(Notification.VISIBILITY_SECRET)
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                 .setSmallIcon(R.mipmap.logo_round)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)

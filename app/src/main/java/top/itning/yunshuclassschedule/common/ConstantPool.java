@@ -106,10 +106,6 @@ public class ConstantPool {
          */
         PHONE_MUTE_OPEN(130),
         /**
-         * 本周课程背景变化
-         */
-        NOTIFICATION_BACKGROUND_CHANGE(131),
-        /**
          * 需要重新初始化课程Fragment
          */
         REFRESH_CLASS_SCHEDULE_FRAGMENT(133),

@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.Display;
 
@@ -19,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;

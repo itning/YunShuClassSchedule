@@ -2,9 +2,6 @@ package top.itning.yunshuclassschedule.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,6 +16,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;

@@ -8,19 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -31,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.xw.repo.BubbleSeekBar;
 import com.zhihu.matisse.Matisse;
@@ -48,6 +36,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
@@ -58,6 +58,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment;
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment;
 import top.itning.yunshuclassschedule.util.DateUtils;
+import top.itning.yunshuclassschedule.util.FileUtils;
 import top.itning.yunshuclassschedule.util.Glide4Engine;
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil;
 
@@ -374,7 +375,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             List<Uri> result = Matisse.obtainResult(data);
             if (result != null && !result.isEmpty()) {
                 Log.d(TAG, "the result uri:" + result.get(0).toString());
-                EventBus.getDefault().post(new EventEntity(ConstantPool.Int.NOTIFICATION_BACKGROUND_CHANGE, "", result.get(0)));
+                FileUtils.transferFile(this, result.get(0), "background_img");
             } else {
                 Toast.makeText(this, "背景图片设置失败", Toast.LENGTH_LONG).show();
                 CrashReport.postCatchedException(new Throwable("background image set failure"));

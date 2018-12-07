@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_id"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
@@ -18,17 +18,17 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/tv_id"
-        android:paddingEnd="0dp"
-        android:paddingStart="10dp">
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginBottom="2dp"
             tools:text="马克思主义基本原理概论" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_semester"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,10 +41,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:paddingEnd="16dp"
-        android:paddingStart="0dp">
+        android:paddingStart="0dp"
+        android:paddingEnd="16dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,12 +53,12 @@
             android:textSize="16sp"
             tools:text="85" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_credit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_below="@id/tv_grade"
+            android:layout_alignParentEnd="true"
             tools:text="3.5学分" />
     </RelativeLayout>
 

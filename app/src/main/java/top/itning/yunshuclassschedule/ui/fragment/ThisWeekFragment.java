@@ -2,12 +2,7 @@ package top.itning.yunshuclassschedule.ui.fragment;
 
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -26,6 +21,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.gridlayout.widget.GridLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.itning.yunshuclassschedule.R;
@@ -35,11 +34,9 @@ import top.itning.yunshuclassschedule.entity.DaoSession;
 import top.itning.yunshuclassschedule.entity.EventEntity;
 import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener;
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils;
-import top.itning.yunshuclassschedule.util.FileUtils;
 import top.itning.yunshuclassschedule.util.GlideApp;
 
 import static top.itning.yunshuclassschedule.util.ClassScheduleUtils.COPY_LIST;
-import static top.itning.yunshuclassschedule.util.FileUtils.MAX_IMAGE_FILE_SIZE;
 
 
 /**
@@ -108,11 +105,6 @@ public class ThisWeekFragment extends Fragment {
                 ClassScheduleUtils.loadingView(classScheduleList, ((ViewHolder) view.getTag()).scheduleGridlayout, clickListener, requireActivity());
                 break;
             }
-            case NOTIFICATION_BACKGROUND_CHANGE: {
-                FileUtils.transferFile(requireContext(), (Uri) eventEntity.getData(), "background_img");
-                setViewBackground();
-                break;
-            }
             case APP_COLOR_CHANGE: {
                 clickListener.updateBtnBackgroundTintList();
                 break;
@@ -127,17 +119,6 @@ public class ThisWeekFragment extends Fragment {
     private void setViewBackground() {
         File file = requireContext().getFileStreamPath("background_img");
         if (file.exists() && file.isFile() && file.length() != 0) {
-            // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
-            long fileSizeInKB = file.length() / 1024;
-            // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
-            long fileSizeInMB = fileSizeInKB / 1024;
-            Log.d(TAG, "file size :" + fileSizeInKB + "KB");
-            if (fileSizeInMB > MAX_IMAGE_FILE_SIZE) {
-                boolean delete = file.delete();
-                Log.d(TAG, "delete :" + delete);
-                view.setBackgroundResource(R.drawable.this_week_background);
-                return;
-            }
             Display display = requireActivity().getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
@@ -166,7 +147,6 @@ public class ThisWeekFragment extends Fragment {
                         @Override
                         protected void onResourceCleared(@Nullable Drawable placeholder) {
                             Log.d(TAG, "on Resource Cleared : " + placeholder);
-                            view.setBackground(placeholder);
                         }
                     });
         } else {
