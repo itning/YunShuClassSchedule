@@ -392,7 +392,7 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
                 .setContentTitle(titleBuilder)
                 .setContentText(textBuilder)
                 .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                .setSmallIcon(R.mipmap.logo_round)
+                .setSmallIcon(R.drawable.notification_icon)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(true)
