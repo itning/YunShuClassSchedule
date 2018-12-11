@@ -29,6 +29,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 import top.itning.yunshuclassschedule.R;
 import top.itning.yunshuclassschedule.common.App;
+import top.itning.yunshuclassschedule.common.ConstantPool;
 import top.itning.yunshuclassschedule.entity.ClassSchedule;
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao;
 import top.itning.yunshuclassschedule.entity.DaoSession;
@@ -168,6 +169,8 @@ public class CourseInfoService extends Service implements SharedPreferences.OnSh
         } catch (Exception e) {
             Log.e(TAG, "get exception: ", e);
             CrashReport.postCatchedException(e);
+        } finally {
+            EventBus.getDefault().post(new EventEntity(ConstantPool.Int.COURSE_INFO_ARRAY_UPDATE, "", courseArray));
         }
     }
 

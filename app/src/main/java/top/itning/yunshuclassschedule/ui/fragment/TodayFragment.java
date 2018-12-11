@@ -153,6 +153,10 @@ public class TodayFragment extends Fragment {
                 viewHolder.rv.getAdapter().notifyDataSetChanged();
                 break;
             }
+            case COURSE_INFO_ARRAY_UPDATE: {
+                setPanelText((ViewHolder) view.getTag());
+                break;
+            }
             default:
         }
     }
