@@ -111,7 +111,6 @@ class ThisWeekFragment : Fragment() {
                     .with(this)
                     .load(file)
                     .override(size.x, size.y)
-                    .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(object : CustomViewTarget<View, Drawable>(mView!!) {
