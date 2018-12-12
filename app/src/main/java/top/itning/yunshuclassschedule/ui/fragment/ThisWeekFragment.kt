@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.gridlayout.widget.GridLayout
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.Unbinder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
@@ -35,34 +36,27 @@ import top.itning.yunshuclassschedule.util.GlideApp
  */
 class ThisWeekFragment : Fragment() {
 
-    private var mView: View? = null
-    private var clickListener: ClassScheduleItemLongClickListener? = null
-
-    internal class ViewHolder(view: View) {
-        @BindView(R.id.schedule_gridlayout)
-        lateinit var scheduleGridlayout: GridLayout
-
-        init {
-            ButterKnife.bind(this, view)
-        }
-    }
+    private lateinit var mView: View
+    private lateinit var clickListener: ClassScheduleItemLongClickListener
+    private lateinit var unBinder: Unbinder
+    @BindView(R.id.schedule_gridlayout)
+    lateinit var scheduleGridlayout: GridLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "on Create View")
-        val holder: ViewHolder
-        if (mView != null) {
-            holder = mView!!.tag as ViewHolder
-        } else {
-            mView = inflater.inflate(R.layout.fragment_this_week, container, false)
-            holder = ViewHolder(mView!!)
-            mView!!.tag = holder
-        }
+        mView = inflater.inflate(R.layout.fragment_this_week, container, false)
+        unBinder = ButterKnife.bind(this, mView)
         setViewBackground()
         val daoSession = (requireActivity().application as App).daoSession
         val classScheduleList = daoSession!!.classScheduleDao.loadAll()
         clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
-        ClassScheduleUtils.loadingView(classScheduleList, holder.scheduleGridlayout, clickListener!!, requireActivity())
+        ClassScheduleUtils.loadingView(classScheduleList, scheduleGridlayout, clickListener, requireActivity())
         return mView
+    }
+
+    override fun onDestroyView() {
+        unBinder.unbind()
+        super.onDestroyView()
     }
 
 
@@ -74,9 +68,6 @@ class ThisWeekFragment : Fragment() {
     override fun onDestroy() {
         Log.d(TAG, "on Destroy")
         EventBus.getDefault().unregister(this)
-        if (clickListener != null) {
-            clickListener = null
-        }
         super.onDestroy()
     }
 
@@ -87,10 +78,10 @@ class ThisWeekFragment : Fragment() {
                 val daoSession = (requireActivity().application as App).daoSession
                 val classScheduleList = daoSession!!.classScheduleDao.loadAll()
                 clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
-                ClassScheduleUtils.loadingView(classScheduleList, (mView!!.tag as ViewHolder).scheduleGridlayout, clickListener!!, requireActivity())
+                ClassScheduleUtils.loadingView(classScheduleList, scheduleGridlayout, clickListener, requireActivity())
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
-                clickListener!!.updateBtnBackgroundTintList()
+                clickListener.updateBtnBackgroundTintList()
             }
             else -> {
             }
@@ -113,7 +104,7 @@ class ThisWeekFragment : Fragment() {
                     .override(size.x, size.y)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(object : CustomViewTarget<View, Drawable>(mView!!) {
+                    .into(object : CustomViewTarget<View, Drawable>(mView) {
 
                         override fun onLoadFailed(errorDrawable: Drawable?) {
                             Log.d(TAG, "on Load Failed : $errorDrawable")
@@ -132,7 +123,7 @@ class ThisWeekFragment : Fragment() {
                     })
         } else {
             Log.d(TAG, "file is not exists , now use default background")
-            mView!!.setBackgroundResource(R.drawable.this_week_background)
+            mView.setBackgroundResource(R.drawable.this_week_background)
         }
     }
 
