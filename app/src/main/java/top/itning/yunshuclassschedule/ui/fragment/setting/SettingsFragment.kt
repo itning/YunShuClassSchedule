@@ -90,7 +90,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         super.onDestroyView()
     }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val bundle = arguments
         if (bundle == null) {
             setPreferencesFromResource(R.xml.preference_settings, rootKey)
