@@ -1,13 +1,13 @@
-package top.itning.yunshuclassschedule.common;
+package top.itning.yunshuclassschedule.common
 
 /**
  * 常量池
  *
  * @author itning
  */
-public class ConstantPool {
+class ConstantPool {
 
-    public enum Str {
+    enum class Str(private val value: String) {
         /**
          * 数据库名
          */
@@ -49,18 +49,12 @@ public class ConstantPool {
          */
         TEACHER_INFO_STATUS("teacher_week_status");
 
-        private final String value;
-
-        Str(String value) {
-            this.value = value;
-        }
-
-        public String get() {
-            return value;
+        fun get(): String {
+            return value
         }
     }
 
-    public enum Int {
+    enum class Int(private val value: kotlin.Int) {
         /**
          * 延迟进入主活动时间
          */
@@ -138,16 +132,8 @@ public class ConstantPool {
          */
         RETURN_LOGIN_FRAGMENT(139);
 
-        private final int value;
-
-        Int(int value) {
-            this.value = value;
-        }
-
-        public int get() {
-            return value;
+        fun get(): kotlin.Int {
+            return value
         }
     }
-
-
 }
