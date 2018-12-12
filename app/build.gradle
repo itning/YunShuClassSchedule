@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'bugly'
 
 android {
@@ -8,8 +10,8 @@ android {
         applicationId "top.itning.yunshuclassschedule"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 33
-        versionName "2.2.3"
+        versionCode 40
+        versionName "2.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -59,10 +61,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     /*https://github.com/JakeWharton/butterknife*/
     implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
+    kapt 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
     /*https://github.com/greenrobot/EventBus*/
     implementation 'org.greenrobot:eventbus:3.1.1'
-    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+    kapt 'org.greenrobot:eventbus-annotation-processor:3.1.1'
     /*https://github.com/greenrobot/greenDAO*/
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.6'
@@ -74,7 +76,7 @@ dependencies {
     implementation 'com.zhihu.android:matisse:0.5.2-beta2'
     /*https://github.com/bumptech/glide*/
     implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
     /*https://github.com/laobie/StatusBarUtil*/
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     /*https://github.com/wdullaer/MaterialDateTimePicker*/
@@ -86,7 +88,12 @@ dependencies {
     /*https://github.com/Ereza/CustomActivityOnCrash*/
     implementation 'cat.ereza:customactivityoncrash:2.2.0'
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
+}
+repositories {
+    mavenCentral()
 }
