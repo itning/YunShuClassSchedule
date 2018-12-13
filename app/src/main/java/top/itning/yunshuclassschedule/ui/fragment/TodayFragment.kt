@@ -52,7 +52,7 @@ class TodayFragment : Fragment() {
     /**
      * 课程集合
      */
-    private var classScheduleList: MutableList<ClassSchedule>? = null
+    private lateinit var classScheduleList: MutableList<ClassSchedule>
     /**
      * 是否滑动到顶部
      */
@@ -181,7 +181,7 @@ class TodayFragment : Fragment() {
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小
         rv.post {
             mView.post {
-                val i = if (classScheduleList!!.size == 0) rv.height else rv.height / classScheduleList!!.size
+                val i = if (classScheduleList.size == 0) rv.height else rv.height / classScheduleList.size
                 val lp: ViewGroup.LayoutParams = ll.layoutParams
                 if (height == 0) {
                     height = mView.height - i
@@ -214,13 +214,13 @@ class TodayFragment : Fragment() {
             //设置随滑动改变位置
             pp.topMargin = scrollY
             rl.layoutParams = pp
-            if (whichClassNow == -1 || !ClassScheduleUtils.haveClassAfterTime(classScheduleList!!)) {
+            if (whichClassNow == -1 || !ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
                 return@OnScrollChangeListener
             }
             if (scrollY <= SLIDE_UP_THRESHOLD && !mTop!!.get()) {
                 mTop!!.set(true)
                 adapter!!.notifyItemMoved(finalIndex, 0)
-            } else if (mTop!!.get() && scrollY == rv.height - rv.height / classScheduleList!!.size) {
+            } else if (mTop!!.get() && scrollY == rv.height - rv.height / classScheduleList.size) {
                 mTop!!.set(false)
                 adapter!!.notifyItemMoved(0, finalIndex)
             }
@@ -273,15 +273,15 @@ class TodayFragment : Fragment() {
     private fun setFinalIndex() {
         val index: Int
         whichClassNow = DateUtils.whichClassNow
-        if (whichClassNow != -1 && ClassScheduleUtils.haveClassAfterTime(classScheduleList!!)) {
+        if (whichClassNow != -1 && ClassScheduleUtils.haveClassAfterTime(classScheduleList)) {
             a@ while (true) {
                 if (whichClassNow == 0) {
                     index = 0
                     break
                 }
-                for (c in classScheduleList!!) {
+                for (c in classScheduleList) {
                     if (c.section == whichClassNow) {
-                        index = classScheduleList!!.indexOf(c)
+                        index = classScheduleList.indexOf(c)
                         break@a
                     }
                 }
@@ -304,7 +304,7 @@ class TodayFragment : Fragment() {
             val size = Point()
             display.getSize(size)
             val layoutParams = viewProgress.layoutParams
-            layoutParams.width = DateUtils.getNowProgress(size.x, classScheduleList!!)
+            layoutParams.width = DateUtils.getNowProgress(size.x, classScheduleList)
             viewProgress.layoutParams = layoutParams
         }
     }
@@ -316,7 +316,7 @@ class TodayFragment : Fragment() {
         if (lastClass != DateUtils.whichClassNow) {
             Log.d(TAG, "time changed ,need update class schedule")
             lastClass = DateUtils.whichClassNow
-            classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList!!)
+            classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList)
             val adapter = rv.adapter
             adapter!!.notifyDataSetChanged()
             setFinalIndex()
