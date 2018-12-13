@@ -64,7 +64,7 @@ class TodayFragment : Fragment() {
     /**
      * [TodayRecyclerViewAdapter]
      */
-    private var todayRecyclerViewAdapter: TodayRecyclerViewAdapter? = null
+    private lateinit var todayRecyclerViewAdapter: TodayRecyclerViewAdapter
     /**
      * 滑动时移动的坐标
      */
@@ -298,7 +298,7 @@ class TodayFragment : Fragment() {
      * 更新进度
      */
     private fun setViewProgress() {
-        val viewProgress = todayRecyclerViewAdapter!!.viewProgress
+        val viewProgress = todayRecyclerViewAdapter.viewProgress
         if (viewProgress != null) {
             val display = (Objects.requireNonNull(Objects.requireNonNull<Context>(context).getSystemService(Context.WINDOW_SERVICE)) as WindowManager).defaultDisplay
             val size = Point()
