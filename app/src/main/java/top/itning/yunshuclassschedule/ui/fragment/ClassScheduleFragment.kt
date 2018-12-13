@@ -15,6 +15,7 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.Unbinder
 import com.google.android.material.tabs.TabLayout
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -36,7 +37,7 @@ class ClassScheduleFragment : Fragment() {
     /**
      * Bind View
      */
-    private var mView: View? = null
+    private lateinit var mView: View
     /**
      * 标题集合
      */
@@ -45,6 +46,13 @@ class ClassScheduleFragment : Fragment() {
      * 片段集合
      */
     private val fragmentList: MutableList<Fragment>
+
+    private lateinit var unBinder: Unbinder
+
+    @BindView(R.id.tl)
+    lateinit var tl: TabLayout
+    @BindView(R.id.vp)
+    lateinit var vp: ViewPager
 
     init {
         titleList = ArrayList()
@@ -55,41 +63,29 @@ class ClassScheduleFragment : Fragment() {
         fragmentList.add(ThisWeekFragment())
     }
 
-    internal class ViewHolder(view: View) {
-        @BindView(R.id.tl)
-        lateinit var tl: TabLayout
-        @BindView(R.id.vp)
-        lateinit var vp: ViewPager
-
-        init {
-            ButterKnife.bind(this, view)
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "on Create View")
-        val holder: ViewHolder
-        if (mView != null) {
-            holder = mView!!.tag as ViewHolder
-        } else {
-            mView = inflater.inflate(R.layout.fragment_class_schedule, container, false)
-            holder = ViewHolder(mView!!)
-            mView!!.tag = holder
-        }
-        ThemeChangeUtil.setTabLayoutColor(requireContext(), holder.tl)
-        initData(holder)
+        mView = inflater.inflate(R.layout.fragment_class_schedule, container, false)
+        unBinder = ButterKnife.bind(this, mView)
+        ThemeChangeUtil.setTabLayoutColor(requireContext(), tl)
+        initData()
         //设置默认展示页面
         if (TODAY != PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY)) {
-            holder.vp.currentItem = 1
-            holder.tl.getTabAt(1)!!.select()
+            vp.currentItem = 1
+            tl.getTabAt(1)!!.select()
         }
-        return mView!!
+        return mView
     }
 
-    private fun initData(holder: ViewHolder) {
+    override fun onDestroyView() {
+        unBinder.unbind()
+        super.onDestroyView()
+    }
+
+    private fun initData() {
         //预加载
-        holder.vp.offscreenPageLimit = fragmentList.size
-        holder.vp.adapter = object : FragmentStatePagerAdapter(childFragmentManager) {
+        vp.offscreenPageLimit = fragmentList.size
+        vp.adapter = object : FragmentStatePagerAdapter(childFragmentManager) {
 
             override fun getCount(): Int {
                 return fragmentList.size
@@ -118,7 +114,7 @@ class ClassScheduleFragment : Fragment() {
 
             }
         }
-        holder.tl.setupWithViewPager(holder.vp)
+        tl.setupWithViewPager(vp)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,11 +133,10 @@ class ClassScheduleFragment : Fragment() {
     fun onMessageEvent(eventEntity: EventEntity) {
         when (eventEntity.id) {
             ConstantPool.Int.APP_COLOR_CHANGE -> {
-                ThemeChangeUtil.setTabLayoutColor(requireContext(), (mView!!.tag as ViewHolder).tl)
+                ThemeChangeUtil.setTabLayoutColor(requireContext(), tl)
             }
             ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT -> {
-                val holder = mView!!.tag as ViewHolder
-                val adapter = holder.vp.adapter
+                val adapter = vp.adapter
                 if (adapter == null) {
                     Toast.makeText(requireContext(), "未找到适配器，尝试重新打开APP解决此问题", Toast.LENGTH_LONG).show()
                     return
