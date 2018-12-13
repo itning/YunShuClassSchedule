@@ -198,6 +198,11 @@ class TodayFragment : Fragment() {
         return this.mView
     }
 
+    override fun onDestroyView() {
+        unBinder.unbind()
+        super.onDestroyView()
+    }
+
     /**
      * 滑动监听
      *
