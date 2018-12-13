@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.Unbinder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -47,7 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class TodayFragment : Fragment() {
 
-    private var mView: View? = null
+    private lateinit var mView: View
     /**
      * 课程集合
      */
@@ -90,28 +91,24 @@ class TodayFragment : Fragment() {
 
     private val courseInfoConnection = CourseInfoConnection()
 
-    internal class ViewHolder(view: View) {
-        @BindView(R.id.rv)
-        lateinit var rv: RecyclerView
-        @BindView(R.id.ll)
-        lateinit var ll: LinearLayout
-        @BindView(R.id.rl)
-        lateinit var rl: RelativeLayout
-        @BindView(R.id.nsv)
-        lateinit var nsv: NestedScrollView
-        @BindView(R.id.tv_remind_time)
-        lateinit var tvRemindTime: TextView
-        @BindView(R.id.tv_remind_remind)
-        lateinit var tvRemindRemind: TextView
-        @BindView(R.id.tv_remind_name)
-        lateinit var tvRemindName: TextView
-        @BindView(R.id.tv_remind_location)
-        lateinit var tvRemindLocation: TextView
+    private lateinit var unBinder: Unbinder
 
-        init {
-            ButterKnife.bind(this, view)
-        }
-    }
+    @BindView(R.id.rv)
+    lateinit var rv: RecyclerView
+    @BindView(R.id.ll)
+    lateinit var ll: LinearLayout
+    @BindView(R.id.rl)
+    lateinit var rl: RelativeLayout
+    @BindView(R.id.nsv)
+    lateinit var nsv: NestedScrollView
+    @BindView(R.id.tv_remind_time)
+    lateinit var tvRemindTime: TextView
+    @BindView(R.id.tv_remind_remind)
+    lateinit var tvRemindRemind: TextView
+    @BindView(R.id.tv_remind_name)
+    lateinit var tvRemindName: TextView
+    @BindView(R.id.tv_remind_location)
+    lateinit var tvRemindLocation: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "on Create")
@@ -132,13 +129,12 @@ class TodayFragment : Fragment() {
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 Log.d(TAG, "app color change , now afresh mView")
-                val viewHolder = mView!!.tag as ViewHolder
-                viewHolder.nsv.scrollTo(0, 0)
-                ThemeChangeUtil.setBackgroundResources(requireContext(), viewHolder.ll)
-                viewHolder.rv.adapter!!.notifyDataSetChanged()
+                nsv.scrollTo(0, 0)
+                ThemeChangeUtil.setBackgroundResources(requireContext(), ll)
+                rv.adapter!!.notifyDataSetChanged()
             }
             ConstantPool.Int.COURSE_INFO_ARRAY_UPDATE -> {
-                setPanelText(mView!!.tag as ViewHolder)
+                setPanelText()
             }
             else -> {
             }
@@ -155,8 +151,7 @@ class TodayFragment : Fragment() {
     override fun onStart() {
         stop = false
         if (needMoved) {
-            val holder = mView!!.tag as ViewHolder
-            Handler().postDelayed({ holder.rv.adapter!!.notifyItemMoved(0, finalIndex) }, 1000)
+            Handler().postDelayed({ rv.adapter!!.notifyItemMoved(0, finalIndex) }, 1000)
             needMoved = false
         }
         super.onStart()
@@ -168,66 +163,59 @@ class TodayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val holder: ViewHolder
-        if (mView != null) {
-            holder = mView!!.tag as ViewHolder
-        } else {
-            mView = inflater.inflate(R.layout.fragment_today, container, false)
-            holder = ViewHolder(mView!!)
-            mView!!.tag = holder
-        }
+        mView = inflater.inflate(R.layout.fragment_today, container, false)
+        unBinder = ButterKnife.bind(this, mView)
         //初始化课程数据
         initClassScheduleListData()
         mTop = AtomicBoolean(true)
         whichClassNow = DateUtils.whichClassNow
 
         //LinearLayout背景颜色
-        ThemeChangeUtil.setBackgroundResources(requireContext(), holder.ll)
+        ThemeChangeUtil.setBackgroundResources(requireContext(), ll)
 
         //RecyclerView初始化
-        holder.rv.layoutManager = LinearLayoutManager(context)
+        rv.layoutManager = LinearLayoutManager(context)
         todayRecyclerViewAdapter = TodayRecyclerViewAdapter(classScheduleList, requireContext())
-        holder.rv.adapter = todayRecyclerViewAdapter
+        rv.adapter = todayRecyclerViewAdapter
 
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小
-        holder.rv.post {
-            mView!!.post {
-                val i = if (classScheduleList!!.size == 0) holder.rv.height else holder.rv.height / classScheduleList!!.size
-                val lp: ViewGroup.LayoutParams = holder.ll.layoutParams
+        rv.post {
+            mView.post {
+                val i = if (classScheduleList!!.size == 0) rv.height else rv.height / classScheduleList!!.size
+                val lp: ViewGroup.LayoutParams = ll.layoutParams
                 if (height == 0) {
-                    height = mView!!.height - i
+                    height = mView.height - i
                 }
                 lp.height = height
-                holder.ll.layoutParams = lp
+                ll.layoutParams = lp
             }
         }
 
         //设置滑动索引
         setFinalIndex()
         //NestedScrollView滑动监听
-        nestedScrollViewOnScrollChangeListener(holder)
+        nestedScrollViewOnScrollChangeListener()
         return this.mView
     }
 
     /**
      * 滑动监听
      *
-     * @param holder [ViewHolder]
      */
-    private fun nestedScrollViewOnScrollChangeListener(holder: ViewHolder) {
-        val adapter = holder.rv.adapter
-        val pp = holder.rl.layoutParams as LinearLayout.LayoutParams
-        holder.nsv.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
+    private fun nestedScrollViewOnScrollChangeListener() {
+        val adapter = rv.adapter
+        val pp = rl.layoutParams as LinearLayout.LayoutParams
+        nsv.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
             //设置随滑动改变位置
             pp.topMargin = scrollY
-            holder.rl.layoutParams = pp
+            rl.layoutParams = pp
             if (whichClassNow == -1 || !ClassScheduleUtils.haveClassAfterTime(classScheduleList!!)) {
                 return@OnScrollChangeListener
             }
             if (scrollY <= SLIDE_UP_THRESHOLD && !mTop!!.get()) {
                 mTop!!.set(true)
                 adapter!!.notifyItemMoved(finalIndex, 0)
-            } else if (mTop!!.get() && scrollY == holder.rv.height - holder.rv.height / classScheduleList!!.size) {
+            } else if (mTop!!.get() && scrollY == rv.height - rv.height / classScheduleList!!.size) {
                 mTop!!.set(false)
                 adapter!!.notifyItemMoved(0, finalIndex)
             }
@@ -250,15 +238,14 @@ class TodayFragment : Fragment() {
     /**
      * 设置面板文字
      *
-     * @param holder [ViewHolder]
      */
-    private fun setPanelText(holder: ViewHolder) {
+    private fun setPanelText() {
         if (courseInfoBinder != null) {
             val sparseArray = courseInfoBinder!!.nowCourseInfo
-            holder.tvRemindRemind.text = sparseArray.get(1)
-            holder.tvRemindName.text = sparseArray.get(2)
-            holder.tvRemindLocation.text = sparseArray.get(3)
-            holder.tvRemindTime.text = sparseArray.get(4)
+            tvRemindRemind.text = sparseArray.get(1)
+            tvRemindName.text = sparseArray.get(2)
+            tvRemindLocation.text = sparseArray.get(3)
+            tvRemindTime.text = sparseArray.get(4)
         }
     }
 
@@ -266,7 +253,7 @@ class TodayFragment : Fragment() {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             Log.d(TAG, "onServiceConnected: $service")
             courseInfoBinder = service as CourseInfoService.CourseInfoBinder
-            setPanelText(mView!!.tag as ViewHolder)
+            setPanelText()
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -325,8 +312,7 @@ class TodayFragment : Fragment() {
             Log.d(TAG, "time changed ,need update class schedule")
             lastClass = DateUtils.whichClassNow
             classScheduleList = ClassScheduleUtils.orderListBySection(classScheduleList!!)
-            val holder = mView!!.tag as ViewHolder
-            val adapter = holder.rv.adapter
+            val adapter = rv.adapter
             adapter!!.notifyDataSetChanged()
             setFinalIndex()
             if (!mTop!!.get() && whichClassNow != -1) {
