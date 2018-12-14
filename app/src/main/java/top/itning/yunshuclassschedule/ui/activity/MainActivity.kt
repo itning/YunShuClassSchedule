@@ -368,7 +368,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 .setView(view)
                 .setTitle("更改字体大小")
                 .setPositiveButton("确定", null)
-                .setOnDismissListener { _ -> EventBus.getDefault().post(EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA)) }
+                .setOnDismissListener { EventBus.getDefault().post(EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA)) }
                 .show()
     }
 
