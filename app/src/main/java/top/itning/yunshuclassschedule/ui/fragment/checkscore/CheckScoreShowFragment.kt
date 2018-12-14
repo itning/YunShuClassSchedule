@@ -26,8 +26,7 @@ import top.itning.yunshuclassschedule.ui.adapter.ScoreRecyclerViewAdapter
 class CheckScoreShowFragment : Fragment() {
     @BindView(R.id.rv)
     lateinit var rv: RecyclerView
-    private var unbinder: Unbinder? = null
-    private var scoreList: List<Score>? = null
+    private lateinit var unBinder: Unbinder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +43,8 @@ class CheckScoreShowFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_check_score_show, container, false)
-        unbinder = ButterKnife.bind(this, view)
-        val bundle = arguments
-        if (bundle != null) {
-            scoreList = bundle.getParcelableArrayList("scoreList")
-        }
-        if (scoreList != null) {
+        unBinder = ButterKnife.bind(this, view)
+        arguments?.getParcelableArrayList<Score>("scoreList")?.let {
             //RecyclerView初始化
             val layout = LinearLayoutManager(requireContext())
             //列表再底部开始展示，反转后由上面开始展示
@@ -57,14 +52,16 @@ class CheckScoreShowFragment : Fragment() {
             //列表翻转
             layout.reverseLayout = true
             rv.layoutManager = layout
-            rv.adapter = ScoreRecyclerViewAdapter(scoreList!!)
+            rv.adapter = ScoreRecyclerViewAdapter(it)
+            return view
+        } ?: kotlin.run {
+            return view
         }
-        return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        unbinder!!.unbind()
+        unBinder.unbind()
     }
 
     companion object {

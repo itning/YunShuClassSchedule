@@ -20,8 +20,7 @@ import top.itning.yunshuclassschedule.util.GlideApp
  */
 class App : Application() {
 
-    var daoSession: DaoSession? = null
-        private set
+    lateinit var daoSession: DaoSession
 
     override fun onCreate() {
         // 程序创建的时候执行

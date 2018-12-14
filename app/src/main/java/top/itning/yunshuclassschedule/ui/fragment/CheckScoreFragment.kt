@@ -25,7 +25,7 @@ import java.util.*
  * @author itning
  */
 class CheckScoreFragment : Fragment(), EventReceiver {
-    private var mFragmentManager: FragmentManager? = null
+    private lateinit var mFragmentManager: FragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class CheckScoreFragment : Fragment(), EventReceiver {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_check_score, container, false)
         mFragmentManager = childFragmentManager
-        mFragmentManager!!.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .replace(R.id.frame_container, CheckScoreLoginFragment())
                 .commit()
         return view
@@ -51,24 +51,19 @@ class CheckScoreFragment : Fragment(), EventReceiver {
     fun onMessageEvent(eventEntity: EventEntity) {
         when (eventEntity.id) {
             ConstantPool.Int.SCORE_LOGIN_SUCCESS -> {
-                if (mFragmentManager == null) {
-                    mFragmentManager = childFragmentManager
-                }
                 val checkScoreShowFragment = CheckScoreShowFragment()
                 val bundle = Bundle()
+
                 val scoreList = eventEntity.data as ArrayList<Score>
                 bundle.putParcelableArrayList("scoreList", scoreList)
                 checkScoreShowFragment.arguments = bundle
-                mFragmentManager!!.beginTransaction()
+                mFragmentManager.beginTransaction()
                         .replace(R.id.frame_container, checkScoreShowFragment)
                         .addToBackStack("checkScoreShowFragment")
                         .commit()
             }
             ConstantPool.Int.RETURN_LOGIN_FRAGMENT -> {
-                if (mFragmentManager == null) {
-                    mFragmentManager = childFragmentManager
-                }
-                mFragmentManager!!.beginTransaction()
+                mFragmentManager.beginTransaction()
                         .replace(R.id.frame_container, CheckScoreLoginFragment())
                         .commit()
             }
@@ -78,9 +73,9 @@ class CheckScoreFragment : Fragment(), EventReceiver {
     }
 
     override fun eventTrigger(): Boolean {
-        val backStackEntryCount = mFragmentManager!!.backStackEntryCount
+        val backStackEntryCount = mFragmentManager.backStackEntryCount
         if (backStackEntryCount == 1) {
-            mFragmentManager!!.popBackStackImmediate()
+            mFragmentManager.popBackStackImmediate()
             return true
         }
         return false

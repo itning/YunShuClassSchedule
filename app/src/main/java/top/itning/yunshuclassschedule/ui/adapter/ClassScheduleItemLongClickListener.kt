@@ -29,7 +29,7 @@ import java.util.*
  */
 class ClassScheduleItemLongClickListener
 constructor(@param:NonNull private val activity: Activity, private val classScheduleList: List<ClassSchedule>?, @param:NonNull private val copyList: MutableList<String>) : View.OnLongClickListener {
-    private val classScheduleDao: ClassScheduleDao = (activity.application as App).daoSession!!.classScheduleDao
+    private val classScheduleDao: ClassScheduleDao = (activity.application as App).daoSession.classScheduleDao
     @SuppressLint("InflateParams")
     private val inflate: View = LayoutInflater.from(activity).inflate(R.layout.dialog_class_schedule, null)
     private var selectClassSchedule: ClassSchedule? = null
@@ -56,7 +56,7 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         setText(tvteacher, tvlocation, tvname, classSplit)
         alertDialog.setTitle(StringBuilder(7).append("星期").append(classSplit[1]).append("第").append(classSplit[0]).append("节课"))
         alertDialog.show()
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { _ ->
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             if (isInputError(tvteacher, tvlocation, tvname, tlname, tllocation, tlteacher)) {
                 return@setOnClickListener
             }
@@ -154,14 +154,14 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
 
     private fun initBtnAction(tvteacher: TextInputEditText, tvlocation: TextInputEditText, tvname: TextInputEditText) {
         updateBtnBackgroundTintList()
-        copyBtn.setOnClickListener { _ ->
+        copyBtn.setOnClickListener {
             copyList.clear()
             copyList.add(tvname.text.toString().trim { it <= ' ' })
             copyList.add(tvlocation.text.toString().trim { it <= ' ' })
             copyList.add(tvteacher.text.toString().trim { it <= ' ' })
             Toast.makeText(activity, "已复制", Toast.LENGTH_SHORT).show()
         }
-        pasteBtn.setOnClickListener { _ ->
+        pasteBtn.setOnClickListener {
             if (copyList.size == COPY_SIZE) {
                 tvname.setText(copyList[0])
                 tvlocation.setText(copyList[1])

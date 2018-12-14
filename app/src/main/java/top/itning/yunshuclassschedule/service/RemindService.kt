@@ -42,11 +42,11 @@ import java.util.*
  * @author itning
  */
 class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
-    private var classScheduleList: MutableList<ClassSchedule>? = null
-    private var sharedPreferences: SharedPreferences? = null
+    private lateinit var classScheduleList: MutableList<ClassSchedule>
+    private lateinit var sharedPreferences: SharedPreferences
     private val calendar = Calendar.getInstance()
-    private var alarmManager: AlarmManager? = null
-    private var powerManager: PowerManager? = null
+    private lateinit var alarmManager: AlarmManager
+    private lateinit var powerManager: PowerManager
     @Volatile
     private var classReminderDownStatus: Boolean = false
     @Volatile
@@ -57,10 +57,10 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     private var phoneMuteBeforeTime: Int = 0
     private var classReminderUpTime: Int = 0
     private var classReminderDownTime: Int = 0
-    private var upTimeList: MutableList<Intent>? = null
-    private var downTimeList: MutableList<Intent>? = null
-    private var pendingIntentList: MutableList<PendingIntent>? = null
-    private var timeList: MutableList<Long>? = null
+    private val upTimeList: MutableList<Intent> = mutableListOf()
+    private val downTimeList: MutableList<Intent> = mutableListOf()
+    private val pendingIntentList: MutableList<PendingIntent> = mutableListOf()
+    private val timeList: MutableList<Long> = mutableListOf()
 
     /**
      * 判断是否是新的一天
@@ -86,7 +86,7 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
         EventBus.getDefault().register(this)
         startForegroundServer()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         initData()
@@ -125,7 +125,7 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onDestroy() {
         Log.d(TAG, "on Destroy")
         EventBus.getDefault().unregister(this)
-        sharedPreferences!!.unregisterOnSharedPreferenceChangeListener(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
         super.onDestroy()
     }
 
@@ -168,19 +168,19 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
      */
     private fun initData() {
         Log.d(TAG, "start init data")
-        val wakeLock = powerManager!!.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, ":initData")
+        val wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, ":initData")
         wakeLock.setReferenceCounted(false)
         wakeLock.acquire((5 * 60 * 1000).toLong())
-        classReminderUpStatus = sharedPreferences!!.getBoolean(CLASS_REMINDER_UP_STATUS, true)
-        classReminderDownStatus = sharedPreferences!!.getBoolean(CLASS_REMINDER_DOWN_STATUS, true)
-        phoneMuteStatus = sharedPreferences!!.getBoolean(PHONE_MUTE_STATUS, false)
-        phoneMuteBeforeTime = sharedPreferences!!.getString(PHONE_MUTE_BEFORE_TIME, "0")!!.toInt()
-        phoneMuteAfterTime = sharedPreferences!!.getString(PHONE_MUTE_AFTER_TIME, "0")!!.toInt()
-        classReminderUpTime = sharedPreferences!!.getString(CLASS_REMINDER_UP_TIME, "1")!!.toInt()
-        classReminderDownTime = sharedPreferences!!.getString(CLASS_REMINDER_DOWN_TIME, "1")!!.toInt()
+        classReminderUpStatus = sharedPreferences.getBoolean(CLASS_REMINDER_UP_STATUS, true)
+        classReminderDownStatus = sharedPreferences.getBoolean(CLASS_REMINDER_DOWN_STATUS, true)
+        phoneMuteStatus = sharedPreferences.getBoolean(PHONE_MUTE_STATUS, false)
+        phoneMuteBeforeTime = sharedPreferences.getString(PHONE_MUTE_BEFORE_TIME, "0")!!.toInt()
+        phoneMuteAfterTime = sharedPreferences.getString(PHONE_MUTE_AFTER_TIME, "0")!!.toInt()
+        classReminderUpTime = sharedPreferences.getString(CLASS_REMINDER_UP_TIME, "1")!!.toInt()
+        classReminderDownTime = sharedPreferences.getString(CLASS_REMINDER_DOWN_TIME, "1")!!.toInt()
         initClassScheduleList()
         obsoleteClear()
-        if (!classScheduleList!!.isEmpty()) {
+        if (!classScheduleList.isEmpty()) {
             clearAlarm()
             initTimeList()
             initPendingIntentList()
@@ -194,43 +194,41 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun clearAlarm() {
         Log.d(TAG, "start clear alarm")
         var i = 0
-        if (pendingIntentList != null) {
-            for (p in pendingIntentList!!) {
-                alarmManager!!.cancel(p)
-                i++
-            }
+        for (p in pendingIntentList) {
+            alarmManager.cancel(p)
+            i++
         }
         Log.d(TAG, "cancel $i alarm !")
     }
 
     private fun initPendingIntentList() {
         Log.d(TAG, "start init pending intent list")
-        pendingIntentList = ArrayList()
-        timeList = ArrayList()
+        pendingIntentList.clear()
+        timeList.clear()
         var requestCode = 0
-        for (upIntent in upTimeList!!) {
+        for (upIntent in upTimeList) {
             val time = upIntent.getLongExtra("time", -1)
             if (time == -1L) {
                 throw RuntimeException("time is -1")
             }
-            timeList!!.add(time)
+            timeList.add(time)
             Log.d(TAG, "time list add $time")
             val pendingIntent = PendingIntent.getBroadcast(this, requestCode, upIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            pendingIntentList!!.add(pendingIntent)
+            pendingIntentList.add(pendingIntent)
             requestCode++
         }
-        for (downIntent in downTimeList!!) {
+        for (downIntent in downTimeList) {
             val time = downIntent.getLongExtra("time", -1)
             if (time == -1L) {
                 throw RuntimeException("time is -1")
             }
-            timeList!!.add(time)
+            timeList.add(time)
             Log.d(TAG, "time list add $time")
             val pendingIntent = PendingIntent.getBroadcast(this, requestCode, downIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            pendingIntentList!!.add(pendingIntent)
+            pendingIntentList.add(pendingIntent)
             requestCode++
         }
-        Log.d(TAG, "finish init pending intent list. pendingIntentList size:" + pendingIntentList!!.size + " timeList size:" + timeList!!.size)
+        Log.d(TAG, "finish init pending intent list. pendingIntentList size:" + pendingIntentList.size + " timeList size:" + timeList.size)
     }
 
     /**
@@ -239,38 +237,35 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun initClassScheduleList() {
         Log.d(TAG, "init class schedule list data")
         val daoSession = (application as App).daoSession
-        classScheduleList = daoSession!!
+        classScheduleList = daoSession
                 .classScheduleDao
                 .queryBuilder()
                 .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                 .list()
-        Log.d(TAG, "init class schedule list size:" + classScheduleList!!.size)
+        Log.d(TAG, "init class schedule list size:" + classScheduleList.size)
     }
 
     private fun obsoleteClear() {
-        if (classScheduleList != null) {
-            Log.d(TAG, "start obsolete clear list")
-            try {
-                val timeList = DateUtils.timeList
-                val tempList = ArrayList<ClassSchedule>()
-                for (c in classScheduleList!!) {
-                    val timeArray = timeList[c.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    val endTime = DateUtils.DF.parse(timeArray[1]).time
-                    val nowTime = DateUtils.DF.parse(DateUtils.DF.format(Date())).time
-                    if (endTime >= nowTime) {
-                        tempList.add(c)
-                        Log.d(TAG, "add section " + c.section + " time:" + timeArray[1] + " endTime:" + endTime + " nowTime:" + nowTime)
-                    }
+        Log.d(TAG, "start obsolete clear list")
+        try {
+            val timeList = DateUtils.timeList
+            val tempList = ArrayList<ClassSchedule>()
+            for (c in classScheduleList) {
+                val timeArray = timeList[c.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val endTime = DateUtils.DF.parse(timeArray[1]).time
+                val nowTime = DateUtils.DF.parse(DateUtils.DF.format(Date())).time
+                if (endTime >= nowTime) {
+                    tempList.add(c)
+                    Log.d(TAG, "add section " + c.section + " time:" + timeArray[1] + " endTime:" + endTime + " nowTime:" + nowTime)
                 }
-                Log.d(TAG, "end obsolete clear list now size:" + tempList.size)
-                classScheduleList!!.clear()
-                classScheduleList!!.addAll(tempList)
-                tempList.clear()
-            } catch (e: ParseException) {
-                Log.e(TAG, " ", e)
-                CrashReport.postCatchedException(e)
             }
-
+            Log.d(TAG, "end obsolete clear list now size:" + tempList.size)
+            classScheduleList.clear()
+            classScheduleList.addAll(tempList)
+            tempList.clear()
+        } catch (e: ParseException) {
+            Log.e(TAG, " ", e)
+            CrashReport.postCatchedException(e)
         }
     }
 
@@ -280,18 +275,18 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun initTimeList() {
         Log.d(TAG, "start init time list")
         val defaultTimeList = DateUtils.timeList
-        upTimeList = mutableListOf()
-        downTimeList = mutableListOf()
-        for (classSchedule in classScheduleList!!) {
+        upTimeList.clear()
+        downTimeList.clear()
+        for (classSchedule in classScheduleList) {
             val timeArray = defaultTimeList[classSchedule.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             if (phoneMuteStatus) {
-                initIntent(upTimeList!!, downTimeList!!, classSchedule, timeArray, phoneMuteBeforeTime, phoneMuteAfterTime, "phone_mute", true, true)
+                initIntent(upTimeList, downTimeList, classSchedule, timeArray, phoneMuteBeforeTime, phoneMuteAfterTime, "phone_mute", true, true)
             }
             if (classReminderUpStatus) {
-                initIntent(upTimeList!!, downTimeList!!, classSchedule, timeArray, classReminderUpTime, 0, "class_reminder_up", true, false)
+                initIntent(upTimeList, downTimeList, classSchedule, timeArray, classReminderUpTime, 0, "class_reminder_up", true, false)
             }
             if (classReminderDownStatus) {
-                initIntent(upTimeList!!, downTimeList!!, classSchedule, timeArray, 0, classReminderDownTime, "class_reminder_down", false, true)
+                initIntent(upTimeList, downTimeList, classSchedule, timeArray, 0, classReminderDownTime, "class_reminder_down", false, true)
             }
         }
     }
@@ -346,14 +341,14 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun addToAlarm() {
         Log.d(TAG, "start add to alarm")
         var index = 0
-        for (p in pendingIntentList!!) {
+        for (p in pendingIntentList) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Log.d(TAG, "Build.VERSION.SDK_INT:" + Build.VERSION.SDK_INT)
-                alarmManager!!.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeList!![index], p)
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeList[index], p)
             } else {
-                alarmManager!!.setExact(AlarmManager.RTC_WAKEUP, timeList!![index], p)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeList[index], p)
             }
-            calendar.timeInMillis = timeList!![index]
+            calendar.timeInMillis = timeList[index]
             Log.d(TAG, "add alarm " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE))
             index++
         }
@@ -413,7 +408,6 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     companion object {
-
         private const val TAG = "RemindService"
         private const val REMIND_SERVICE_NEW_DAY = "remind_service_new_day"
         private const val CLASS_REMINDER_UP_STATUS = "class_reminder_up_status"

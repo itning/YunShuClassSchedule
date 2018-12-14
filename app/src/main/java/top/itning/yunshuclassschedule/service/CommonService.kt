@@ -27,14 +27,14 @@ import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Compa
  * @author itning
  */
 class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
-    private var timeTickReceiver: TimeTickReceiver? = null
-    private var sharedPreferences: SharedPreferences? = null
+    private lateinit var timeTickReceiver: TimeTickReceiver
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate() {
         Log.d(TAG, "on Create")
         EventBus.getDefault().register(this)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         initNotificationChannel()
         startForegroundServer()
         val filter = IntentFilter()
@@ -105,7 +105,7 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
         unregisterReceiver(timeTickReceiver)
-        sharedPreferences!!.unregisterOnSharedPreferenceChangeListener(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onBind(intent: Intent): IBinder? {

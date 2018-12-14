@@ -34,7 +34,7 @@ import java.util.*
  */
 class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
-    private var msg: String? = null
+    private lateinit var msg: String
     private var timeMap: TreeMap<String, String> = TreeMap()
 
     @BindView(R.id.rl_1_s)
@@ -234,7 +234,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     @OnClick(R.id.rl_1_s, R.id.rl_1_x, R.id.rl_2_s, R.id.rl_2_x, R.id.rl_3_s, R.id.rl_3_x, R.id.rl_4_s, R.id.rl_4_x, R.id.rl_5_s, R.id.rl_5_x)
     fun onViewClicked(view: View) {
-        val msg: String = when (view.id) {
+        this.msg = when (view.id) {
             R.id.rl_1_s -> "1-s"
             R.id.rl_1_x -> "1-x"
             R.id.rl_2_s -> "2-s"
@@ -247,7 +247,6 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
             R.id.rl_5_x -> "5-x"
             else -> ""
         }
-        this.msg = msg
         showTimePickerDialog()
     }
 
@@ -255,7 +254,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
      * 显示时间选择器
      */
     private fun showTimePickerDialog() {
-        val type = msg!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+        val type = msg.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         val time: String
         val title: String
         when (msg) {
@@ -343,7 +342,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         Log.d(TAG, "hourOfDay:$hourOfDay minute:$minute")
         if (hourOfDay != -1 && minute != -1) {
             //2-s -> 2 s
-            val typeInfo = msg!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val typeInfo = msg.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             var h = hourOfDay.toString() + ""
             var m = minute.toString() + ""
             if (hourOfDay < MIN_TIME) {

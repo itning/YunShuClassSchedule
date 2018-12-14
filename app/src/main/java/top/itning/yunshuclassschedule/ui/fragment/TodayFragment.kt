@@ -233,7 +233,7 @@ class TodayFragment : Fragment() {
     private fun initClassScheduleListData() {
         val daoSession = (requireActivity().application as App).daoSession
         classScheduleList = ClassScheduleUtils
-                .orderListBySection(daoSession!!
+                .orderListBySection(daoSession
                         .classScheduleDao
                         .queryBuilder()
                         .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))

@@ -48,7 +48,7 @@ class ThisWeekFragment : Fragment() {
         unBinder = ButterKnife.bind(this, mView)
         setViewBackground()
         val daoSession = (requireActivity().application as App).daoSession
-        val classScheduleList = daoSession!!.classScheduleDao.loadAll()
+        val classScheduleList = daoSession.classScheduleDao.loadAll()
         clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
         ClassScheduleUtils.loadingView(classScheduleList, scheduleGridlayout, clickListener, requireActivity())
         return mView
@@ -76,7 +76,7 @@ class ThisWeekFragment : Fragment() {
         when (eventEntity.id) {
             ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA -> {
                 val daoSession = (requireActivity().application as App).daoSession
-                val classScheduleList = daoSession!!.classScheduleDao.loadAll()
+                val classScheduleList = daoSession.classScheduleDao.loadAll()
                 clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
                 ClassScheduleUtils.loadingView(classScheduleList, scheduleGridlayout, clickListener, requireActivity())
             }

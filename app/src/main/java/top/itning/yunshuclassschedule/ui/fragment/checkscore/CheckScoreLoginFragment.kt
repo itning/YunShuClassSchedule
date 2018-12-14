@@ -292,7 +292,7 @@ class CheckScoreLoginFragment : Fragment() {
             val bitmap = Bitmap.createBitmap(sourceBitmap, sWidth * i, 0, sourceBitmap.width / 6, sourceBitmap.height)
             val hash1 = ImageHash.calculateFingerPrint(bitmap)
             val daoSession = (requireActivity().application as App).daoSession
-            val hash = daoSession!!.hashDao.load(hash1)
+            val hash = daoSession.hashDao.load(hash1)
             if (hash != null) {
                 stringBuilder.append(hash.name)
             }
@@ -307,7 +307,7 @@ class CheckScoreLoginFragment : Fragment() {
      */
     private fun initLibData() {
         val daoSession = (requireActivity().application as App).daoSession
-        if (daoSession!!.hashDao.count() == 0L) {
+        if (daoSession.hashDao.count() == 0L) {
             val assets = requireActivity().assets
             insert(assets)
         }
@@ -345,7 +345,7 @@ class CheckScoreLoginFragment : Fragment() {
      */
     private fun doInsert(@NonNull hash: String, @NonNull name: String) {
         val daoSession = (requireActivity().application as App).daoSession
-        daoSession!!.hashDao.insert(Hash(hash, name))
+        daoSession.hashDao.insert(Hash(hash, name))
     }
 
     /**

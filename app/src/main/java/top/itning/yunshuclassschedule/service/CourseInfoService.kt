@@ -40,8 +40,8 @@ import kotlin.Comparator
  */
 class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private var sharedPreferences: SharedPreferences? = null
-    private var nowDate: Date? = null
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var nowDate: Date
     private val courseArray = SparseArray<String>()
 
     /**
@@ -103,7 +103,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
             val classScheduleList = soredClassSchedules
             for (i in classScheduleList.indices) {
                 val times = DateUtils.timeList[classScheduleList[i].section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (DateUtils.isBelongCalendar(nowDate!!, DateUtils.DF.parse(times[0]), DateUtils.DF.parse(times[1]))) {
+                if (DateUtils.isBelongCalendar(nowDate, DateUtils.DF.parse(times[0]), DateUtils.DF.parse(times[1]))) {
                     return i + 1 != classScheduleList.size
                 }
             }
@@ -124,7 +124,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
             val classScheduleList = soredClassSchedules
             for (c in classScheduleList) {
                 val times = DateUtils.timeList[c.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (DateUtils.isBelongCalendar(nowDate!!, DateUtils.DF.parse(times[0]), DateUtils.DF.parse(times[1]))) {
+                if (DateUtils.isBelongCalendar(nowDate, DateUtils.DF.parse(times[0]), DateUtils.DF.parse(times[1]))) {
                     return true
                 }
             }
@@ -143,13 +143,13 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
             return classScheduleList
         }
 
-    private val daoSession: DaoSession?
+    private val daoSession: DaoSession
         @CheckResult
         get() = (this.application as App).daoSession
 
     private val classScheduleDao: ClassScheduleDao
         @CheckResult
-        get() = this.daoSession!!.classScheduleDao
+        get() = this.daoSession.classScheduleDao
 
     init {
         getDate()
@@ -169,7 +169,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
         Log.d(TAG, "on Create")
         EventBus.getDefault().register(this)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         getNowCourseInfoArray()
         setNotificationContentsIfOpen()
         super.onCreate()
@@ -178,7 +178,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
     override fun onDestroy() {
         Log.d(TAG, "on Destroy")
         courseArray.clear()
-        sharedPreferences!!.unregisterOnSharedPreferenceChangeListener(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
         EventBus.getDefault().unregister(this)
         super.onDestroy()
     }
@@ -277,7 +277,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
     private fun setFirstCourseInfo2Map(@NonNull courseArray: SparseArray<String>) {
         val classSchedule = soredClassSchedules[0]
         val startFirstTime = DateUtils.timeList[classSchedule.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-        val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate!!, startFirstTime)
+        val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate, startFirstTime)
         putStr2Map(courseArray, "下节课", classSchedule.name, classSchedule.location, "还有" + theRestOfTheTime + "分钟上课")
     }
 
@@ -292,9 +292,9 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
         val classScheduleList = soredClassSchedules
         for (i in classScheduleList.indices) {
             val times = DateUtils.timeList[classScheduleList[i].section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            if (DateUtils.isBelongCalendar(nowDate!!, DateUtils.DF.parse(times[0]), DateUtils.DF.parse(times[1]))) {
+            if (DateUtils.isBelongCalendar(nowDate, DateUtils.DF.parse(times[0]), DateUtils.DF.parse(times[1]))) {
                 val classSchedule = classScheduleList[i + 1]
-                val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate!!, times[1])
+                val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate, times[1])
                 putStr2Map(courseArray, "下节课", classSchedule.name, classSchedule.location, "还有" + theRestOfTheTime + "分钟下课")
                 break
             }
@@ -310,7 +310,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
         val classScheduleList = soredClassSchedules
         val classSchedule = classScheduleList[classScheduleList.size - 1]
         val endTime = DateUtils.timeList[classSchedule.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-        val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate!!, endTime)
+        val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate, endTime)
         putStr2Map(courseArray, "", "这是最后一节课", "还有" + theRestOfTheTime + "分钟下课", "")
     }
 
@@ -329,8 +329,8 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
             }
             val nextClassSchedule = classScheduleList[i + 1]
             val times2 = DateUtils.timeList[nextClassSchedule.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            if (DateUtils.isBelongCalendar(nowDate!!, DateUtils.DF.parse(times[1]), DateUtils.DF.parse(times2[0]))) {
-                val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate!!, times2[0])
+            if (DateUtils.isBelongCalendar(nowDate, DateUtils.DF.parse(times[1]), DateUtils.DF.parse(times2[0]))) {
+                val theRestOfTheTime = DateUtils.getTheRestOfTheTime(nowDate, times2[0])
                 putStr2Map(courseArray, "下节课", nextClassSchedule.name, nextClassSchedule.location, "还有" + theRestOfTheTime + "分钟上课")
                 break
             }

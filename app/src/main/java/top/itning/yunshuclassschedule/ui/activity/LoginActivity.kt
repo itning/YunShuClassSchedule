@@ -156,7 +156,7 @@ class LoginActivity : BaseActivity() {
                             Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                             return@setPositiveButton
                         }
-                        val classScheduleDao = (application as App).daoSession!!.classScheduleDao
+                        val classScheduleDao = (application as App).daoSession.classScheduleDao
                         classScheduleDao.deleteAll()
                         for (classSchedule in classScheduleList) {
                             classScheduleDao.insert(classSchedule)
