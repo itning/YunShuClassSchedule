@@ -341,12 +341,12 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun addToAlarm() {
         Log.d(TAG, "start add to alarm")
         var index = 0
-        for (p in pendingIntentList) {
+        pendingIntentList.forEach {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Log.d(TAG, "Build.VERSION.SDK_INT:" + Build.VERSION.SDK_INT)
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeList[index], p)
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeList[index], it)
             } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeList[index], p)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeList[index], it)
             }
             calendar.timeInMillis = timeList[index]
             Log.d(TAG, "add alarm " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE))

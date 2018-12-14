@@ -141,12 +141,12 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         tvteacher.text = null
         if (classScheduleList != null && !classScheduleList.isEmpty()) {
             selectClassSchedule = null
-            for (classSchedule in classScheduleList) {
-                if (classSchedule.section.toString() + "" == classSplit[0] && classSchedule.week.toString() + "" == classSplit[1]) {
-                    selectClassSchedule = classSchedule
-                    tvteacher.setText(classSchedule.teacher)
-                    tvname.setText(classSchedule.name)
-                    tvlocation.setText(classSchedule.location)
+            classScheduleList.forEach {
+                if (it.section.toString() + "" == classSplit[0] && it.week.toString() + "" == classSplit[1]) {
+                    selectClassSchedule = it
+                    tvteacher.setText(it.teacher)
+                    tvname.setText(it.name)
+                    tvlocation.setText(it.location)
                 }
             }
         }

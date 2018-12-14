@@ -257,9 +257,7 @@ class ShareActivity : BaseActivity() {
                         }
                         val classScheduleDao = (application as App).daoSession.classScheduleDao
                         classScheduleDao.deleteAll()
-                        for (classSchedule in classScheduleList) {
-                            classScheduleDao.insert(classSchedule)
-                        }
+                        classScheduleList.forEach { classScheduleDao.insert(it) }
                         EventBus.getDefault().post(EventEntity(ConstantPool.Int.TIME_TICK_CHANGE, ""))
                         if (classScheduleList.size.toLong() == classScheduleDao.count()) {
                             Toast.makeText(this, "导入成功", Toast.LENGTH_LONG).show()

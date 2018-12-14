@@ -261,8 +261,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
         if (requestCode == REQUEST_CODE) {
             var granted = true
-            for (i in grantResults) {
-                if (i != PackageManager.PERMISSION_GRANTED) {
+            grantResults.forEach {
+                if (it != PackageManager.PERMISSION_GRANTED) {
                     granted = false
                 }
             }
