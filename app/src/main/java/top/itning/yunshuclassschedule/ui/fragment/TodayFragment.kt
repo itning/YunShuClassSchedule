@@ -184,7 +184,11 @@ class TodayFragment : Fragment() {
                 val i = if (classScheduleList.size == 0) rv.height else rv.height / classScheduleList.size
                 val lp: ViewGroup.LayoutParams = ll.layoutParams
                 if (height == 0) {
-                    height = mView.height - i
+                    height = if (classScheduleList.isEmpty()) {
+                        0
+                    } else {
+                        mView.height - i
+                    }
                 }
                 lp.height = height
                 ll.layoutParams = lp
