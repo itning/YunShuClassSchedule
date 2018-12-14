@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.entity.Score
 import top.itning.yunshuclassschedule.ui.adapter.ScoreRecyclerViewAdapter
@@ -30,14 +29,12 @@ class CheckScoreShowFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(this)
         val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireActivity().window.decorView.windowToken, 0)
     }
 
     override fun onDestroy() {
         Log.d(TAG, "on Destroy")
-        EventBus.getDefault().unregister(this)
         super.onDestroy()
     }
 
