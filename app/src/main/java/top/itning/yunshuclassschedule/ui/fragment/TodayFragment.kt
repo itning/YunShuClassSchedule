@@ -136,6 +136,10 @@ class TodayFragment : Fragment() {
             ConstantPool.Int.COURSE_INFO_ARRAY_UPDATE -> {
                 setPanelText()
             }
+            ConstantPool.Int.REFRESH_CLASS_SCHEDULE_FRAGMENT -> {
+                height = 0
+                Log.d(TAG, "Reset height: $height")
+            }
             else -> {
             }
         }
