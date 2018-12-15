@@ -185,13 +185,15 @@ class TodayFragment : Fragment() {
                 val lp: ViewGroup.LayoutParams = ll.layoutParams
                 if (height == 0) {
                     //如果今天没有课那么不进行赋值,防止修改后造成BUG
-                    height = if (classScheduleList.isEmpty()) {
-                        0
+                    if (classScheduleList.isEmpty()) {
+                        lp.height = mView.height - i
                     } else {
-                        mView.height - i
+                        height = mView.height - i
+                        lp.height = height
                     }
+                } else {
+                    lp.height = height
                 }
-                lp.height = height
                 ll.layoutParams = lp
             }
         }
