@@ -12,11 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
-import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.fragment_class_schedule.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -35,10 +31,6 @@ import java.util.*
 class ClassScheduleFragment : Fragment() {
 
     /**
-     * Bind View
-     */
-    private lateinit var mView: View
-    /**
      * 标题集合
      */
     private val titleList: MutableList<String>
@@ -46,13 +38,6 @@ class ClassScheduleFragment : Fragment() {
      * 片段集合
      */
     private val fragmentList: MutableList<Fragment>
-
-    private lateinit var unBinder: Unbinder
-
-    @BindView(R.id.tl)
-    lateinit var tl: TabLayout
-    @BindView(R.id.vp)
-    lateinit var vp: ViewPager
 
     init {
         titleList = ArrayList()
@@ -65,21 +50,17 @@ class ClassScheduleFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "on Create View")
-        mView = inflater.inflate(R.layout.fragment_class_schedule, container, false)
-        unBinder = ButterKnife.bind(this, mView)
+        return inflater.inflate(R.layout.fragment_class_schedule, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         ThemeChangeUtil.setTabLayoutColor(requireContext(), tl)
         initData()
         //设置默认展示页面
         if (TODAY != PreferenceManager.getDefaultSharedPreferences(requireContext()).getString(DEFAULT_SHOW_MAIN_FRAGMENT, TODAY)) {
             vp.currentItem = 1
-            tl.getTabAt(1)!!.select()
+            tl.getTabAt(1)?.select()
         }
-        return mView
-    }
-
-    override fun onDestroyView() {
-        unBinder.unbind()
-        super.onDestroyView()
     }
 
     private fun initData() {

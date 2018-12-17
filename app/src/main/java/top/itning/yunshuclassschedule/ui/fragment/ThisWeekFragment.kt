@@ -9,13 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.gridlayout.widget.GridLayout
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
+import kotlinx.android.synthetic.main.fragment_this_week.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -35,30 +32,22 @@ import top.itning.yunshuclassschedule.util.GlideApp
  * @author itning
  */
 class ThisWeekFragment : Fragment() {
-
     private lateinit var mView: View
     private lateinit var clickListener: ClassScheduleItemLongClickListener
-    private lateinit var unBinder: Unbinder
-    @BindView(R.id.schedule_gridlayout)
-    lateinit var scheduleGridlayout: GridLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "on Create View")
         mView = inflater.inflate(R.layout.fragment_this_week, container, false)
-        unBinder = ButterKnife.bind(this, mView)
+        return mView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setViewBackground()
         val daoSession = (requireActivity().application as App).daoSession
         val classScheduleList = daoSession.classScheduleDao.loadAll()
         clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
-        ClassScheduleUtils.loadingView(classScheduleList, scheduleGridlayout, clickListener, requireActivity())
-        return mView
+        ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
     }
-
-    override fun onDestroyView() {
-        unBinder.unbind()
-        super.onDestroyView()
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +67,7 @@ class ThisWeekFragment : Fragment() {
                 val daoSession = (requireActivity().application as App).daoSession
                 val classScheduleList = daoSession.classScheduleDao.loadAll()
                 clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
-                ClassScheduleUtils.loadingView(classScheduleList, scheduleGridlayout, clickListener, requireActivity())
+                ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 clickListener.updateBtnBackgroundTintList()

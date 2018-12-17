@@ -14,15 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
+import kotlinx.android.synthetic.main.fragment_today.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -91,25 +87,6 @@ class TodayFragment : Fragment() {
 
     private val courseInfoConnection = CourseInfoConnection()
 
-    private lateinit var unBinder: Unbinder
-
-    @BindView(R.id.rv)
-    lateinit var rv: RecyclerView
-    @BindView(R.id.ll)
-    lateinit var ll: LinearLayout
-    @BindView(R.id.rl)
-    lateinit var rl: RelativeLayout
-    @BindView(R.id.nsv)
-    lateinit var nsv: NestedScrollView
-    @BindView(R.id.tv_remind_time)
-    lateinit var tvRemindTime: TextView
-    @BindView(R.id.tv_remind_remind)
-    lateinit var tvRemindRemind: TextView
-    @BindView(R.id.tv_remind_name)
-    lateinit var tvRemindName: TextView
-    @BindView(R.id.tv_remind_location)
-    lateinit var tvRemindLocation: TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "on Create")
         requireActivity().bindService(Intent(requireActivity(), CourseInfoService::class.java), courseInfoConnection, Context.BIND_AUTO_CREATE)
@@ -168,25 +145,27 @@ class TodayFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_today, container, false)
-        unBinder = ButterKnife.bind(this, mView)
         //初始化课程数据
         initClassScheduleListData()
         mTop = AtomicBoolean(true)
         whichClassNow = DateUtils.whichClassNow
+        return mView
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //LinearLayout背景颜色
         ThemeChangeUtil.setBackgroundResources(requireContext(), ll)
-
         //RecyclerView初始化
         rv.layoutManager = LinearLayoutManager(context)
         todayRecyclerViewAdapter = TodayRecyclerViewAdapter(classScheduleList, requireContext())
         rv.adapter = todayRecyclerViewAdapter
-
         //设置LinearLayout的高度为总大小-RecyclerView的子项大小
         rv.post {
             mView.post {
-                val i = if (classScheduleList.size == 0) rv.height else rv.height / classScheduleList.size
-                val lp: ViewGroup.LayoutParams = ll.layoutParams
+                val mRv = view.findViewById<RecyclerView>(R.id.rv)
+                val mLl = view.findViewById<LinearLayout>(R.id.ll)
+                val i = if (classScheduleList.size == 0) mRv.height else mRv.height / classScheduleList.size
+                val lp: ViewGroup.LayoutParams = mLl.layoutParams
                 if (height == 0) {
                     //如果今天没有课那么不进行赋值,防止修改后造成BUG
                     if (classScheduleList.isEmpty()) {
@@ -198,7 +177,7 @@ class TodayFragment : Fragment() {
                 } else {
                     lp.height = height
                 }
-                ll.layoutParams = lp
+                mLl.layoutParams = lp
             }
         }
 
@@ -206,12 +185,6 @@ class TodayFragment : Fragment() {
         setFinalIndex()
         //NestedScrollView滑动监听
         nestedScrollViewOnScrollChangeListener()
-        return this.mView
-    }
-
-    override fun onDestroyView() {
-        unBinder.unbind()
-        super.onDestroyView()
     }
 
     /**
@@ -258,10 +231,10 @@ class TodayFragment : Fragment() {
     private fun setPanelText() {
         if (courseInfoBinder != null) {
             val sparseArray = courseInfoBinder!!.nowCourseInfo
-            tvRemindRemind.text = sparseArray.get(1)
-            tvRemindName.text = sparseArray.get(2)
-            tvRemindLocation.text = sparseArray.get(3)
-            tvRemindTime.text = sparseArray.get(4)
+            tv_remind_remind.text = sparseArray.get(1)
+            tv_remind_name.text = sparseArray.get(2)
+            tv_remind_location.text = sparseArray.get(3)
+            tv_remind_time.text = sparseArray.get(4)
         }
     }
 

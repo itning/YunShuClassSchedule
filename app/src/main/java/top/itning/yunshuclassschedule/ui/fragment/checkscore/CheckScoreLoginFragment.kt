@@ -21,16 +21,9 @@ import android.widget.Toast
 import androidx.annotation.CheckResult
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import butterknife.Unbinder
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.fragment_check_score_login.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -54,20 +47,6 @@ import java.util.*
  * @author itning
  */
 class CheckScoreLoginFragment : Fragment() {
-
-    @BindView(R.id.et_name)
-    lateinit var etName: TextInputEditText
-    @BindView(R.id.tl_name)
-    lateinit var tlName: TextInputLayout
-    @BindView(R.id.et_id)
-    lateinit var etId: TextInputEditText
-    @BindView(R.id.tl_id)
-    lateinit var tlId: TextInputLayout
-    @BindView(R.id.btn_login)
-    lateinit var btnLogin: AppCompatButton
-    @BindView(R.id.checkBox)
-    lateinit var checkBox: AppCompatCheckBox
-    private var unbinder: Unbinder? = null
     private var cookies: MutableMap<String, String>? = null
     private var name: String? = null
     private var id: String? = null
@@ -182,7 +161,7 @@ class CheckScoreLoginFragment : Fragment() {
                 progressDialog!!.setMessage(eventEntity.msg)
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
-                btnLogin.backgroundTintList = ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(requireContext()))
+                btn_login.backgroundTintList = ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(requireContext()))
             }
             else -> {
             }
@@ -190,13 +169,15 @@ class CheckScoreLoginFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_check_score_login, container, false)
-        unbinder = ButterKnife.bind(this, view)
-        btnLogin.backgroundTintList = ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(requireContext()))
-        etId.setText(App.sharedPreferences.getString(REMEMBER_ID, ""))
-        etName.setText(App.sharedPreferences.getString(REMEMBER_NAME, ""))
+        return inflater.inflate(R.layout.fragment_check_score_login, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        btn_login.backgroundTintList = ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(requireContext()))
+        btn_login.setOnClickListener { onLoginBtnClicked() }
+        et_id.setText(App.sharedPreferences.getString(REMEMBER_ID, ""))
+        et_name.setText(App.sharedPreferences.getString(REMEMBER_NAME, ""))
         checkBox.isChecked = App.sharedPreferences.getBoolean(REMEMBER_STATUS, false)
-        return view
     }
 
     /**
@@ -478,28 +459,22 @@ class CheckScoreLoginFragment : Fragment() {
         EventBus.getDefault().post(EventEntity(ConstantPool.Int.SCORE_LOGIN_SUCCESS, "", scoreList))
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        unbinder!!.unbind()
-    }
-
-    @OnClick(R.id.btn_login)
     fun onLoginBtnClicked() {
         if (!netStatusOk()) {
             return
         }
-        tlId.error = null
-        tlName.error = null
-        if ("" == etName.text.toString()) {
-            tlName.error = "请输入姓名"
+        tl_id.error = null
+        tl_name.error = null
+        if ("" == et_name.text.toString()) {
+            tl_name.error = "请输入姓名"
             return
         }
-        if ("" == etId.text.toString()) {
-            tlId.error = "请输入学号"
+        if ("" == et_id.text.toString()) {
+            tl_id.error = "请输入学号"
             return
         }
-        this.name = etName.text.toString()
-        this.id = etId.text.toString()
+        this.name = et_name.text.toString()
+        this.id = et_id.text.toString()
         val remember = checkBox.isChecked
         App.sharedPreferences.edit().putBoolean(REMEMBER_STATUS, remember).apply()
         if (remember) {
