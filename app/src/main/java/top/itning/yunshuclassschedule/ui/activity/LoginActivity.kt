@@ -13,6 +13,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
+import com.tencent.bugly.crashreport.CrashReport
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -112,16 +113,16 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun doImportFile(data: Intent) {
-        val uri = data.data ?: kotlin.run {
-            Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
-            return
-        }
-        Log.d(TAG, "File Uri: " + uri.toString())
-        val openInputStream = contentResolver.openInputStream(uri) ?: kotlin.run {
-            Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
-            return
-        }
         try {
+            val uri = data.data ?: kotlin.run {
+                Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
+                return
+            }
+            Log.d(TAG, "File Uri: " + uri.toString())
+            val openInputStream = contentResolver.openInputStream(uri) ?: kotlin.run {
+                Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
+                return
+            }
             val inputAsString = openInputStream.bufferedReader().use { it.readText() }
             val dataEntity = Gson().fromJson(inputAsString, DataEntity::class.java)
             val classScheduleList = dataEntity.classScheduleList
@@ -171,6 +172,7 @@ class LoginActivity : BaseActivity() {
                     .show()
         } catch (e: Exception) {
             Log.e(TAG, " ", e)
+            CrashReport.postCatchedException(e)
             Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
         }
     }
