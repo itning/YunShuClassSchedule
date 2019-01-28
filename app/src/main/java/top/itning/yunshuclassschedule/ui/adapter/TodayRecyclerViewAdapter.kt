@@ -12,8 +12,6 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.entity.ClassSchedule
 import top.itning.yunshuclassschedule.ui.view.RoundBackChange
@@ -110,30 +108,25 @@ class TodayRecyclerViewAdapter(
     }
 
     class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.view_left)
-        lateinit var viewLeft: View
-        @BindView(R.id.view_top)
-        lateinit var viewTop: View
-        @BindView(R.id.view_bottom)
-        lateinit var viewBottom: View
-        @BindView(R.id.view_center)
-        lateinit var viewCenter: View
-        @BindView(R.id.view_progress)
-        lateinit var viewProgress: View
-        @BindView(R.id.round)
-        lateinit var round: RoundBackChange
-        @BindView(R.id.fl_no)
-        lateinit var flNo: FrameLayout
-        @BindView(R.id.tv_name)
-        lateinit var tvName: TextView
-        @BindView(R.id.tv_location)
-        lateinit var tvLocation: TextView
-        @BindView(R.id.tv_time)
-        lateinit var tvTime: TextView
+        val viewLeft: View = itemView.findViewById(R.id.view_left)
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        val viewTop: View = itemView.findViewById(R.id.view_top)
+
+        val viewBottom: View = itemView.findViewById(R.id.view_bottom)
+
+        val viewCenter: View = itemView.findViewById(R.id.view_center)
+
+        val viewProgress: View = itemView.findViewById(R.id.view_progress)
+
+        val round: RoundBackChange = itemView.findViewById(R.id.round)
+
+        val flNo: FrameLayout = itemView.findViewById(R.id.fl_no)
+
+        val tvName: TextView = itemView.findViewById(R.id.tv_name)
+
+        val tvLocation: TextView = itemView.findViewById(R.id.tv_location)
+
+        val tvTime: TextView = itemView.findViewById(R.id.tv_time)
     }
 
     companion object {

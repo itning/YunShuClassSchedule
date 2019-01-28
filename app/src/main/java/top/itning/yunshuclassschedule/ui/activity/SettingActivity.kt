@@ -9,7 +9,6 @@ import android.view.MenuItem
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
-import butterknife.ButterKnife
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -36,7 +35,6 @@ class SettingActivity : BaseActivity(), PreferenceFragmentCompat.OnPreferenceSta
         setContentView(R.layout.activity_setting)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         initView()
     }

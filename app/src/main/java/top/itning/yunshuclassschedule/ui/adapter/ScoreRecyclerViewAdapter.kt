@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.entity.Score
 
@@ -36,19 +34,14 @@ class ScoreRecyclerViewAdapter(@param:NonNull private val scoreList: List<Score>
     }
 
     class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.tv_id)
-        lateinit var tvId: AppCompatTextView
-        @BindView(R.id.tv_name)
-        lateinit var tvName: AppCompatTextView
-        @BindView(R.id.tv_semester)
-        lateinit var tvSemester: AppCompatTextView
-        @BindView(R.id.tv_grade)
-        lateinit var tvGrade: AppCompatTextView
-        @BindView(R.id.tv_credit)
-        lateinit var tvCredit: AppCompatTextView
+        val tvId: AppCompatTextView = itemView.findViewById(R.id.tv_id)
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+        val tvName: AppCompatTextView = itemView.findViewById(R.id.tv_name)
+
+        val tvSemester: AppCompatTextView = itemView.findViewById(R.id.tv_semester)
+
+        val tvGrade: AppCompatTextView = itemView.findViewById(R.id.tv_grade)
+
+        val tvCredit: AppCompatTextView = itemView.findViewById(R.id.tv_credit)
     }
 }

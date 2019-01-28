@@ -5,16 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.RelativeLayout
 import androidx.annotation.CheckResult
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatTextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
+import kotlinx.android.synthetic.main.activity_custom.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -37,80 +32,23 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
     private lateinit var msg: String
     private var timeMap: TreeMap<String, String> = TreeMap()
 
-    @BindView(R.id.rl_1_s)
-    lateinit var rl1S: RelativeLayout
-    @BindView(R.id.rl_1_x)
-    lateinit var rl1X: RelativeLayout
-    @BindView(R.id.rl_2_s)
-    lateinit var rl2S: RelativeLayout
-    @BindView(R.id.rl_2_x)
-    lateinit var rl2X: RelativeLayout
-    @BindView(R.id.rl_3_s)
-    lateinit var rl3S: RelativeLayout
-    @BindView(R.id.rl_3_x)
-    lateinit var rl3X: RelativeLayout
-    @BindView(R.id.rl_4_s)
-    lateinit var rl4S: RelativeLayout
-    @BindView(R.id.rl_4_x)
-    lateinit var rl4X: RelativeLayout
-    @BindView(R.id.rl_5_s)
-    lateinit var rl5S: RelativeLayout
-    @BindView(R.id.rl_5_x)
-    lateinit var rl5X: RelativeLayout
-    @BindView(R.id.s_1)
-    lateinit var s1: AppCompatTextView
-    @BindView(R.id.x_1)
-    lateinit var x1: AppCompatTextView
-    @BindView(R.id.s_2)
-    lateinit var s2: AppCompatTextView
-    @BindView(R.id.x_2)
-    lateinit var x2: AppCompatTextView
-    @BindView(R.id.s_3)
-    lateinit var s3: AppCompatTextView
-    @BindView(R.id.x_3)
-    lateinit var x3: AppCompatTextView
-    @BindView(R.id.s_4)
-    lateinit var s4: AppCompatTextView
-    @BindView(R.id.x_4)
-    lateinit var x4: AppCompatTextView
-    @BindView(R.id.s_5)
-    lateinit var s5: AppCompatTextView
-    @BindView(R.id.x_5)
-    lateinit var x5: AppCompatTextView
-    @BindView(R.id.tv_morning)
-    lateinit var tvMorning: AppCompatTextView
-    @BindView(R.id.tv_afternoon)
-    lateinit var tvAfternoon: AppCompatTextView
-    @BindView(R.id.tv_at_night)
-    lateinit var tvAtNight: AppCompatTextView
-
-    @BindView(R.id.a1)
-    lateinit var a1: AppCompatTextView
-    @BindView(R.id.a2)
-    lateinit var a2: AppCompatTextView
-    @BindView(R.id.a3)
-    lateinit var a3: AppCompatTextView
-    @BindView(R.id.a4)
-    lateinit var a4: AppCompatTextView
-    @BindView(R.id.a5)
-    lateinit var a5: AppCompatTextView
-    @BindView(R.id.a6)
-    lateinit var a6: AppCompatTextView
-    @BindView(R.id.a7)
-    lateinit var a7: AppCompatTextView
-    @BindView(R.id.a8)
-    lateinit var a8: AppCompatTextView
-    @BindView(R.id.a9)
-    lateinit var a9: AppCompatTextView
-    @BindView(R.id.a10)
-    lateinit var a10: AppCompatTextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeChangeUtil.changeTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
+
+        rl_1_s.setOnClickListener { onViewClicked( "1-s") }
+        rl_1_x.setOnClickListener { onViewClicked( "1-x") }
+        rl_2_s.setOnClickListener { onViewClicked( "2-s") }
+        rl_2_x.setOnClickListener { onViewClicked( "2-x") }
+        rl_3_s.setOnClickListener { onViewClicked( "3-s") }
+        rl_3_x.setOnClickListener { onViewClicked( "3-x") }
+        rl_4_s.setOnClickListener { onViewClicked( "4-s") }
+        rl_4_x.setOnClickListener { onViewClicked( "4-x") }
+        rl_5_s.setOnClickListener { onViewClicked( "5-s") }
+        rl_5_x.setOnClickListener { onViewClicked( "5-x") }
+
         initData()
         initView()
     }
@@ -142,17 +80,17 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         val a3 = timeMap["3"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val a4 = timeMap["4"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val a5 = timeMap["5"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        s1.text = a1[0]
-        s2.text = a2[0]
-        s3.text = a3[0]
-        s4.text = a4[0]
-        s5.text = a5[0]
+        s_1.text = a1[0]
+        s_2.text = a2[0]
+        s_3.text = a3[0]
+        s_4.text = a4[0]
+        s_5.text = a5[0]
 
-        x1.text = a1[1]
-        x2.text = a2[1]
-        x3.text = a3[1]
-        x4.text = a4[1]
-        x5.text = a5[1]
+        x_1.text = a1[1]
+        x_2.text = a2[1]
+        x_3.text = a3[1]
+        x_4.text = a4[1]
+        x_5.text = a5[1]
     }
 
     /**
@@ -165,11 +103,11 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
             supportActionBar.title = "课时设置"
         }
         val nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this)
-        tvMorning.setTextColor(nowThemeColorAccent)
-        tvAfternoon.setTextColor(nowThemeColorAccent)
-        tvAtNight.setTextColor(nowThemeColorAccent)
+        tv_morning.setTextColor(nowThemeColorAccent)
+        tv_afternoon.setTextColor(nowThemeColorAccent)
+        tv_at_night.setTextColor(nowThemeColorAccent)
         ThemeChangeUtil.setTextViewsColorByTheme(this,
-                s1, x1, s2, x2, s3, x3, s4, x4, s5, x5,
+                s_1, x_1, s_2, x_2, s_3, x_3, s_4, x_4, s_5, x_5,
                 a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
         AlertDialog.Builder(this).setTitle("关于课节")
                 .setMessage("我们将两节小课合成为1节课,这样上午有2节课,下午有2节课,晚自习(如果有)1节课\n全天共计5节课")
@@ -232,21 +170,8 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     }
 
-    @OnClick(R.id.rl_1_s, R.id.rl_1_x, R.id.rl_2_s, R.id.rl_2_x, R.id.rl_3_s, R.id.rl_3_x, R.id.rl_4_s, R.id.rl_4_x, R.id.rl_5_s, R.id.rl_5_x)
-    fun onViewClicked(view: View) {
-        this.msg = when (view.id) {
-            R.id.rl_1_s -> "1-s"
-            R.id.rl_1_x -> "1-x"
-            R.id.rl_2_s -> "2-s"
-            R.id.rl_2_x -> "2-x"
-            R.id.rl_3_s -> "3-s"
-            R.id.rl_3_x -> "3-x"
-            R.id.rl_4_s -> "4-s"
-            R.id.rl_4_x -> "4-x"
-            R.id.rl_5_s -> "5-s"
-            R.id.rl_5_x -> "5-x"
-            else -> ""
-        }
+    fun onViewClicked(id: String) {
+        this.msg = id
         showTimePickerDialog()
     }
 

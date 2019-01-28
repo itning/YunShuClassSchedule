@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import kotlinx.android.synthetic.main.activity_money.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -24,16 +21,13 @@ import java.net.URISyntaxException
  * @author itning
  */
 class MoneyActivity : BaseActivity() {
-    @BindView(R.id.cv_z)
-    lateinit var cvZ: CardView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeChangeUtil.changeTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_money)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         initView()
+        cv_z.setOnClickListener { onQRCodeClicked() }
     }
 
     private fun initView() {
@@ -71,8 +65,7 @@ class MoneyActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    @OnClick(R.id.cv_z)
-    fun onQRCodeClicked() {
+    private fun onQRCodeClicked() {
         openPay()
     }
 

@@ -12,9 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
 import android.util.Log
-import androidx.appcompat.widget.AppCompatImageView
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.activity_splash.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -33,10 +31,6 @@ import top.itning.yunshuclassschedule.util.GlideApp
  * @author itning
  */
 class SplashActivity : BaseActivity() {
-
-    @BindView(R.id.iv_splash)
-    lateinit var ivSplash: AppCompatImageView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!isTaskRoot) {
@@ -44,7 +38,6 @@ class SplashActivity : BaseActivity() {
             return
         }
         setContentView(R.layout.activity_splash)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         initBackGroundImage()
 
@@ -73,7 +66,7 @@ class SplashActivity : BaseActivity() {
                 .load(R.drawable.splash_background)
                 .override(size.x, size.y)
                 .centerCrop()
-                .into(ivSplash)
+                .into(iv_splash)
     }
 
     /**

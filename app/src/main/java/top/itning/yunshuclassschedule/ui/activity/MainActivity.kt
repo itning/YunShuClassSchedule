@@ -24,19 +24,18 @@ import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.google.android.material.navigation.NavigationView
 import com.tencent.bugly.crashreport.CrashReport
 import com.xw.repo.BubbleSeekBar
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -64,12 +63,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private lateinit var fragmentSparseArray: SparseArray<Fragment>
     private var firstPressedTime: Long = 0
-    @BindView(R.id.toolbar)
-    lateinit var toolbar: Toolbar
-    @BindView(R.id.nav_view)
-    lateinit var navView: NavigationView
-    @BindView(R.id.drawer_layout)
-    lateinit var drawerLayout: DrawerLayout
     private lateinit var drawerSwitch: SwitchCompat
 
     /**
@@ -89,7 +82,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         ThemeChangeUtil.changeMainActivityTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         initData()
         initView()
@@ -112,11 +104,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         toolbar.title = ACTION_BAR_TITLE_FORMAT.format(Date())
         //设置导航
         setSupportActionBar(toolbar)
-        ThemeChangeUtil.initColor(this, drawerLayout)
+        ThemeChangeUtil.initColor(this, drawer_layout)
         val toggle = ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
-        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(@NonNull drawerView: View, slideOffset: Float) {
 
             }
@@ -132,13 +124,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         })
         toggle.syncState()
         //默认选中第一项
-        navView.menu.getItem(0).isChecked = true
-        drawerSwitch = navView.menu.findItem(R.id.nav_day_night).actionView as SwitchCompat
+        nav_view.menu.getItem(0).isChecked = true
+        drawerSwitch = nav_view.menu.findItem(R.id.nav_day_night).actionView as SwitchCompat
         if (ThemeChangeUtil.isChange) {
             drawerSwitch.isChecked = true
         }
         drawerSwitch.setOnCheckedChangeListener { _, _ -> ThemeChangeUtil.changeNightMode(this) }
-        navView.setNavigationItemSelectedListener(this)
+        nav_view.setNavigationItemSelectedListener(this)
         App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), Calendar.getInstance().get(Calendar.DATE)).apply()
     }
 
@@ -160,7 +152,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 Log.d(TAG, "app color change , now afresh view")
-                ThemeChangeUtil.initColor(this, drawerLayout)
+                ThemeChangeUtil.initColor(this, drawer_layout)
             }
             else -> {
             }
@@ -390,7 +382,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
 
-        drawerLayout.closeDrawer(GravityCompat.START)
+        drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 

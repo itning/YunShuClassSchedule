@@ -9,11 +9,7 @@ import android.view.MenuItem
 import androidx.annotation.CheckResult
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.cardview.widget.CardView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import kotlinx.android.synthetic.main.activity_about.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -28,18 +24,10 @@ import top.itning.yunshuclassschedule.util.ThemeChangeUtil
  * @author itning
  */
 class AboutActivity : BaseActivity() {
-    @BindView(R.id.cv_href)
-    lateinit var cvHref: CardView
-    @BindView(R.id.cv_introduction)
-    lateinit var cvIntroduction: CardView
-    @BindView(R.id.tv_version)
-    lateinit var tvVersion: AppCompatTextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeChangeUtil.changeTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         initView()
     }
@@ -52,7 +40,9 @@ class AboutActivity : BaseActivity() {
             supportActionBar.setDisplayHomeAsUpEnabled(true)
             supportActionBar.title = "关于"
         }
-        tvVersion.text = getPackageVersionName(this)
+        tv_version.text = getPackageVersionName(this)
+        cv_href.setOnClickListener { onCvHrefClicked() }
+        cv_introduction.setOnClickListener { onIntroductionClicked() }
     }
 
     /**
@@ -91,13 +81,11 @@ class AboutActivity : BaseActivity() {
 
     }
 
-    @OnClick(R.id.cv_href)
     fun onCvHrefClicked() {
         val uri = Uri.parse("https://github.com/itning/YunShuClassSchedule")
         startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
-    @OnClick(R.id.cv_introduction)
     fun onIntroductionClicked() {
         startActivity(Intent(this, MoneyActivity::class.java))
     }

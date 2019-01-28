@@ -10,9 +10,7 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.ListPreference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
+import androidx.preference.*
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 import java.util.*
@@ -39,7 +37,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         if (bundle == null) {
             defaultShowMainFragmentListPreference = findPreference(DEFAULT_SHOW_MAIN_FRAGMENT) as ListPreference
             defaultShowMainFragmentListPreference!!.summary = defaultShowMainFragmentListPreference!!.entry
-            val foregroundServiceStatus = findPreference(FOREGROUND_SERVICE_STATUS)
+            val foregroundServiceStatus: Preference = findPreference(FOREGROUND_SERVICE_STATUS)
             foregroundServiceStatus.setOnPreferenceChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     AlertDialog.Builder(requireContext()).setTitle("注意")
@@ -62,7 +60,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 "phone_mute" -> {
                     phoneMuteBeforeTime = findPreference(PHONE_MUTE_BEFORE_TIME) as ListPreference
                     phoneMuteAfterTime = findPreference(PHONE_MUTE_AFTER_TIME) as ListPreference
-                    val phoneMuteStatus = findPreference(PHONE_MUTE_STATUS)
+                    val phoneMuteStatus: SwitchPreference = findPreference(PHONE_MUTE_STATUS)
                     phoneMuteStatus.setOnPreferenceChangeListener { _, newValue ->
                         if (newValue as Boolean) {
                             val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

@@ -6,17 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.FileProvider
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.gson.Gson
 import com.tencent.bugly.crashreport.CrashReport
+import kotlinx.android.synthetic.main.activity_share.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -38,25 +34,16 @@ import java.util.*
  * @author itning
  */
 class ShareActivity : BaseActivity() {
-
-    @BindView(R.id.tv_import_title)
-    lateinit var tvImportTitle: AppCompatTextView
-    @BindView(R.id.tv_import_file)
-    lateinit var tvImportFile: AppCompatTextView
-    @BindView(R.id.tv_export_title)
-    lateinit var tvExportTitle: AppCompatTextView
-    @BindView(R.id.tv_export_file)
-    lateinit var tvExportFile: AppCompatTextView
-    @BindView(R.id.tv_export_share)
-    lateinit var tvExportShare: AppCompatTextView
-
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         ThemeChangeUtil.simpleSetTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         initView()
+
+        tv_import_file.setOnClickListener { importFile() }
+        tv_export_file.setOnClickListener { exportFile() }
+        tv_export_share.setOnClickListener { shareFile() }
     }
 
     /**
@@ -69,9 +56,9 @@ class ShareActivity : BaseActivity() {
             supportActionBar.title = "分享课程表"
         }
         val nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this)
-        tvImportTitle.setTextColor(nowThemeColorAccent)
-        tvExportTitle.setTextColor(nowThemeColorAccent)
-        ThemeChangeUtil.setTextViewsColorByTheme(this, tvImportFile, tvExportFile, tvExportShare)
+        tv_import_title.setTextColor(nowThemeColorAccent)
+        tv_export_title.setTextColor(nowThemeColorAccent)
+        ThemeChangeUtil.setTextViewsColorByTheme(this, tv_import_file, tv_export_file, tv_export_share)
     }
 
     override fun onDestroy() {
@@ -91,15 +78,6 @@ class ShareActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    @OnClick(R.id.tv_import_file, R.id.tv_export_file, R.id.tv_export_share)
-    fun onViewClicked(view: View) {
-        when (view.id) {
-            R.id.tv_import_file -> importFile()
-            R.id.tv_export_file -> exportFile()
-            R.id.tv_export_share -> shareFile()
-        }
     }
 
     /**

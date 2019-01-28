@@ -7,13 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatButton
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
 import com.tencent.bugly.crashreport.CrashReport
+import kotlinx.android.synthetic.main.activity_login.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -34,19 +31,14 @@ import java.util.*
  * @author itning
  */
 class LoginActivity : BaseActivity() {
-
-    @BindView(R.id.btn_custom)
-    lateinit var btnCustom: AppCompatButton
-    @BindView(R.id.btn_share)
-    lateinit var btnShare: AppCompatButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        ButterKnife.bind(this)
         EventBus.getDefault().register(this)
         StatusBarUtil.setTransparent(this)
         initData()
+        btn_custom.setOnClickListener { onCustomBtnClicked() }
+        btn_share.setOnClickListener { onViewClicked() }
     }
 
     /**
@@ -86,14 +78,12 @@ class LoginActivity : BaseActivity() {
     /**
      * 自定义课程
      */
-    @OnClick(R.id.btn_custom)
-    fun onCustomBtnClicked() {
+    private fun onCustomBtnClicked() {
         startActivity(Intent(this, CustomActivity::class.java))
         finish()
     }
 
-    @OnClick(R.id.btn_share)
-    fun onViewClicked() {
+    private fun onViewClicked() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "*/*"
         intent.addCategory(Intent.CATEGORY_OPENABLE)

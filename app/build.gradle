@@ -56,13 +56,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
+    implementation 'androidx.preference:preference:1.1.0-alpha02'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     /*https://github.com/google/gson*/
     implementation 'com.google.code.gson:gson:2.8.5'
-    /*https://github.com/JakeWharton/butterknife*/
-    implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
-    kapt 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
     /*https://github.com/greenrobot/EventBus*/
     implementation 'org.greenrobot:eventbus:3.1.1'
     kapt 'org.greenrobot:eventbus-annotation-processor:3.1.1'
@@ -74,7 +71,7 @@ dependencies {
     /*https://github.com/kizitonwose/colorpreference*/
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.6'
     /*https://github.com/zhihu/Matisse*/
-    implementation 'com.zhihu.android:matisse:0.5.2-beta2'
+    implementation 'com.zhihu.android:matisse:0.5.2-beta4'
     /*https://github.com/bumptech/glide*/
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
