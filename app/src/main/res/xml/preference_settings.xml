@@ -165,7 +165,7 @@
             app:iconSpaceReserved="false">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="mqqwpa://im/chat?chat_type=wpa&amp;uin=3579677768" />
+                android:data="mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DdGYRU1ThLpA88YH7vMJv-ANUl2SY31HO" />
         </Preference>
         <Preference
             android:title="检查更新"
