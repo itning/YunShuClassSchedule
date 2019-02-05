@@ -36,11 +36,6 @@
     <string name="time_5s">第5节上课</string>
     <string name="time_5x">第5节下课</string>
     <string name="login_btn_custom">开始使用</string>
-    <string name="week_course_1">1</string>
-    <string name="week_course_2">2</string>
-    <string name="week_course_3">3</string>
-    <string name="week_course_4">4</string>
-    <string name="week_course_5">5</string>
     <string name="week_1">星期一</string>
     <string name="week_2">星期二</string>
     <string name="week_3">星期三</string>

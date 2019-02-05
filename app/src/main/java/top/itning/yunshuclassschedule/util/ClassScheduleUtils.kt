@@ -62,7 +62,16 @@ object ClassScheduleUtils {
         val display = activity.windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        gridLayout.removeViews(13, gridLayout.childCount - 13)
+        gridLayout.removeViews(8, gridLayout.childCount - 8)
+        for (i in 0 until 5) {
+            val textView = TextView(activity)
+            textView.text = String.format("%d", i + 1)
+            val rowSpec = GridLayout.spec(i + 1, 1.0f)
+            val columnSpec = GridLayout.spec(0, 1.0f)
+            val params = GridLayout.LayoutParams(rowSpec, columnSpec)
+            params.setGravity(Gravity.CENTER_VERTICAL)
+            gridLayout.addView(textView, params)
+        }
         for (i in 0 until CLASS_SECTION) {
             for (j in 0 until CLASS_WEEK) {
                 gridLayout.addView(setNull(activity, i + 1, j + 1), setParams(i + 1, j + 1, size))
@@ -104,7 +113,7 @@ object ClassScheduleUtils {
         textView.setBackgroundColor(backgroundColor)
         textView.textSize = weekFont
         cardView.addView(textView)
-        cardView.tag = x.toString() + "-" + y
+        cardView.tag = "$x-$y"
         Log.d(TAG, "card view tag is " + cardView.tag)
         return cardView
     }
@@ -120,7 +129,7 @@ object ClassScheduleUtils {
     @CheckResult
     private fun setNull(@NonNull context: Context, x: Int, y: Int): View {
         val view = View(context)
-        view.tag = x.toString() + "-" + y
+        view.tag = "$x-$y"
         Log.d(TAG, "null view tag is " + view.tag)
         return view
     }
