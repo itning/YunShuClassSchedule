@@ -8,9 +8,7 @@
         android:id="@+id/schedule_gridlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:columnCount="8"
-        app:orientation="vertical"
-        app:rowCount="6">
+        app:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"

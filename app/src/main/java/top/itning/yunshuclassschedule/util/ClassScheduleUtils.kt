@@ -31,7 +31,6 @@ import java.util.*
 object ClassScheduleUtils {
     private const val TAG = "ClassScheduleUtils"
 
-    private const val CLASS_SECTION = 5
     private const val CLASS_WEEK = 7
     private var weekFont: Float = 0.toFloat()
     private val ORDER_LIST = ArrayList<ClassSchedule>()
@@ -57,28 +56,27 @@ object ClassScheduleUtils {
      * @param activity          [Activity]
      */
     fun loadingView(classScheduleList: List<ClassSchedule>?, @NonNull gridLayout: GridLayout, @NonNull clickListener: ClassScheduleItemLongClickListener, @NonNull activity: Activity) {
+        val CLASS_SECTION = 5
         initColorArray(activity)
         initFontSize()
         val display = activity.windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        gridLayout.removeViews(8, gridLayout.childCount - 8)
-        for (i in 0 until 5) {
-            val textView = TextView(activity)
-            textView.text = String.format("%d", i + 1)
-            val rowSpec = GridLayout.spec(i + 1, 1.0f)
-            val columnSpec = GridLayout.spec(0, 1.0f)
-            val params = GridLayout.LayoutParams(rowSpec, columnSpec)
-            params.setGravity(Gravity.CENTER_VERTICAL)
-            gridLayout.addView(textView, params)
-        }
+        //列
+        gridLayout.columnCount = 8
+        //行
+        gridLayout.rowCount = CLASS_SECTION + 1
         for (i in 0 until CLASS_SECTION) {
+            setFirstRow(activity, i, gridLayout)
             for (j in 0 until CLASS_WEEK) {
                 gridLayout.addView(setNull(activity, i + 1, j + 1), setParams(i + 1, j + 1, size))
             }
         }
         if (classScheduleList != null) {
             for (classSchedule in classScheduleList) {
+                if (classSchedule.section > CLASS_SECTION) {
+                    continue
+                }
                 gridLayout.removeView(gridLayout.findViewWithTag(classSchedule.section.toString() + "-" + classSchedule.week))
                 gridLayout.addView(setClass(showText(classSchedule), getColor(classSchedule.name), activity, classSchedule.section, classSchedule.week), setParams(classSchedule.section, classSchedule.week, size))
             }
@@ -90,6 +88,22 @@ object ClassScheduleUtils {
             val view = gridLayout.getChildAt(i)
             view.setOnLongClickListener(clickListener)
         }
+    }
+
+    /**
+     * 设置第一列的信息
+     * @param activity    上下文
+     * @param i           行数索引
+     * @param gridLayout  [GridLayout]
+     */
+    private fun setFirstRow(activity: Activity, i: Int, gridLayout: GridLayout) {
+        val textView = TextView(activity)
+        textView.text = String.format("%d", i + 1)
+        val rowSpec = GridLayout.spec(i + 1, 1.0f)
+        val columnSpec = GridLayout.spec(0, 1.0f)
+        val params = GridLayout.LayoutParams(rowSpec, columnSpec)
+        params.setGravity(Gravity.CENTER_VERTICAL)
+        gridLayout.addView(textView, params)
     }
 
     /**
