@@ -6,6 +6,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.RelativeLayout
 import androidx.annotation.CheckResult
 import androidx.annotation.NonNull
@@ -41,17 +42,6 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         setContentView(R.layout.activity_custom)
         EventBus.getDefault().register(this)
 
-        rl_1_s.setOnClickListener { onViewClicked("1-s") }
-        rl_1_x.setOnClickListener { onViewClicked("1-x") }
-        rl_2_s.setOnClickListener { onViewClicked("2-s") }
-        rl_2_x.setOnClickListener { onViewClicked("2-x") }
-        rl_3_s.setOnClickListener { onViewClicked("3-s") }
-        rl_3_x.setOnClickListener { onViewClicked("3-x") }
-        rl_4_s.setOnClickListener { onViewClicked("4-s") }
-        rl_4_x.setOnClickListener { onViewClicked("4-x") }
-        rl_5_s.setOnClickListener { onViewClicked("5-s") }
-        rl_5_x.setOnClickListener { onViewClicked("5-x") }
-
         initData()
         initView()
     }
@@ -77,23 +67,26 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
     /**
      * 设置面板
      */
-    private fun setText() {
+    private fun setText(key: String = "") {
         val a1 = timeMap["1"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val a2 = timeMap["2"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val a3 = timeMap["3"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val a4 = timeMap["4"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val a5 = timeMap["5"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        s_1.text = a1[0]
-        s_2.text = a2[0]
-        s_3.text = a3[0]
-        s_4.text = a4[0]
-        s_5.text = a5[0]
-
-        x_1.text = a1[1]
-        x_2.text = a2[1]
-        x_3.text = a3[1]
-        x_4.text = a4[1]
-        x_5.text = a5[1]
+        if (key == "") {
+            getOneClass("1", a1[0], a1[1])
+            getOneClass("2", a2[0], a2[1])
+            getOneClass("3", a3[0], a3[1])
+            getOneClass("4", a4[0], a4[1])
+            getOneClass("5", a5[0], a5[1])
+        } else {
+            val up = ll.findViewWithTag<RelativeLayout>("$key-s")
+            val down = ll.findViewWithTag<RelativeLayout>("$key-x")
+            val upView = up.getChildAt(1) as AppCompatTextView
+            val downView = down.getChildAt(1) as AppCompatTextView
+            upView.text = timeMap[key]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+            downView.text = timeMap[key]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+        }
     }
 
     /**
@@ -105,20 +98,22 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
             supportActionBar.setDisplayHomeAsUpEnabled(true)
             supportActionBar.title = "课时设置"
         }
-        val nowThemeColorAccent = ThemeChangeUtil.getNowThemeColorAccent(this)
-        tv_morning.setTextColor(nowThemeColorAccent)
-        tv_afternoon.setTextColor(nowThemeColorAccent)
-        tv_at_night.setTextColor(nowThemeColorAccent)
-        ThemeChangeUtil.setTextViewsColorByTheme(this,
-                s_1, x_1, s_2, x_2, s_3, x_3, s_4, x_4, s_5, x_5,
-                a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
         AlertDialog.Builder(this).setTitle("关于课节")
                 .setMessage("我们将两节小课合成为1节课,这样上午有2节课,下午有2节课,晚自习(如果有)1节课\n全天共计5节课")
                 .setPositiveButton("我知道了", null)
                 .show()
     }
 
-    private fun getOneRowRelativeLayout(leftText: CharSequence, rightText: CharSequence): RelativeLayout {
+    private fun getOneClass(classText: CharSequence, upTime: CharSequence, downTime: CharSequence) {
+        val up = getOneRowRelativeLayout("第${classText}节上课", upTime, View.OnClickListener { onViewClicked("$classText-s", it) })
+        val down = getOneRowRelativeLayout("第${classText}节下课", downTime, View.OnClickListener { onViewClicked("$classText-x", it) })
+        up.tag = "$classText-s"
+        down.tag = "$classText-x"
+        ll.addView(up)
+        ll.addView(down)
+    }
+
+    private fun getOneRowRelativeLayout(leftText: CharSequence, rightText: CharSequence, l: View.OnClickListener?): RelativeLayout {
         val relativeLayout = RelativeLayout(this)
         val outValue = TypedValue()
         this.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
@@ -143,6 +138,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
         relativeLayout.addView(appCompatTextView)
         relativeLayout.addView(timeAppCompatTextView, layoutParams)
+        relativeLayout.setOnClickListener(l)
         return relativeLayout
     }
 
@@ -201,7 +197,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     }
 
-    private fun onViewClicked(id: String) {
+    private fun onViewClicked(id: String, view: View) {
         this.msg = id
         showTimePickerDialog()
     }
@@ -317,7 +313,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
                 }
                 Log.d(TAG, "insert :$insertStr")
                 timeMap[typeInfo[0]] = insertStr
-                setText()
+                setText(typeInfo[0])
             }
         }
     }
