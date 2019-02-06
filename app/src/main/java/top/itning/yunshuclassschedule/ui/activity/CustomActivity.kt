@@ -3,11 +3,14 @@ package top.itning.yunshuclassschedule.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.RelativeLayout
 import androidx.annotation.CheckResult
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_custom.*
 import org.greenrobot.eventbus.EventBus
@@ -38,16 +41,16 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         setContentView(R.layout.activity_custom)
         EventBus.getDefault().register(this)
 
-        rl_1_s.setOnClickListener { onViewClicked( "1-s") }
-        rl_1_x.setOnClickListener { onViewClicked( "1-x") }
-        rl_2_s.setOnClickListener { onViewClicked( "2-s") }
-        rl_2_x.setOnClickListener { onViewClicked( "2-x") }
-        rl_3_s.setOnClickListener { onViewClicked( "3-s") }
-        rl_3_x.setOnClickListener { onViewClicked( "3-x") }
-        rl_4_s.setOnClickListener { onViewClicked( "4-s") }
-        rl_4_x.setOnClickListener { onViewClicked( "4-x") }
-        rl_5_s.setOnClickListener { onViewClicked( "5-s") }
-        rl_5_x.setOnClickListener { onViewClicked( "5-x") }
+        rl_1_s.setOnClickListener { onViewClicked("1-s") }
+        rl_1_x.setOnClickListener { onViewClicked("1-x") }
+        rl_2_s.setOnClickListener { onViewClicked("2-s") }
+        rl_2_x.setOnClickListener { onViewClicked("2-x") }
+        rl_3_s.setOnClickListener { onViewClicked("3-s") }
+        rl_3_x.setOnClickListener { onViewClicked("3-x") }
+        rl_4_s.setOnClickListener { onViewClicked("4-s") }
+        rl_4_x.setOnClickListener { onViewClicked("4-x") }
+        rl_5_s.setOnClickListener { onViewClicked("5-s") }
+        rl_5_x.setOnClickListener { onViewClicked("5-x") }
 
         initData()
         initView()
@@ -115,6 +118,34 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
                 .show()
     }
 
+    private fun getOneRowRelativeLayout(leftText: CharSequence, rightText: CharSequence): RelativeLayout {
+        val relativeLayout = RelativeLayout(this)
+        val outValue = TypedValue()
+        this.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+        relativeLayout.setBackgroundResource(outValue.resourceId)
+        val paddingInDp = 16
+        val scale = this.resources.displayMetrics.density
+        val paddingInPx = (paddingInDp * scale + 0.5f).toInt()
+
+        val appCompatTextView = AppCompatTextView(this)
+        appCompatTextView.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx)
+        appCompatTextView.textSize = 16f
+        appCompatTextView.text = leftText
+
+        val timeAppCompatTextView = AppCompatTextView(this)
+        timeAppCompatTextView.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx)
+        timeAppCompatTextView.textSize = 16f
+        timeAppCompatTextView.text = rightText
+        val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END)
+
+        ThemeChangeUtil.setTextViewsColorByTheme(this, appCompatTextView, timeAppCompatTextView)
+
+        relativeLayout.addView(appCompatTextView)
+        relativeLayout.addView(timeAppCompatTextView, layoutParams)
+        return relativeLayout
+    }
+
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
         super.onDestroy()
@@ -170,7 +201,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     }
 
-    fun onViewClicked(id: String) {
+    private fun onViewClicked(id: String) {
         this.msg = id
         showTimePickerDialog()
     }
@@ -268,8 +299,8 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         if (hourOfDay != -1 && minute != -1) {
             //2-s -> 2 s
             val typeInfo = msg.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            var h = hourOfDay.toString() + ""
-            var m = minute.toString() + ""
+            var h = hourOfDay.toString()
+            var m = minute.toString()
             if (hourOfDay < MIN_TIME) {
                 h = "0$h"
             }
