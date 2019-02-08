@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.*
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
-import java.util.*
 
 /**
  * 设置Fragment
@@ -22,22 +21,23 @@ import java.util.*
  */
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private var prefs: SharedPreferences? = null
-    private var defaultShowMainFragmentListPreference: ListPreference? = null
-    private var classReminderUpTime: ListPreference? = null
-    private var classReminderDownTime: ListPreference? = null
-    private var phoneMuteBeforeTime: ListPreference? = null
-    private var phoneMuteAfterTime: ListPreference? = null
+    private lateinit var prefs: SharedPreferences
+    private lateinit var defaultShowMainFragmentListPreference: ListPreference
+    private lateinit var classReminderUpTime: ListPreference
+    private lateinit var classReminderDownTime: ListPreference
+    private lateinit var phoneMuteBeforeTime: ListPreference
+    private lateinit var phoneMuteAfterTime: ListPreference
+    private lateinit var nowWeekNumEditTextPreference: EditTextPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull<Context>(context))
-        prefs!!.registerOnSharedPreferenceChangeListener(this)
+        prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        prefs.registerOnSharedPreferenceChangeListener(this)
         val bundle = arguments
         if (bundle == null) {
-            defaultShowMainFragmentListPreference = findPreference(DEFAULT_SHOW_MAIN_FRAGMENT) as ListPreference
-            defaultShowMainFragmentListPreference!!.summary = defaultShowMainFragmentListPreference!!.entry
-            val foregroundServiceStatus: Preference = findPreference(FOREGROUND_SERVICE_STATUS)
+            defaultShowMainFragmentListPreference = findPreference<ListPreference>(DEFAULT_SHOW_MAIN_FRAGMENT)
+            defaultShowMainFragmentListPreference.summary = defaultShowMainFragmentListPreference.entry
+            val foregroundServiceStatus: Preference = findPreference<SwitchPreference>(FOREGROUND_SERVICE_STATUS)
             foregroundServiceStatus.setOnPreferenceChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     AlertDialog.Builder(requireContext()).setTitle("注意")
@@ -48,19 +48,21 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 }
                 true
             }
+            nowWeekNumEditTextPreference = findPreference<EditTextPreference>(NOW_WEEK_NUM)
+            nowWeekNumEditTextPreference.summary = prefs.getString(NOW_WEEK_NUM, "1")
         } else {
-            val key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT)!!
+            val key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT)
             when (key) {
                 "class_reminder" -> {
-                    classReminderUpTime = findPreference(CLASS_REMINDER_UP_TIME) as ListPreference
-                    classReminderDownTime = findPreference(CLASS_REMINDER_DOWN_TIME) as ListPreference
-                    classReminderUpTime!!.summary = classReminderUpTime!!.entry
-                    classReminderDownTime!!.summary = classReminderDownTime!!.entry
+                    classReminderUpTime = findPreference<ListPreference>(CLASS_REMINDER_UP_TIME)
+                    classReminderDownTime = findPreference<ListPreference>(CLASS_REMINDER_DOWN_TIME)
+                    classReminderUpTime.summary = classReminderUpTime.entry
+                    classReminderDownTime.summary = classReminderDownTime.entry
                 }
                 "phone_mute" -> {
-                    phoneMuteBeforeTime = findPreference(PHONE_MUTE_BEFORE_TIME) as ListPreference
-                    phoneMuteAfterTime = findPreference(PHONE_MUTE_AFTER_TIME) as ListPreference
-                    val phoneMuteStatus: SwitchPreference = findPreference(PHONE_MUTE_STATUS)
+                    phoneMuteBeforeTime = findPreference<ListPreference>(PHONE_MUTE_BEFORE_TIME)
+                    phoneMuteAfterTime = findPreference<ListPreference>(PHONE_MUTE_AFTER_TIME)
+                    val phoneMuteStatus = findPreference<SwitchPreference>(PHONE_MUTE_STATUS)
                     phoneMuteStatus.setOnPreferenceChangeListener { _, newValue ->
                         if (newValue as Boolean) {
                             val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -75,8 +77,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                         }
                         true
                     }
-                    phoneMuteBeforeTime!!.summary = phoneMuteBeforeTime!!.entry
-                    phoneMuteAfterTime!!.summary = phoneMuteAfterTime!!.entry
+                    phoneMuteBeforeTime.summary = phoneMuteBeforeTime.entry
+                    phoneMuteAfterTime.summary = phoneMuteAfterTime.entry
                 }
             }
         }
@@ -84,7 +86,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onDestroyView() {
         Log.d(TAG, "on Destroy View")
-        prefs!!.unregisterOnSharedPreferenceChangeListener(this)
+        prefs.unregisterOnSharedPreferenceChangeListener(this)
         super.onDestroyView()
     }
 
@@ -100,27 +102,19 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             DEFAULT_SHOW_MAIN_FRAGMENT -> {
-                defaultShowMainFragmentListPreference!!.summary = defaultShowMainFragmentListPreference!!.entry
+                defaultShowMainFragmentListPreference.summary = defaultShowMainFragmentListPreference.entry
             }
             CLASS_REMINDER_UP_TIME -> {
-                if (classReminderUpTime != null) {
-                    classReminderUpTime!!.summary = classReminderUpTime!!.entry
-                }
+                classReminderUpTime.summary = classReminderUpTime.entry
             }
             CLASS_REMINDER_DOWN_TIME -> {
-                if (classReminderDownTime != null) {
-                    classReminderDownTime!!.summary = classReminderDownTime!!.entry
-                }
+                classReminderDownTime.summary = classReminderDownTime.entry
             }
             PHONE_MUTE_BEFORE_TIME -> {
-                if (phoneMuteBeforeTime != null) {
-                    phoneMuteBeforeTime!!.summary = phoneMuteBeforeTime!!.entry
-                }
+                phoneMuteBeforeTime.summary = phoneMuteBeforeTime.entry
             }
             PHONE_MUTE_AFTER_TIME -> {
-                if (phoneMuteAfterTime != null) {
-                    phoneMuteAfterTime!!.summary = phoneMuteAfterTime!!.entry
-                }
+                phoneMuteAfterTime.summary = phoneMuteAfterTime.entry
             }
             APP_COLOR_PRIMARY -> {
                 ThemeChangeUtil.changeColor()
@@ -133,6 +127,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
             APP_COLOR_PROGRESS -> {
                 ThemeChangeUtil.changeColor()
+            }
+            NOW_WEEK_NUM -> {
+                nowWeekNumEditTextPreference.summary = sharedPreferences.getString(key, "1")
             }
         }
     }
@@ -150,5 +147,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         const val APP_COLOR_ACCENT = "app_color_accent"
         const val APP_COLOR_PROGRESS = "app_color_progress"
         const val FOREGROUND_SERVICE_STATUS = "foreground_service_status"
+        const val NOW_WEEK_NUM = "now_week_num"
     }
 }

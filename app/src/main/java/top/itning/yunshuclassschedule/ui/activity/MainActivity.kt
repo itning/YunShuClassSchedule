@@ -102,6 +102,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun initView() {
         //设置主标题
         toolbar.title = ACTION_BAR_TITLE_FORMAT.format(Date())
+        toolbar.setOnClickListener {
+
+        }
         //设置导航
         setSupportActionBar(toolbar)
         ThemeChangeUtil.initColor(this, drawer_layout)
@@ -153,6 +156,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 Log.d(TAG, "app color change , now afresh view")
                 ThemeChangeUtil.initColor(this, drawer_layout)
+            }
+            ConstantPool.Int.TOOLBAR_TITLE_CHANGE -> {
+                toolbar.title = eventEntity.msg
             }
             else -> {
             }
@@ -407,6 +413,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         private const val REQUEST_CODE_CHOOSE = 101
         private const val REQUEST_CODE = 103
         private const val SETTING_REQUEST_CODE = 104
-        private val ACTION_BAR_TITLE_FORMAT = SimpleDateFormat("MM月dd日 E", Locale.CHINESE)
+        val ACTION_BAR_TITLE_FORMAT = SimpleDateFormat("MM月dd日 E", Locale.CHINESE)
     }
 }

@@ -134,7 +134,11 @@ class ConstantPool {
         /**
          * 回到登陆页面
          */
-        RETURN_LOGIN_FRAGMENT(139);
+        RETURN_LOGIN_FRAGMENT(139),
+        /**
+         * Toolbar Title Change Event
+         */
+        TOOLBAR_TITLE_CHANGE(140);
 
         fun get(): kotlin.Int {
             return value

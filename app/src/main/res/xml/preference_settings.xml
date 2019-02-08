@@ -23,6 +23,11 @@
             app:iconSpaceReserved="false">
             <intent android:action="top.itning.yunshuclassschedule.SHARE" />
         </Preference>
+        <EditTextPreference
+            android:key="now_week_num"
+            android:title="设置当前周数"
+            android:dialogLayout="@layout/preference_dialog_layout"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="上下课提醒与静音"
