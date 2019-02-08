@@ -47,7 +47,7 @@ class SplashActivity : BaseActivity() {
         startTime = System.currentTimeMillis()
 
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//勿扰权限判定
+        //勿扰权限判定
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !notificationManager.isNotificationPolicyAccessGranted) {
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("phone_mute_status", false).apply()
         }

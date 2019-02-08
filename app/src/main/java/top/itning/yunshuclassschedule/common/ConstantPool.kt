@@ -47,7 +47,11 @@ class ConstantPool {
         /**
          * 是否显示授课教师信息
          */
-        TEACHER_INFO_STATUS("teacher_week_status");
+        TEACHER_INFO_STATUS("teacher_week_status"),
+        /**
+         * 每天课程节数
+         */
+        CLASS_SECTION("class_section");
 
         fun get(): String {
             return value

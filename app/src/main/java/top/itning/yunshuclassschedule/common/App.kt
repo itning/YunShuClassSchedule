@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.util.Log
-import com.tencent.bugly.crashreport.CrashReport
 import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.AppActivityIndex
 import top.itning.yunshuclassschedule.entity.DaoMaster
@@ -27,7 +26,8 @@ class App : Application() {
         //EventBus add Index
         EventBus.builder().addIndex(AppActivityIndex()).installDefaultEventBus()
         //bugly
-        CrashReport.initCrashReport(applicationContext, "439037c8de", false)
+        Log.e(TAG, "not open bugly")
+        //CrashReport.initCrashReport(applicationContext, "439037c8de", false)
 
         val helper = DaoMaster.DevOpenHelper(this, ConstantPool.Str.DB_NAME.get())
         val db = helper.writableDb

@@ -1,5 +1,6 @@
 package top.itning.yunshuclassschedule.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,10 +8,12 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.RelativeLayout
 import androidx.annotation.CheckResult
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_custom.*
@@ -34,6 +37,7 @@ import java.util.*
 class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     private lateinit var msg: String
+    private var classSchedule = 5
     private var timeMap: TreeMap<String, String> = TreeMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,49 +45,48 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom)
         EventBus.getDefault().register(this)
-
-        initData()
-        initView()
+        init()
     }
 
     /**
      * 初始化数据
      */
+    @SuppressLint("ApplySharedPref")
     private fun initData() {
-        val time1 = App.sharedPreferences.getString("1", "08:20-09:50")!!
-        val time2 = App.sharedPreferences.getString("2", "10:05-11:35")!!
-        val time3 = App.sharedPreferences.getString("3", "12:55-14:25")!!
-        val time4 = App.sharedPreferences.getString("4", "14:40-16:10")!!
-        val time5 = App.sharedPreferences.getString("5", "17:30-20:00")!!
+        if (App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
+            App.sharedPreferences.edit().putString("1", "08:20-09:50").commit()
+            App.sharedPreferences.edit().putString("2", "10:05-11:35").commit()
+            App.sharedPreferences.edit().putString("3", "12:55-14:25").commit()
+            App.sharedPreferences.edit().putString("4", "14:40-16:10").commit()
+            App.sharedPreferences.edit().putString("5", "17:30-20:00").commit()
+            App.sharedPreferences.edit().putString("6", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("7", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("8", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("9", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("10", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("11", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("12", "12:00-12:01").commit()
+        }
         timeMap.clear()
-        timeMap["1"] = time1
-        timeMap["2"] = time2
-        timeMap["3"] = time3
-        timeMap["4"] = time4
-        timeMap["5"] = time5
-        setText()
+        for (i in 1..classSchedule) {
+            timeMap[i.toString()] = App.sharedPreferences.getString(i.toString(), "12:00-12:01")!!
+        }
     }
 
     /**
      * 设置面板
      */
     private fun setText(key: String = "") {
-        val a1 = timeMap["1"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val a2 = timeMap["2"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val a3 = timeMap["3"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val a4 = timeMap["4"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val a5 = timeMap["5"]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         if (key == "") {
-            getOneClass("1", a1[0], a1[1])
-            getOneClass("2", a2[0], a2[1])
-            getOneClass("3", a3[0], a3[1])
-            getOneClass("4", a4[0], a4[1])
-            getOneClass("5", a5[0], a5[1])
+            for (i in 1..classSchedule) {
+                val a = timeMap[i.toString()]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                getOneClass(i.toString(), a[0], a[1])
+            }
         } else {
             val up = ll.findViewWithTag<RelativeLayout>("$key-s")
             val down = ll.findViewWithTag<RelativeLayout>("$key-x")
-            val upView = up.getChildAt(1) as AppCompatTextView
-            val downView = down.getChildAt(1) as AppCompatTextView
+            val upView: AppCompatTextView = up.getChildAt(1) as AppCompatTextView
+            val downView: AppCompatTextView = down.getChildAt(1) as AppCompatTextView
             upView.text = timeMap[key]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
             downView.text = timeMap[key]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         }
@@ -92,15 +95,32 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
     /**
      * 初始化视图
      */
-    private fun initView() {
+    private fun init() {
         val supportActionBar = supportActionBar
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true)
             supportActionBar.title = "课时设置"
         }
-        AlertDialog.Builder(this).setTitle("关于课节")
-                .setMessage("我们将两节小课合成为1节课,这样上午有2节课,下午有2节课,晚自习(如果有)1节课\n全天共计5节课")
-                .setPositiveButton("我知道了", null)
+        val appCompatSpinner = AppCompatSpinner(this)
+        val list = listOf(5, 6, 7, 8, 9, 10, 11, 12)
+        appCompatSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, list)
+        val defaultClassSection = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
+        val index = list.indexOf(defaultClassSection)
+        val i = if (index == -1) {
+            0
+        } else {
+            index
+        }
+        appCompatSpinner.setSelection(i)
+        AlertDialog.Builder(this).setTitle("设置每天课程节数")
+                .setView(appCompatSpinner)
+                .setCancelable(false)
+                .setPositiveButton("保存") { dialog, _ ->
+                    classSchedule = (appCompatSpinner.selectedItem as Int)
+                    initData()
+                    dialog.cancel()
+                    setText()
+                }
                 .show()
     }
 
@@ -164,6 +184,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
                             .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
                             .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
                             .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
+                            .putInt(ConstantPool.Str.CLASS_SECTION.get(), classSchedule)
                             .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
                             .apply()
                     if (!isTaskRoot) {
@@ -206,57 +227,15 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
      * 显示时间选择器
      */
     private fun showTimePickerDialog() {
-        val type = msg.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-        val time: String
-        val title: String
-        when (msg) {
-            "1-s" -> {
-                time = timeMap["1"]!!
-                title = "第一节上课"
-            }
-            "1-x" -> {
-                time = timeMap["1"]!!
-                title = "第一节下课"
-            }
-            "2-s" -> {
-                time = timeMap["2"]!!
-                title = "第二节上课"
-            }
-            "2-x" -> {
-                time = timeMap["2"]!!
-                title = "第二节下课"
-            }
-            "3-s" -> {
-                time = timeMap["3"]!!
-                title = "第三节上课"
-            }
-            "3-x" -> {
-                time = timeMap["3"]!!
-                title = "第三节下课"
-            }
-            "4-s" -> {
-                time = timeMap["4"]!!
-                title = "第四节上课"
-            }
-            "4-x" -> {
-                time = timeMap["4"]!!
-                title = "第四节下课"
-            }
-            "5-s" -> {
-                time = timeMap["5"]!!
-                title = "第五节上课"
-            }
-            "5-x" -> {
-                time = timeMap["5"]!!
-                title = "第五节下课"
-            }
-            else -> {
-                time = ""
-                title = ""
-            }
+        val type = msg.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val stringBuilder = StringBuilder(6).append("第${type[0]}节")
+        if (type[1] == "s") {
+            stringBuilder.append("上课")
+        } else {
+            stringBuilder.append("下课")
         }
-        val timePickerDialog = getTimePickerDialog(type, time)
-        timePickerDialog.title = title
+        val timePickerDialog = getTimePickerDialog(type[1], timeMap[type[0]]!!)
+        timePickerDialog.title = stringBuilder.toString()
         timePickerDialog.show(fragmentManager, "TimePickerDialog")
     }
 

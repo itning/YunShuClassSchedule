@@ -56,7 +56,7 @@ object ClassScheduleUtils {
      * @param activity          [Activity]
      */
     fun loadingView(classScheduleList: List<ClassSchedule>?, @NonNull gridLayout: GridLayout, @NonNull clickListener: ClassScheduleItemLongClickListener, @NonNull activity: Activity) {
-        val CLASS_SECTION = 5
+        val classSection = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
         initColorArray(activity)
         initFontSize()
         val display = activity.windowManager.defaultDisplay
@@ -65,8 +65,8 @@ object ClassScheduleUtils {
         //列
         gridLayout.columnCount = 8
         //行
-        gridLayout.rowCount = CLASS_SECTION + 1
-        for (i in 0 until CLASS_SECTION) {
+        gridLayout.rowCount = classSection + 1
+        for (i in 0 until classSection) {
             setFirstRow(activity, i, gridLayout)
             for (j in 0 until CLASS_WEEK) {
                 gridLayout.addView(setNull(activity, i + 1, j + 1), setParams(i + 1, j + 1, size))
@@ -74,7 +74,7 @@ object ClassScheduleUtils {
         }
         if (classScheduleList != null) {
             for (classSchedule in classScheduleList) {
-                if (classSchedule.section > CLASS_SECTION) {
+                if (classSchedule.section > classSection) {
                     continue
                 }
                 gridLayout.removeView(gridLayout.findViewWithTag(classSchedule.section.toString() + "-" + classSchedule.week))
