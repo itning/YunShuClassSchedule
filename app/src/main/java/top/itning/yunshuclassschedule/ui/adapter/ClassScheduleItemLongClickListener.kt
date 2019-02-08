@@ -19,6 +19,7 @@ import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.R
+
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
@@ -37,7 +38,7 @@ class ClassScheduleItemLongClickListener
 constructor(@param:NonNull private val activity: Activity, private val classScheduleList: List<ClassSchedule>?, @param:NonNull private val copyList: MutableList<String>) : View.OnLongClickListener {
     private val classScheduleDao: ClassScheduleDao = (activity.application as App).daoSession.classScheduleDao
     @SuppressLint("InflateParams")
-    private val inflate: View = LayoutInflater.from(activity).inflate(top.itning.yunshuclassschedule.R.layout.dialog_class_schedule, null)
+    private val inflate: View = LayoutInflater.from(activity).inflate(R.layout.dialog_class_schedule, null)
     private var selectClassSchedule: ClassSchedule? = null
     private lateinit var alertDialog: AlertDialog
     private lateinit var copyBtn: AppCompatButton
@@ -62,12 +63,12 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
             materialCheckBox.isChecked = false
         }
         val classSplit = tag.toString().split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val tvteacher = inflate.findViewById<TextInputEditText>(top.itning.yunshuclassschedule.R.id.tv_teacher)
-        val tvlocation = inflate.findViewById<TextInputEditText>(top.itning.yunshuclassschedule.R.id.tv_location)
-        val tvname = inflate.findViewById<TextInputEditText>(top.itning.yunshuclassschedule.R.id.tv_name)
-        val tlname = inflate.findViewById<TextInputLayout>(top.itning.yunshuclassschedule.R.id.tl_name)
-        val tllocation = inflate.findViewById<TextInputLayout>(top.itning.yunshuclassschedule.R.id.tl_location)
-        val tlteacher = inflate.findViewById<TextInputLayout>(top.itning.yunshuclassschedule.R.id.tl_teacher)
+        val tvteacher = inflate.findViewById<TextInputEditText>(R.id.tv_teacher)
+        val tvlocation = inflate.findViewById<TextInputEditText>(R.id.tv_location)
+        val tvname = inflate.findViewById<TextInputEditText>(R.id.tv_name)
+        val tlname = inflate.findViewById<TextInputLayout>(R.id.tl_name)
+        val tllocation = inflate.findViewById<TextInputLayout>(R.id.tl_location)
+        val tlteacher = inflate.findViewById<TextInputLayout>(R.id.tl_teacher)
         //设置内容文字
         setText(tvteacher, tvlocation, tvname, classSplit)
         alertDialog.setTitle(StringBuilder(7).append("星期").append(classSplit[1]).append("第").append(classSplit[0]).append("节课"))
@@ -224,8 +225,8 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         rangeBtn.setOnClickListener {
             var l = 0
             var r = 0
-            val view = LayoutInflater.from(activity).inflate(top.itning.yunshuclassschedule.R.layout.view_range, null)
-            val seekBar = view.findViewById<RangeSeekBar>(top.itning.yunshuclassschedule.R.id.seekBar)
+            val view = LayoutInflater.from(activity).inflate(R.layout.view_range, null)
+            val seekBar = view.findViewById<RangeSeekBar>(R.id.seekBar)
             val tvFontPreview = view.findViewById<TextView>(R.id.tv_font_preview)
             tvFontPreview.text = "拖动滑块设置课程周数"
             seekBar.seekBarMode = RangeSeekBar.SEEKBAR_MODE_RANGE
