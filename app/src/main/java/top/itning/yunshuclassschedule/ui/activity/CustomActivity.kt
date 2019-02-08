@@ -180,13 +180,15 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
             R.id.done -> run {
                 if (DateUtils.isDataLegitimate(timeMap, this)) {
                     updateSharedPreferences()
-                    App.sharedPreferences.edit()
-                            .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
-                            .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
-                            .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
-                            .putInt(ConstantPool.Str.CLASS_SECTION.get(), classSchedule)
-                            .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
-                            .apply()
+                    if (App.sharedPreferences.edit()
+                                    .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
+                                    .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
+                                    .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
+                                    .putInt(ConstantPool.Str.CLASS_SECTION.get(), classSchedule)
+                                    .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
+                                    .commit()) {
+                        DateUtils.refreshTimeList()
+                    }
                     if (!isTaskRoot) {
                         EventBus.getDefault().post(EventEntity(ConstantPool.Int.TIME_TICK_CHANGE, ""))
                         finish()
