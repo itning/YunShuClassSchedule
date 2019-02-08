@@ -6,12 +6,17 @@ import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
+import cn.wolfspider.autowraplinelayout.AutoWrapLineLayout
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.jaygoo.widget.OnRangeChangedListener
+import com.jaygoo.widget.RangeSeekBar
 import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.App
@@ -22,6 +27,7 @@ import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 import java.util.*
 
+
 /**
  * 每节课长按监听
  *
@@ -31,11 +37,17 @@ class ClassScheduleItemLongClickListener
 constructor(@param:NonNull private val activity: Activity, private val classScheduleList: List<ClassSchedule>?, @param:NonNull private val copyList: MutableList<String>) : View.OnLongClickListener {
     private val classScheduleDao: ClassScheduleDao = (activity.application as App).daoSession.classScheduleDao
     @SuppressLint("InflateParams")
-    private val inflate: View = LayoutInflater.from(activity).inflate(R.layout.dialog_class_schedule, null)
+    private val inflate: View = LayoutInflater.from(activity).inflate(top.itning.yunshuclassschedule.R.layout.dialog_class_schedule, null)
     private var selectClassSchedule: ClassSchedule? = null
     private lateinit var alertDialog: AlertDialog
     private lateinit var copyBtn: AppCompatButton
     private lateinit var pasteBtn: AppCompatButton
+    private lateinit var oddBtn: AppCompatButton
+    private lateinit var doubleBtn: AppCompatButton
+    private lateinit var allBtn: AppCompatButton
+    private lateinit var clearBtn: AppCompatButton
+    private lateinit var rangeBtn: AppCompatButton
+    private lateinit var autoWrapLineLayout: AutoWrapLineLayout
 
     init {
         initAlertDialog()
@@ -45,13 +57,17 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         Log.d(TAG, "onLongClick:the view instance is $v")
         val tag = v.tag
         Log.d(TAG, "onLongClick:the view tag is " + tag!!)
+        for (i in 0 until 50) {
+            val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+            materialCheckBox.isChecked = false
+        }
         val classSplit = tag.toString().split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val tvteacher = inflate.findViewById<TextInputEditText>(R.id.tv_teacher)
-        val tvlocation = inflate.findViewById<TextInputEditText>(R.id.tv_location)
-        val tvname = inflate.findViewById<TextInputEditText>(R.id.tv_name)
-        val tlname = inflate.findViewById<TextInputLayout>(R.id.tl_name)
-        val tllocation = inflate.findViewById<TextInputLayout>(R.id.tl_location)
-        val tlteacher = inflate.findViewById<TextInputLayout>(R.id.tl_teacher)
+        val tvteacher = inflate.findViewById<TextInputEditText>(top.itning.yunshuclassschedule.R.id.tv_teacher)
+        val tvlocation = inflate.findViewById<TextInputEditText>(top.itning.yunshuclassschedule.R.id.tv_location)
+        val tvname = inflate.findViewById<TextInputEditText>(top.itning.yunshuclassschedule.R.id.tv_name)
+        val tlname = inflate.findViewById<TextInputLayout>(top.itning.yunshuclassschedule.R.id.tl_name)
+        val tllocation = inflate.findViewById<TextInputLayout>(top.itning.yunshuclassschedule.R.id.tl_location)
+        val tlteacher = inflate.findViewById<TextInputLayout>(top.itning.yunshuclassschedule.R.id.tl_teacher)
         //设置内容文字
         setText(tvteacher, tvlocation, tvname, classSplit)
         alertDialog.setTitle(StringBuilder(7).append("星期").append(classSplit[1]).append("第").append(classSplit[0]).append("节课"))
@@ -109,11 +125,22 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
     }
 
     private fun initAlertDialog() {
+        autoWrapLineLayout = inflate.findViewById(R.id.ll_week)
         copyBtn = inflate.findViewById(R.id.btn_copy)
         pasteBtn = inflate.findViewById(R.id.btn_paste)
+        oddBtn = inflate.findViewById(R.id.btn_set_odd)
+        doubleBtn = inflate.findViewById(R.id.btn_set_double)
+        allBtn = inflate.findViewById(R.id.btn_set_all)
+        clearBtn = inflate.findViewById(R.id.btn_set_clear)
+        rangeBtn = inflate.findViewById(R.id.btn_set_range)
         val tvteacher = inflate.findViewById<TextInputEditText>(R.id.tv_teacher)
         val tvlocation = inflate.findViewById<TextInputEditText>(R.id.tv_location)
         val tvname = inflate.findViewById<TextInputEditText>(R.id.tv_name)
+        for (i in 1..50) {
+            val checkBox = MaterialCheckBox(activity)
+            checkBox.text = i.toString()
+            autoWrapLineLayout.addView(checkBox)
+        }
         initBtnAction(tvteacher, tvlocation, tvname)
         alertDialog = AlertDialog.Builder(activity)
                 .setView(inflate)
@@ -152,6 +179,7 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         }
     }
 
+    @SuppressWarnings("all")
     private fun initBtnAction(tvteacher: TextInputEditText, tvlocation: TextInputEditText, tvname: TextInputEditText) {
         updateBtnBackgroundTintList()
         copyBtn.setOnClickListener {
@@ -169,12 +197,77 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
                 Toast.makeText(activity, "已粘贴", Toast.LENGTH_SHORT).show()
             }
         }
+        oddBtn.setOnClickListener {
+            for (i in 0 until 50 step 2) {
+                val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+                materialCheckBox.isChecked = true
+            }
+        }
+        doubleBtn.setOnClickListener {
+            for (i in 1..50 step 2) {
+                val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+                materialCheckBox.isChecked = true
+            }
+        }
+        allBtn.setOnClickListener {
+            for (i in 0 until 50) {
+                val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+                materialCheckBox.isChecked = true
+            }
+        }
+        clearBtn.setOnClickListener {
+            for (i in 0 until 50) {
+                val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+                materialCheckBox.isChecked = false
+            }
+        }
+        rangeBtn.setOnClickListener {
+            var l = 0
+            var r = 0
+            val view = LayoutInflater.from(activity).inflate(top.itning.yunshuclassschedule.R.layout.view_range, null)
+            val seekBar = view.findViewById<RangeSeekBar>(top.itning.yunshuclassschedule.R.id.seekBar)
+            val tvFontPreview = view.findViewById<TextView>(R.id.tv_font_preview)
+            tvFontPreview.text = "拖动滑块设置课程周数"
+            seekBar.seekBarMode = RangeSeekBar.SEEKBAR_MODE_RANGE
+            seekBar.setRange(1f, 50f)
+            seekBar.setValue(12f, 37f)
+            seekBar.setIndicatorTextDecimalFormat("0")
+            seekBar.setOnRangeChangedListener(object : OnRangeChangedListener {
+                @Suppress("UsePropertyAccessSyntax")
+                override fun onRangeChanged(view: RangeSeekBar, leftValue: Float, rightValue: Float, isFromUser: Boolean) {
+                    l = leftValue.toInt()
+                    r = rightValue.toInt()
+                    tvFontPreview.setText("课程从第${l}周到第${r}周")
+                }
+
+                override fun onStartTrackingTouch(view: RangeSeekBar, isLeft: Boolean) {}
+
+                override fun onStopTrackingTouch(view: RangeSeekBar, isLeft: Boolean) {}
+            })
+            AlertDialog.Builder(activity)
+                    .setView(view)
+                    .setTitle("设置课程周数区间")
+                    .setPositiveButton("确定") { _, _ ->
+                        if (l != 0 && r != 0) {
+                            for (i in l..r) {
+                                val materialCheckBox = autoWrapLineLayout.getChildAt(i - 1) as MaterialCheckBox
+                                materialCheckBox.isChecked = true
+                            }
+                        }
+                    }
+                    .show()
+        }
     }
 
     fun updateBtnBackgroundTintList() {
         val colorStateList = ColorStateList.valueOf(ThemeChangeUtil.getNowThemeColorAccent(activity))
         copyBtn.backgroundTintList = colorStateList
         pasteBtn.backgroundTintList = colorStateList
+        oddBtn.backgroundTintList = colorStateList
+        doubleBtn.backgroundTintList = colorStateList
+        allBtn.backgroundTintList = colorStateList
+        clearBtn.backgroundTintList = colorStateList
+        rangeBtn.backgroundTintList = colorStateList
     }
 
     companion object {

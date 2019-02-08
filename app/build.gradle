@@ -51,12 +51,12 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
     implementation 'androidx.annotation:annotation:1.0.1'
     implementation 'com.google.android.material:material:1.1.0-alpha03'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0-alpha02'
+    implementation 'androidx.preference:preference:1.1.0-alpha03'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     /*https://github.com/google/gson*/
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -81,10 +81,12 @@ dependencies {
     implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
     /*https://github.com/jhy/jsoup*/
     implementation 'org.jsoup:jsoup:1.11.3'
-    /*https://github.com/wdullaer/MaterialDateTimePicker*/
-    implementation 'com.xw.repo:bubbleseekbar:3.19-lite'
     /*https://github.com/Ereza/CustomActivityOnCrash*/
     implementation 'cat.ereza:customactivityoncrash:2.2.0'
+    /*https://github.com/Hector1990/AutoWrapLineLayoutDemo*/
+    implementation 'cn.wolfspider:autowraplinelayout:1.0.1'
+    /*https://github.com/Jay-Goo/RangeSeekBar*/
+    implementation 'com.github.Jay-Goo:RangeSeekBar:2.0.6'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

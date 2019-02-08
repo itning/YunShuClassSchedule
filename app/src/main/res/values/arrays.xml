@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="markArray">
+        <item>1</item>
+        <item>25</item>
+        <item>50</item>
+    </string-array>
     <!--默认展示课程页面-->
     <string-array name="entries_list_default_show_main_fragment">
         <item>今天课程</item>

@@ -13,18 +13,22 @@
         android:layout_marginTop="10dp"
         android:padding="10dp" />
 
-    <com.xw.repo.BubbleSeekBar
-        android:id="@+id/bubble_seekBar"
+    <com.jaygoo.widget.RangeSeekBar
+        android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_font_preview"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:bsb_bubble_color="@color/colorAccent"
-        app:bsb_bubble_text_color="@color/mdtp_white"
-        app:bsb_max="20"
-        app:bsb_min="10"
-        app:bsb_show_progress_in_float="false"
-        app:bsb_show_section_text="true"
-        app:bsb_track_color="@color/colorAccent" />
+        app:rsb_indicator_height="20dp"
+        app:rsb_indicator_radius="8dp"
+        app:rsb_indicator_show_mode="showWhenTouch"
+        app:rsb_indicator_width="80dp"
+        app:rsb_max="20"
+        app:rsb_min="10"
+        app:rsb_mode="single"
+        app:rsb_progress_color="@color/colorAccent"
+        app:rsb_progress_default_color="@color/rsbColorSeekBarDefault"
+        app:rsb_progress_height="4dp"
+        app:rsb_range_interval="0"
+        app:rsb_thumb_drawable="@drawable/seekbar_thumb"
+        app:rsb_tick_mark_text_array="@array/markArray" />
 </RelativeLayout>

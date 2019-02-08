@@ -29,8 +29,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
+import com.jaygoo.widget.OnRangeChangedListener
+import com.jaygoo.widget.RangeSeekBar
 import com.tencent.bugly.crashreport.CrashReport
-import com.xw.repo.BubbleSeekBar
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.internal.entity.CaptureStrategy
@@ -343,25 +344,30 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      */
     private fun changeWeekFragmentFont() {
         @SuppressLint("InflateParams")
-        val view = LayoutInflater.from(this).inflate(R.layout.setting_week_font, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.view_range, null)
         val tvFontPreview = view.findViewById<TextView>(R.id.tv_font_preview)
         val setFont = App.sharedPreferences.getFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), 12f)
         tvFontPreview.text = MessageFormat.format("字体大小:{0}", setFont)
         tvFontPreview.textSize = setFont
-        val bubbleSeekBar = view.findViewById<BubbleSeekBar>(R.id.bubble_seekBar)
-        bubbleSeekBar.setProgress(setFont)
-        bubbleSeekBar.onProgressChangedListener = object : BubbleSeekBar.OnProgressChangedListener {
-            override fun onProgressChanged(bubbleSeekBar: BubbleSeekBar, progress: Int, progressFloat: Float, fromUser: Boolean) {
-                tvFontPreview.text = MessageFormat.format("字体大小:{0}", progress)
-                tvFontPreview.textSize = progress.toFloat()
+        val bubbleSeekBar = view.findViewById<RangeSeekBar>(R.id.seekBar)
+        bubbleSeekBar.setValue(setFont)
+        var size = 1f
+        bubbleSeekBar.setOnRangeChangedListener(object : OnRangeChangedListener {
+            @Suppress("UsePropertyAccessSyntax")
+            override fun onRangeChanged(view: RangeSeekBar, leftValue: Float, rightValue: Float, isFromUser: Boolean) {
+                tvFontPreview.text = MessageFormat.format("字体大小:{0}", leftValue)
+                tvFontPreview.textSize = leftValue
+                size = leftValue
             }
 
-            override fun getProgressOnActionUp(bubbleSeekBar: BubbleSeekBar, progress: Int, progressFloat: Float) {
-                App.sharedPreferences.edit().putFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), progress.toFloat()).apply()
+            override fun onStartTrackingTouch(view: RangeSeekBar, isLeft: Boolean) {
+
             }
 
-            override fun getProgressOnFinally(bubbleSeekBar: BubbleSeekBar, progress: Int, progressFloat: Float, fromUser: Boolean) {}
-        }
+            override fun onStopTrackingTouch(view: RangeSeekBar, isLeft: Boolean) {
+                App.sharedPreferences.edit().putFloat(ConstantPool.Str.WEEK_FONT_SIZE.get(), size).apply()
+            }
+        })
         AlertDialog.Builder(this)
                 .setView(view)
                 .setTitle("更改字体大小")
