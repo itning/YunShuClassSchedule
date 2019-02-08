@@ -36,7 +36,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         greendao {
-            schemaVersion 2
+            schemaVersion 3
         }
     }
     bugly {

@@ -74,6 +74,18 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         alertDialog.setTitle(StringBuilder(7).append("星期").append(classSplit[1]).append("第").append(classSplit[0]).append("节课"))
         alertDialog.show()
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            var isUnChecked = true
+            for (i in 0 until 50) {
+                val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+                if (materialCheckBox.isChecked) {
+                    isUnChecked = false
+                    break
+                }
+            }
+            if (isUnChecked) {
+                Toast.makeText(activity, "请设置课程周数", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             if (isInputError(tvteacher, tvlocation, tvname, tlname, tllocation, tlteacher)) {
                 return@setOnClickListener
             }
@@ -111,6 +123,7 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         selectClassSchedule!!.name = tvname.text.toString().trim { it <= ' ' }
         selectClassSchedule!!.location = tvlocation.text.toString().trim { it <= ' ' }
         selectClassSchedule!!.teacher = tvteacher.text.toString().trim { it <= ' ' }
+        selectClassSchedule!!.numberOfWeek = setNumberOfWeek()
         classScheduleDao.update(selectClassSchedule)
     }
 
@@ -122,7 +135,19 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         classSchedule.teacher = tvteacher.text.toString().trim { it <= ' ' }
         classSchedule.section = Integer.parseInt(classSplit[0])
         classSchedule.week = Integer.parseInt(classSplit[1])
+        classSchedule.numberOfWeek = setNumberOfWeek()
         classScheduleDao.insert(classSchedule)
+    }
+
+    private fun setNumberOfWeek(): String {
+        val stringBuilder = StringBuilder(80)
+        for (i in 0 until 50) {
+            val materialCheckBox = autoWrapLineLayout.getChildAt(i) as MaterialCheckBox
+            if (materialCheckBox.isChecked) {
+                stringBuilder.append(i).append("-")
+            }
+        }
+        return stringBuilder.substring(0, stringBuilder.length - 1)
     }
 
     private fun initAlertDialog() {
@@ -175,6 +200,10 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
                     tvteacher.setText(it.teacher)
                     tvname.setText(it.name)
                     tvlocation.setText(it.location)
+                    it.numberOfWeek.split("-").forEach { i ->
+                        val materialCheckBox = autoWrapLineLayout.getChildAt(i.toInt()) as MaterialCheckBox
+                        materialCheckBox.isChecked = true
+                    }
                 }
             }
         }

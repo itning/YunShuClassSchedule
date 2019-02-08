@@ -1,8 +1,8 @@
 package top.itning.yunshuclassschedule.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 课程实体
@@ -36,16 +36,21 @@ public class ClassSchedule {
      * 教师
      */
     private String teacher;
+    /**
+     * 周数
+     */
+    private String numberOfWeek;
 
-    @Generated(hash = 317900149)
+    @Generated(hash = 61551471)
     public ClassSchedule(String id, int week, int section, String name,
-                         String location, String teacher) {
+            String location, String teacher, String numberOfWeek) {
         this.id = id;
         this.week = week;
         this.section = section;
         this.name = name;
         this.location = location;
         this.teacher = teacher;
+        this.numberOfWeek = numberOfWeek;
     }
 
     @Generated(hash = 1679435099)
@@ -100,6 +105,14 @@ public class ClassSchedule {
         this.teacher = teacher;
     }
 
+    public String getNumberOfWeek() {
+        return numberOfWeek;
+    }
+
+    public void setNumberOfWeek(String numberOfWeek) {
+        this.numberOfWeek = numberOfWeek;
+    }
+
     @Override
     public String toString() {
         return "ClassSchedule{" +
@@ -109,6 +122,7 @@ public class ClassSchedule {
                 ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 ", teacher='" + teacher + '\'' +
+                ", numberOfWeek='" + numberOfWeek + '\'' +
                 '}';
     }
 }
