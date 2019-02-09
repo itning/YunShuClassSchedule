@@ -109,10 +109,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         //设置主标题
         toolbar.title = ACTION_BAR_TITLE_FORMAT.format(Date())
         toolbar.setOnClickListener {
-            tempNumberOfWeek = PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!
-            toolbar.title = "第${tempNumberOfWeek}周"
-            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
-            Toast.makeText(this, "回到当前周", Toast.LENGTH_SHORT).show()
+            val now = PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!
+            if (tempNumberOfWeek != now) {
+                tempNumberOfWeek = now
+                EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
+                Toast.makeText(this, "回到当前周", Toast.LENGTH_SHORT).show()
+            }
         }
         toolbar.setOnLongClickListener {
             val appCompatSpinner = AppCompatSpinner(this)
@@ -183,9 +185,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 Log.d(TAG, "app color change , now afresh view")
                 ThemeChangeUtil.initColor(this, drawer_layout)
-            }
-            ConstantPool.Int.TOOLBAR_TITLE_CHANGE -> {
-                toolbar.title = eventEntity.msg
             }
             else -> {
             }
@@ -275,7 +274,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val t = tempNumberOfWeek.toInt() - 1
                 tempNumberOfWeek = t.toString()
                 EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
-                toolbar.title = "第${tempNumberOfWeek}周"
                 return true
             }
             R.id.action_next_week -> {
@@ -284,7 +282,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
                 val t = tempNumberOfWeek.toInt() + 1
                 tempNumberOfWeek = t.toString()
-                toolbar.title = "第${tempNumberOfWeek}周"
                 EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
                 return true
             }

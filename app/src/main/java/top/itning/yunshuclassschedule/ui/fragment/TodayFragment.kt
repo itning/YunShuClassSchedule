@@ -16,6 +16,7 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_today.*
@@ -30,6 +31,7 @@ import top.itning.yunshuclassschedule.entity.ClassScheduleDao
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.service.CourseInfoService
 import top.itning.yunshuclassschedule.ui.adapter.TodayRecyclerViewAdapter
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils
 import top.itning.yunshuclassschedule.util.DateUtils
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
@@ -215,13 +217,16 @@ class TodayFragment : Fragment() {
      * 初始化课程数据
      */
     private fun initClassScheduleListData() {
+        val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
         val daoSession = (requireActivity().application as App).daoSession
         classScheduleList = ClassScheduleUtils
                 .orderListBySection(daoSession
                         .classScheduleDao
                         .queryBuilder()
                         .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
-                        .list())
+                        .list()
+                        .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                        .toMutableList())
     }
 
     /**

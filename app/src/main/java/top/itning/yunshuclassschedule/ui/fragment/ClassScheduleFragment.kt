@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Nullable
-import androidx.annotation.Px
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.fragment_class_schedule.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -21,8 +19,8 @@ import org.greenrobot.eventbus.ThreadMode
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
-import top.itning.yunshuclassschedule.ui.activity.MainActivity
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.DEFAULT_SHOW_MAIN_FRAGMENT
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.NOW_WEEK_NUM
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 import java.util.*
 
@@ -98,24 +96,6 @@ class ClassScheduleFragment : Fragment() {
 
             }
         }
-        vp.clearOnPageChangeListeners()
-        vp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, @Px positionOffsetPixels: Int) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-                if (position == 0) {
-                    EventBus.getDefault().post(EventEntity(ConstantPool.Int.TOOLBAR_TITLE_CHANGE, MainActivity.ACTION_BAR_TITLE_FORMAT.format(Date())))
-                } else {
-                    EventBus.getDefault().post(EventEntity(ConstantPool.Int.TOOLBAR_TITLE_CHANGE, "第${MainActivity.tempNumberOfWeek}周"))
-                }
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-        })
         tl.setupWithViewPager(vp)
     }
 
@@ -144,6 +124,13 @@ class ClassScheduleFragment : Fragment() {
                     return
                 }
                 adapter.notifyDataSetChanged()
+            }
+            ConstantPool.Int.CLASS_WEEK_CHANGE -> {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getString(NOW_WEEK_NUM, "1") == eventEntity.msg) {
+                    tl.getTabAt(1)?.text = "本周"
+                } else {
+                    tl.getTabAt(1)?.text = "第${eventEntity.msg}周"
+                }
             }
             else -> {
             }

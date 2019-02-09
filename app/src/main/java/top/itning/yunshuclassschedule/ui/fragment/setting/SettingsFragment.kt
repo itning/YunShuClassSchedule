@@ -11,7 +11,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.*
+import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.R
+import top.itning.yunshuclassschedule.common.ConstantPool
+import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 
 /**
@@ -49,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 true
             }
             nowWeekNumEditTextPreference = findPreference<EditTextPreference>(NOW_WEEK_NUM)
-            nowWeekNumEditTextPreference.summary = prefs.getString(NOW_WEEK_NUM, "1")
+            nowWeekNumEditTextPreference.summary = "第${prefs.getString(NOW_WEEK_NUM, "1")}周"
         } else {
             val key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT)
             when (key) {
@@ -130,6 +133,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
             NOW_WEEK_NUM -> {
                 nowWeekNumEditTextPreference.summary = sharedPreferences.getString(key, "1")
+                EventBus.getDefault().post(EventEntity(ConstantPool.Int.TIME_TICK_CHANGE, ""))
             }
         }
     }

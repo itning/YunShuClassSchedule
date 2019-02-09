@@ -136,13 +136,9 @@ class ConstantPool {
          */
         RETURN_LOGIN_FRAGMENT(139),
         /**
-         * Toolbar Title Change Event
-         */
-        TOOLBAR_TITLE_CHANGE(140),
-        /**
          * 课程周数改变(非持久)
          */
-        CLASS_WEEK_CHANGE(141);
+        CLASS_WEEK_CHANGE(140);
 
         fun get(): kotlin.Int {
             return value

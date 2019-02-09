@@ -27,7 +27,9 @@ import top.itning.yunshuclassschedule.entity.ClassScheduleDao
 import top.itning.yunshuclassschedule.entity.DaoSession
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.ui.activity.MainActivity
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.FOREGROUND_SERVICE_STATUS
+import top.itning.yunshuclassschedule.util.ClassScheduleUtils
 import top.itning.yunshuclassschedule.util.DateUtils
 import java.text.ParseException
 import java.util.Date
@@ -52,10 +54,14 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
      */
     private val isHaveCourseThisDay: Boolean
         @CheckResult
-        get() = classScheduleDao
-                .queryBuilder()
-                .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
-                .count() != 0L
+        get() {
+            val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
+            return classScheduleDao
+                    .queryBuilder()
+                    .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
+                    .list()
+                    .any { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+        }
 
     /**
      * 当前时间是否是在第一节课之前
@@ -136,9 +142,13 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
         @NonNull
         @CheckResult
         get() {
+            val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
             val classScheduleList = classScheduleDao
                     .queryBuilder()
-                    .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week)).list()
+                    .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
+                    .list()
+                    .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                    .toMutableList()
             classScheduleList.sortWith(Comparator { a, b -> Integer.compare(a.section, b.section) })
             return classScheduleList
         }

@@ -26,12 +26,14 @@ import top.itning.yunshuclassschedule.entity.ClassScheduleDao
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.receiver.RemindReceiver
 import top.itning.yunshuclassschedule.ui.activity.MainActivity
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.CLASS_REMINDER_DOWN_TIME
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.CLASS_REMINDER_UP_TIME
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.FOREGROUND_SERVICE_STATUS
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.PHONE_MUTE_AFTER_TIME
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.PHONE_MUTE_BEFORE_TIME
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.PHONE_MUTE_STATUS
+import top.itning.yunshuclassschedule.util.ClassScheduleUtils
 import top.itning.yunshuclassschedule.util.DateUtils
 import java.text.ParseException
 import java.util.*
@@ -236,12 +238,15 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
      */
     private fun initClassScheduleList() {
         Log.d(TAG, "init class schedule list data")
+        val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
         val daoSession = (application as App).daoSession
         classScheduleList = daoSession
                 .classScheduleDao
                 .queryBuilder()
                 .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                 .list()
+                .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                .toMutableList()
         Log.d(TAG, "init class schedule list size:" + classScheduleList.size)
     }
 
