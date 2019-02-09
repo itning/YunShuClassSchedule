@@ -307,7 +307,7 @@ class CheckScoreLoginFragment : Fragment() {
                 doInsert(hash1, c + "")
             }
             for (i in 0..END_NUMBER) {
-                val hash2 = ImageHash.calculateFingerPrint(BitmapFactory.decodeStream(assets.open(i.toString() + ".bmp")))
+                val hash2 = ImageHash.calculateFingerPrint(BitmapFactory.decodeStream(assets.open("$i.bmp")))
                 doInsert(hash2, i.toString() + "")
             }
             EventBus.getDefault().post(EventEntity(ConstantPool.Int.HTTP_ERROR, "数据初始化完成"))
@@ -459,7 +459,7 @@ class CheckScoreLoginFragment : Fragment() {
         EventBus.getDefault().post(EventEntity(ConstantPool.Int.SCORE_LOGIN_SUCCESS, "", scoreList))
     }
 
-    fun onLoginBtnClicked() {
+    private fun onLoginBtnClicked() {
         if (!netStatusOk()) {
             return
         }

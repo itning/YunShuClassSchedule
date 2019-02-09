@@ -38,7 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         prefs.registerOnSharedPreferenceChangeListener(this)
         val bundle = arguments
         if (bundle == null) {
-            defaultShowMainFragmentListPreference = findPreference<ListPreference>(DEFAULT_SHOW_MAIN_FRAGMENT)
+            defaultShowMainFragmentListPreference = findPreference(DEFAULT_SHOW_MAIN_FRAGMENT)
             defaultShowMainFragmentListPreference.summary = defaultShowMainFragmentListPreference.entry
             val foregroundServiceStatus: Preference = findPreference<SwitchPreference>(FOREGROUND_SERVICE_STATUS)
             foregroundServiceStatus.setOnPreferenceChangeListener { _, newValue ->
@@ -51,20 +51,20 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 }
                 true
             }
-            nowWeekNumEditTextPreference = findPreference<EditTextPreference>(NOW_WEEK_NUM)
+            nowWeekNumEditTextPreference = findPreference(NOW_WEEK_NUM)
             nowWeekNumEditTextPreference.summary = "第${prefs.getString(NOW_WEEK_NUM, "1")}周"
         } else {
             val key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT)
             when (key) {
                 "class_reminder" -> {
-                    classReminderUpTime = findPreference<ListPreference>(CLASS_REMINDER_UP_TIME)
-                    classReminderDownTime = findPreference<ListPreference>(CLASS_REMINDER_DOWN_TIME)
+                    classReminderUpTime = findPreference(CLASS_REMINDER_UP_TIME)
+                    classReminderDownTime = findPreference(CLASS_REMINDER_DOWN_TIME)
                     classReminderUpTime.summary = classReminderUpTime.entry
                     classReminderDownTime.summary = classReminderDownTime.entry
                 }
                 "phone_mute" -> {
-                    phoneMuteBeforeTime = findPreference<ListPreference>(PHONE_MUTE_BEFORE_TIME)
-                    phoneMuteAfterTime = findPreference<ListPreference>(PHONE_MUTE_AFTER_TIME)
+                    phoneMuteBeforeTime = findPreference(PHONE_MUTE_BEFORE_TIME)
+                    phoneMuteAfterTime = findPreference(PHONE_MUTE_AFTER_TIME)
                     val phoneMuteStatus = findPreference<SwitchPreference>(PHONE_MUTE_STATUS)
                     phoneMuteStatus.setOnPreferenceChangeListener { _, newValue ->
                         if (newValue as Boolean) {

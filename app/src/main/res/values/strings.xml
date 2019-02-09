@@ -22,19 +22,6 @@
     <string name="about_github">Github：YunShuClassSchedule</string>
     <string name="about_series">Yun Shu™ SoftWare Series</string>
     <string name="about_copyrights">© 2018 ITNING.TOP ALL RIGHTS RESERVED</string>
-    <string name="time_morning">上午课程时间</string>
-    <string name="time_1s">第1节上课</string>
-    <string name="time_1x">第1节下课</string>
-    <string name="time_2s">第2节上课</string>
-    <string name="time_2x">第2节下课</string>
-    <string name="time_afternoon">下午课程时间</string>
-    <string name="time_3s">第3节上课</string>
-    <string name="time_3x">第3节下课</string>
-    <string name="time_4s">第4节上课</string>
-    <string name="time_4x">第4节下课</string>
-    <string name="time_night">晚自习时间</string>
-    <string name="time_5s">第5节上课</string>
-    <string name="time_5x">第5节下课</string>
     <string name="login_btn_custom">开始使用</string>
     <string name="week_1">星期一</string>
     <string name="week_2">星期二</string>
@@ -65,4 +52,10 @@
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
     <string name="action_next_week">下一周</string>
     <string name="action_last_week">上一周</string>
+    <string name="dialog_class_schedule_set_week">设置课程周数：</string>
+    <string name="dialog_class_schedule_odd">设为单周课程</string>
+    <string name="dialog_class_schedule_double">设为双周课程</string>
+    <string name="dialog_class_schedule_all">全部选择</string>
+    <string name="dialog_class_schedule_clear">清空选择</string>
+    <string name="dialog_class_schedule_range">区间</string>
 </resources>

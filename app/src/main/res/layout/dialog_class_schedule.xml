@@ -79,7 +79,7 @@
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
-                android:text="设置课程周数：" />
+                android:text="@string/dialog_class_schedule_set_week" />
 
             <cn.wolfspider.autowraplinelayout.AutoWrapLineLayout
                 android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="设为单周课程"
+                    android:text="@string/dialog_class_schedule_odd"
                     android:textColor="#fff"
                     android:theme="@style/AppTheme"
                     app:backgroundTint="@color/colorAccent" />
@@ -110,7 +110,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_toEndOf="@id/btn_set_odd"
-                    android:text="设为双周课程"
+                    android:text="@string/dialog_class_schedule_double"
                     android:textColor="#fff"
                     android:theme="@style/AppTheme"
                     app:backgroundTint="@color/colorAccent" />
@@ -122,7 +122,7 @@
                     android:layout_below="@id/btn_set_odd"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="全部选择"
+                    android:text="@string/dialog_class_schedule_all"
                     android:textColor="#fff"
                     android:theme="@style/AppTheme"
                     app:backgroundTint="@color/colorAccent" />
@@ -135,7 +135,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_toEndOf="@id/btn_set_all"
-                    android:text="清空选择"
+                    android:text="@string/dialog_class_schedule_clear"
                     android:textColor="#fff"
                     android:theme="@style/AppTheme"
                     app:backgroundTint="@color/colorAccent" />
@@ -148,7 +148,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_toEndOf="@id/btn_set_all"
-                    android:text="区间"
+                    android:text="@string/dialog_class_schedule_range"
                     android:textColor="#fff"
                     android:theme="@style/AppTheme"
                     app:backgroundTint="@color/colorAccent" />

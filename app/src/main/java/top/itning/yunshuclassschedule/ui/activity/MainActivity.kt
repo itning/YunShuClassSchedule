@@ -69,6 +69,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var fragmentSparseArray: SparseArray<Fragment>
     private var firstPressedTime: Long = 0
     private lateinit var drawerSwitch: SwitchCompat
+    private var tempNumberOfWeek = "1"
 
     /**
      * fragment 是否消费返回事件
@@ -462,7 +463,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         private const val REQUEST_CODE_CHOOSE = 101
         private const val REQUEST_CODE = 103
         private const val SETTING_REQUEST_CODE = 104
-        val ACTION_BAR_TITLE_FORMAT = SimpleDateFormat("MM月dd日 E", Locale.CHINESE)
-        var tempNumberOfWeek = "1"
+        private val ACTION_BAR_TITLE_FORMAT = SimpleDateFormat("MM月dd日 E", Locale.CHINESE)
     }
 }

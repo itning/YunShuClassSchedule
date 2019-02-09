@@ -81,12 +81,12 @@ class AboutActivity : BaseActivity() {
 
     }
 
-    fun onCvHrefClicked() {
+    private fun onCvHrefClicked() {
         val uri = Uri.parse("https://github.com/itning/YunShuClassSchedule")
         startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
-    fun onIntroductionClicked() {
+    private fun onIntroductionClicked() {
         startActivity(Intent(this, MoneyActivity::class.java))
     }
 

@@ -15,13 +15,11 @@ import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.gridlayout.widget.GridLayout
-import androidx.preference.PreferenceManager
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
 import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener
-import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import java.text.ParseException
 import java.util.*
 
@@ -316,11 +314,6 @@ object ClassScheduleUtils {
         classScheduleList.addAll(ORDER_LIST)
         ORDER_LIST.clear()
         return classScheduleList
-    }
-
-    fun isThisWeekOfClassSchedule(classSchedule: ClassSchedule, context: Context): Boolean {
-        val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
-        return ClassScheduleUtils.isThisWeekOfClassSchedule(classSchedule, nowWeekNum)
     }
 
     fun isThisWeekOfClassSchedule(classSchedule: ClassSchedule, nowWeekNum: String): Boolean {
