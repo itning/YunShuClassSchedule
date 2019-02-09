@@ -23,7 +23,6 @@ import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.ui.activity.MainActivity
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.DEFAULT_SHOW_MAIN_FRAGMENT
-import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.NOW_WEEK_NUM
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 import java.util.*
 
@@ -109,7 +108,7 @@ class ClassScheduleFragment : Fragment() {
                 if (position == 0) {
                     EventBus.getDefault().post(EventEntity(ConstantPool.Int.TOOLBAR_TITLE_CHANGE, MainActivity.ACTION_BAR_TITLE_FORMAT.format(Date())))
                 } else {
-                    EventBus.getDefault().post(EventEntity(ConstantPool.Int.TOOLBAR_TITLE_CHANGE, "第${PreferenceManager.getDefaultSharedPreferences(context).getString(NOW_WEEK_NUM, "1")!!.toInt()}周"))
+                    EventBus.getDefault().post(EventEntity(ConstantPool.Int.TOOLBAR_TITLE_CHANGE, "第${MainActivity.tempNumberOfWeek}周"))
                 }
             }
 

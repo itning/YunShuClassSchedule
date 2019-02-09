@@ -15,11 +15,13 @@ import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.gridlayout.widget.GridLayout
+import androidx.preference.PreferenceManager
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
 import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import java.text.ParseException
 import java.util.*
 
@@ -66,6 +68,7 @@ object ClassScheduleUtils {
         gridLayout.columnCount = 8
         //行
         gridLayout.rowCount = classSection + 1
+        gridLayout.removeViews(8, gridLayout.childCount - 8)
         for (i in 0 until classSection) {
             setFirstRow(activity, i, gridLayout)
             for (j in 0 until CLASS_WEEK) {
@@ -313,5 +316,29 @@ object ClassScheduleUtils {
         classScheduleList.addAll(ORDER_LIST)
         ORDER_LIST.clear()
         return classScheduleList
+    }
+
+    fun isThisWeekOfClassSchedule(classSchedule: ClassSchedule, context: Context): Boolean {
+        val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
+        return ClassScheduleUtils.isThisWeekOfClassSchedule(classSchedule, nowWeekNum)
+    }
+
+    fun isThisWeekOfClassSchedule(classSchedule: ClassSchedule, nowWeekNum: String): Boolean {
+        var have = false
+        classSchedule.numberOfWeek.split("-").forEach {
+            if (nowWeekNum == it) {
+                have = true
+                return@forEach
+            }
+        }
+        return have
+    }
+
+    fun delNumberOfWeek(classSchedule: ClassSchedule, number: List<String>): String {
+        return try {
+            classSchedule.numberOfWeek.split("-").filter { number.indexOf(it) == -1 }.reduce { acc, s -> "$acc-$s" }
+        } catch (e: Exception) {
+            return ""
+        }
     }
 }

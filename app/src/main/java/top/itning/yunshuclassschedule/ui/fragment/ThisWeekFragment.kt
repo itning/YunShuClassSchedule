@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
@@ -21,6 +22,7 @@ import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils
 import top.itning.yunshuclassschedule.util.ClassScheduleUtils.COPY_LIST
 import top.itning.yunshuclassschedule.util.GlideApp
@@ -43,8 +45,11 @@ class ThisWeekFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setViewBackground()
+        val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
         val daoSession = (requireActivity().application as App).daoSession
         val classScheduleList = daoSession.classScheduleDao.loadAll()
+                .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                .toMutableList()
         clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
         ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
     }
@@ -64,13 +69,25 @@ class ThisWeekFragment : Fragment() {
     fun onMessageEvent(eventEntity: EventEntity) {
         when (eventEntity.id) {
             ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA -> {
+                val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
                 val daoSession = (requireActivity().application as App).daoSession
                 val classScheduleList = daoSession.classScheduleDao.loadAll()
+                        .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                        .toMutableList()
                 clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
                 ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 clickListener.updateBtnBackgroundTintList()
+            }
+            ConstantPool.Int.CLASS_WEEK_CHANGE -> {
+                val nowWeekNum = (eventEntity.msg!!.toInt() - 1).toString()
+                val daoSession = (requireActivity().application as App).daoSession
+                val classScheduleList = daoSession.classScheduleDao.loadAll()
+                        .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                        .toMutableList()
+                clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
+                ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
             }
             else -> {
             }

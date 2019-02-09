@@ -25,6 +25,7 @@ import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao
 import top.itning.yunshuclassschedule.entity.EventEntity
+import top.itning.yunshuclassschedule.util.ClassScheduleUtils
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 import java.util.*
 
@@ -124,6 +125,21 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         selectClassSchedule!!.location = tvlocation.text.toString().trim { it <= ' ' }
         selectClassSchedule!!.teacher = tvteacher.text.toString().trim { it <= ' ' }
         selectClassSchedule!!.numberOfWeek = setNumberOfWeek()
+        classScheduleDao.loadAll()
+                .filter { it.week == selectClassSchedule!!.week }
+                .filter { it.section == selectClassSchedule!!.section }
+                .filter { it.id != selectClassSchedule!!.id }
+                .forEach {
+                    val newNumberOfWeek = ClassScheduleUtils.delNumberOfWeek(it, selectClassSchedule!!.numberOfWeek.split("-"))
+                    if (newNumberOfWeek != it.numberOfWeek) {
+                        if (newNumberOfWeek == "") {
+                            classScheduleDao.deleteByKey(it.id)
+                        } else {
+                            it.numberOfWeek = newNumberOfWeek
+                            classScheduleDao.update(it)
+                        }
+                    }
+                }
         classScheduleDao.update(selectClassSchedule)
     }
 
@@ -136,6 +152,18 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         classSchedule.section = Integer.parseInt(classSplit[0])
         classSchedule.week = Integer.parseInt(classSplit[1])
         classSchedule.numberOfWeek = setNumberOfWeek()
+        classScheduleDao.loadAll()
+                .filter { it.section == classSchedule.section }
+                .filter { it.week == classSchedule.week }
+                .forEach {
+                    //检查当前插入的和其它周的是否有冲突
+                    it.numberOfWeek = ClassScheduleUtils.delNumberOfWeek(it, classSchedule.numberOfWeek.split("-"))
+                    if (it.numberOfWeek == "") {
+                        classScheduleDao.deleteByKey(it.id)
+                    } else {
+                        classScheduleDao.update(it)
+                    }
+                }
         classScheduleDao.insert(classSchedule)
     }
 

@@ -63,4 +63,6 @@
     <string name="customactivityoncrash_error_activity_error_details_copy">复制错误信息</string>
     <string name="customactivityoncrash_error_activity_error_details_copied">已复制</string>
     <string name="customactivityoncrash_error_activity_error_details_clipboard_label">错误信息</string>
+    <string name="action_next_week">下一周</string>
+    <string name="action_last_week">上一周</string>
 </resources>

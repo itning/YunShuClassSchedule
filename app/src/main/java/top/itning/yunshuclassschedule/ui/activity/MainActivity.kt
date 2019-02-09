@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.IdRes
@@ -23,11 +24,13 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
@@ -47,6 +50,7 @@ import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.ui.fragment.CheckScoreFragment
 import top.itning.yunshuclassschedule.ui.fragment.ClassScheduleFragment
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.util.DateUtils
 import top.itning.yunshuclassschedule.util.FileUtils
 import top.itning.yunshuclassschedule.util.Glide4Engine
@@ -92,6 +96,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
      * 初始化数据
      */
     private fun initData() {
+        tempNumberOfWeek = PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!
         fragmentSparseArray = SparseArray()
         fragmentSparseArray.put(R.id.nav_class_schedule, ClassScheduleFragment())
         fragmentSparseArray.put(R.id.nav_check_score, CheckScoreFragment())
@@ -104,7 +109,28 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         //设置主标题
         toolbar.title = ACTION_BAR_TITLE_FORMAT.format(Date())
         toolbar.setOnClickListener {
-
+            tempNumberOfWeek = PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!
+            toolbar.title = "第${tempNumberOfWeek}周"
+            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
+            Toast.makeText(this, "回到当前周", Toast.LENGTH_SHORT).show()
+        }
+        toolbar.setOnLongClickListener {
+            val appCompatSpinner = AppCompatSpinner(this)
+            val list = 1..50
+            appCompatSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, list.toList())
+            appCompatSpinner.setSelection(tempNumberOfWeek.toInt() - 1)
+            AlertDialog.Builder(this)
+                    .setTitle("快速跳转到其它周")
+                    .setView(appCompatSpinner)
+                    .setPositiveButton("确定") { _, _ ->
+                        if (appCompatSpinner.selectedItem.toString() != tempNumberOfWeek) {
+                            tempNumberOfWeek = appCompatSpinner.selectedItem.toString()
+                            toolbar.title = "第${tempNumberOfWeek}周"
+                            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
+                        }
+                    }
+                    .show()
+            true
         }
         //设置导航
         setSupportActionBar(toolbar)
@@ -240,6 +266,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     item.title = "隐藏授课教师"
                 }
                 EventBus.getDefault().post(EventEntity(ConstantPool.Int.REFRESH_WEEK_FRAGMENT_DATA))
+                return true
+            }
+            R.id.action_last_week -> {
+                if (tempNumberOfWeek == "1") {
+                    return true
+                }
+                val t = tempNumberOfWeek.toInt() - 1
+                tempNumberOfWeek = t.toString()
+                EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
+                toolbar.title = "第${tempNumberOfWeek}周"
+                return true
+            }
+            R.id.action_next_week -> {
+                if (tempNumberOfWeek == "50") {
+                    return true
+                }
+                val t = tempNumberOfWeek.toInt() + 1
+                tempNumberOfWeek = t.toString()
+                toolbar.title = "第${tempNumberOfWeek}周"
+                EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -420,5 +466,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         private const val REQUEST_CODE = 103
         private const val SETTING_REQUEST_CODE = 104
         val ACTION_BAR_TITLE_FORMAT = SimpleDateFormat("MM月dd日 E", Locale.CHINESE)
+        var tempNumberOfWeek = "1"
     }
 }
