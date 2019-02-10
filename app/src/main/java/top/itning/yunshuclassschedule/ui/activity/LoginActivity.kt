@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
 import com.tencent.bugly.crashreport.CrashReport
@@ -22,7 +23,9 @@ import top.itning.yunshuclassschedule.entity.DataEntity
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.ui.activity.ShareActivity.Companion.FILE_SELECT_CODE
 import top.itning.yunshuclassschedule.ui.activity.ShareActivity.Companion.TIME_LIST_SIZE
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.util.DateUtils
+import top.itning.yunshuclassschedule.util.DateUtils.getNextMondayOfTimeInMillis
 import java.util.*
 
 /**
@@ -45,14 +48,24 @@ class LoginActivity : BaseActivity() {
      * 加载专业数据
      */
     private fun initData() {
-        if ("" == App.sharedPreferences.getString(FIRST_CLASS, "")) {
+        if (App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                    .putString(SettingsFragment.NOW_WEEK_NUM, "1")
+                    .apply()
             App.sharedPreferences.edit()
+                    .putLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), getNextMondayOfTimeInMillis())
                     .putString("1", "08:20-09:50")
                     .putString("2", "10:05-11:35")
                     .putString("3", "12:55-14:25")
                     .putString("4", "14:40-16:10")
                     .putString("5", "17:30-20:00")
-                    .apply()
+                    .putString("6", "20:05-20:08")
+                    .putString("7", "20:10-20:15")
+                    .putString("8", "20:18-20:20")
+                    .putString("9", "20:30-20:35")
+                    .putString("10", "20:40-20:45")
+                    .putString("11", "20:50-21:01")
+                    .putString("12", "21:10-21:15").apply()
         }
     }
 
@@ -165,9 +178,6 @@ class LoginActivity : BaseActivity() {
 
     private fun enterMainActivity() {
         App.sharedPreferences.edit()
-                .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
-                .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
-                .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
                 .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
                 .apply()
         startActivity(Intent(this, MainActivity::class.java))
@@ -176,6 +186,5 @@ class LoginActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "LoginActivity"
-        private const val FIRST_CLASS = "1"
     }
 }

@@ -15,11 +15,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import top.itning.yunshuclassschedule.R
+import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.receiver.TimeTickReceiver
 import top.itning.yunshuclassschedule.ui.activity.MainActivity
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.FOREGROUND_SERVICE_STATUS
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.NOW_WEEK_NUM
+import top.itning.yunshuclassschedule.util.DateUtils.getNextMondayOfTimeInMillis
 
 /**
  * 公共服务
@@ -118,10 +121,29 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
             ConstantPool.Int.HTTP_ERROR -> {
                 Toast.makeText(this, eventEntity.msg, Toast.LENGTH_LONG).show()
             }
+            ConstantPool.Int.TIME_TICK_CHANGE -> {
+                if (isNewWeek()) {
+                    val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+                    val i = defaultSharedPreferences.getString(NOW_WEEK_NUM, "1")!!.toInt() + 1
+                    Log.e(TAG, i.toString())
+                    if (defaultSharedPreferences.edit().putString(NOW_WEEK_NUM, i.toString()).commit()) {
+                        App.sharedPreferences.edit().putLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), getNextMondayOfTimeInMillis()).apply()
+                    }
+                }
+            }
             else -> {
 
             }
         }
+    }
+
+    /**
+     * 检查是不是新的一周
+     */
+    private fun isNewWeek(): Boolean {
+        val currentTimeMillis = System.currentTimeMillis()
+        val lastTimeMillis = App.sharedPreferences.getLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), currentTimeMillis)
+        return currentTimeMillis > lastTimeMillis
     }
 
     /**

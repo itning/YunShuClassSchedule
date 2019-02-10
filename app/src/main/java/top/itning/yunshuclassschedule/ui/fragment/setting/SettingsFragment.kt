@@ -13,8 +13,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.*
 import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.R
+import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
+import top.itning.yunshuclassschedule.util.DateUtils.getNextMondayOfTimeInMillis
 import top.itning.yunshuclassschedule.util.ThemeChangeUtil
 
 /**
@@ -133,6 +135,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
             NOW_WEEK_NUM -> {
                 nowWeekNumEditTextPreference.summary = sharedPreferences.getString(key, "1")
+                App.sharedPreferences.edit().putLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), getNextMondayOfTimeInMillis()).apply()
                 EventBus.getDefault().post(EventEntity(ConstantPool.Int.TIME_TICK_CHANGE, ""))
             }
         }

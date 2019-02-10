@@ -17,25 +17,9 @@ class ConstantPool {
          */
         SHARED_PREFERENCES_FILENAME("class-schedule"),
         /**
-         * 课程表版本KEY
-         */
-        APP_CLASS_SCHEDULE_VERSION("APP_CLASS_SCHEDULE_VERSION"),
-        /**
          * 第一次进入app
          */
         FIRST_IN_APP("first_in_app"),
-        /**
-         * 登陆用户名
-         */
-        USER_USERNAME("user_username"),
-        /**
-         * 登陆密码
-         */
-        USER_PASSWORD("user_password"),
-        /**
-         * 用户所在班级
-         */
-        USER_CLASS_ID("user_class_id"),
         /**
          * 周课表文字大小
          */
@@ -48,6 +32,10 @@ class ConstantPool {
          * 是否显示授课教师信息
          */
         TEACHER_INFO_STATUS("teacher_week_status"),
+        /**
+         * 下周一 日期
+         */
+        NEXT_WEEK_OF_MONDAY("this_week_of_sunday"),
         /**
          * 每天课程节数
          */

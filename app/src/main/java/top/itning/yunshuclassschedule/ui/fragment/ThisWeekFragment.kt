@@ -50,7 +50,7 @@ class ThisWeekFragment : Fragment() {
         val classScheduleList = daoSession.classScheduleDao.loadAll()
                 .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
                 .toMutableList()
-        clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
+        clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST)
         ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
     }
 
@@ -74,7 +74,7 @@ class ThisWeekFragment : Fragment() {
                 val classScheduleList = daoSession.classScheduleDao.loadAll()
                         .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
                         .toMutableList()
-                clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
+                clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST)
                 ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
@@ -86,7 +86,7 @@ class ThisWeekFragment : Fragment() {
                 val classScheduleList = daoSession.classScheduleDao.loadAll()
                         .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
                         .toMutableList()
-                clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST.toMutableList())
+                clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST)
                 ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
             }
             else -> {

@@ -34,7 +34,7 @@ object ClassScheduleUtils {
     private const val CLASS_WEEK = 7
     private var weekFont: Float = 0.toFloat()
     private val ORDER_LIST = ArrayList<ClassSchedule>()
-    val COPY_LIST: List<String> = ArrayList()
+    val COPY_LIST: MutableList<String> = mutableListOf()
     /**
      * 颜色数组
      */

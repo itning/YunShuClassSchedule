@@ -19,7 +19,6 @@ import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 import org.greenrobot.eventbus.EventBus
 import top.itning.yunshuclassschedule.R
-
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
@@ -245,6 +244,7 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
             copyList.add(tvname.text.toString().trim { it <= ' ' })
             copyList.add(tvlocation.text.toString().trim { it <= ' ' })
             copyList.add(tvteacher.text.toString().trim { it <= ' ' })
+            copyList.add(setNumberOfWeek())
             Toast.makeText(activity, "已复制", Toast.LENGTH_SHORT).show()
         }
         pasteBtn.setOnClickListener {
@@ -252,6 +252,10 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
                 tvname.setText(copyList[0])
                 tvlocation.setText(copyList[1])
                 tvteacher.setText(copyList[2])
+                copyList[3].split("-").forEach { i ->
+                    val materialCheckBox = autoWrapLineLayout.getChildAt(i.toInt()) as MaterialCheckBox
+                    materialCheckBox.isChecked = true
+                }
                 Toast.makeText(activity, "已粘贴", Toast.LENGTH_SHORT).show()
             }
         }
@@ -330,6 +334,6 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
 
     companion object {
         private const val TAG = "CSLongClickListener"
-        private const val COPY_SIZE = 3
+        private const val COPY_SIZE = 4
     }
 }

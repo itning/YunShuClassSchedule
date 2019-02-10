@@ -53,20 +53,6 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
      */
     @SuppressLint("ApplySharedPref")
     private fun initData() {
-        if (App.sharedPreferences.getBoolean(ConstantPool.Str.FIRST_IN_APP.get(), true)) {
-            App.sharedPreferences.edit().putString("1", "08:20-09:50").commit()
-            App.sharedPreferences.edit().putString("2", "10:05-11:35").commit()
-            App.sharedPreferences.edit().putString("3", "12:55-14:25").commit()
-            App.sharedPreferences.edit().putString("4", "14:40-16:10").commit()
-            App.sharedPreferences.edit().putString("5", "17:30-20:00").commit()
-            App.sharedPreferences.edit().putString("6", "20:05-20:08").commit()
-            App.sharedPreferences.edit().putString("7", "20:10-20:15").commit()
-            App.sharedPreferences.edit().putString("8", "20:18-20:20").commit()
-            App.sharedPreferences.edit().putString("9", "20:30-20:35").commit()
-            App.sharedPreferences.edit().putString("10", "20:40-20:45").commit()
-            App.sharedPreferences.edit().putString("11", "20:50-21:01").commit()
-            App.sharedPreferences.edit().putString("12", "21:10-21:15").commit()
-        }
         timeMap.clear()
         for (i in 1..classSchedule) {
             timeMap[i] = App.sharedPreferences.getString(i.toString(), "12:00-12:01")!!
@@ -181,9 +167,6 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
                 if (DateUtils.isDataLegitimate(timeMap, this)) {
                     updateSharedPreferences()
                     if (App.sharedPreferences.edit()
-                                    .putString(ConstantPool.Str.APP_CLASS_SCHEDULE_VERSION.get(), "")
-                                    .putString(ConstantPool.Str.USER_USERNAME.get(), "test")
-                                    .putString(ConstantPool.Str.USER_CLASS_ID.get(), "-1")
                                     .putInt(ConstantPool.Str.CLASS_SECTION.get(), classSchedule)
                                     .putBoolean(ConstantPool.Str.FIRST_IN_APP.get(), false)
                                     .commit()) {

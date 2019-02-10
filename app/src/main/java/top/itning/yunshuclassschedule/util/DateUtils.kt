@@ -228,7 +228,6 @@ object DateUtils {
         for (entry in timeMap.entries) {
             val timeArray = entry.value.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             //检查每节课上下课时间合法性
-            Log.e(TAG, "${timeArray[0]}  ${timeArray[1]}")
             if (DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
                 Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1])
                 showTimeErrorDialog(entry.key.toString(), 1, context)
@@ -264,5 +263,19 @@ object DateUtils {
         }
         builder.setPositiveButton("确定", null)
                 .show()
+    }
+
+    fun getNextMondayOfTimeInMillis(): Long {
+        val c = Calendar.getInstance()
+        var dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1
+        if (dayOfWeek == 0) {
+            dayOfWeek = 7
+        }
+        c.add(Calendar.DATE, -dayOfWeek + 8)
+        c.set(Calendar.HOUR_OF_DAY, 0)
+        c.set(Calendar.MINUTE, 0)
+        c.set(Calendar.SECOND, 0)
+        c.set(Calendar.MILLISECOND, 0)
+        return c.timeInMillis
     }
 }
