@@ -4,9 +4,11 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.CheckResult
 import androidx.appcompat.app.AlertDialog
+import androidx.preference.PreferenceManager
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -220,21 +222,23 @@ object DateUtils {
      *
      * @return 合法返回真
      */
-    fun isDataLegitimate(timeMap: TreeMap<String, String>, context: Context): Boolean {
-        var lastEntry: Map.Entry<String, String>? = null
+    fun isDataLegitimate(timeMap: TreeMap<Int, String>, context: Context): Boolean {
+        val nowWeekNum = PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")
+        var lastEntry: Map.Entry<Int, String>? = null
         for (entry in timeMap.entries) {
             val timeArray = entry.value.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             //检查每节课上下课时间合法性
+            Log.e(TAG, "${timeArray[0]}  ${timeArray[1]}")
             if (DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
                 Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1])
-                showTimeErrorDialog(entry.key, 1, context)
+                showTimeErrorDialog(entry.key.toString(), 1, context)
                 return false
             }
-            if (lastEntry != null && "5" != entry.key) {
+            if (lastEntry != null && nowWeekNum != entry.key.toString()) {
                 val lastTimeArray = lastEntry.value.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 if (DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
                     Log.d(TAG, "error2: " + lastTimeArray[1] + "-->" + timeArray[0])
-                    showTimeErrorDialog(lastEntry.key, 2, context)
+                    showTimeErrorDialog(lastEntry.key.toString(), 2, context)
                     return false
                 }
             }

@@ -211,23 +211,19 @@ class ShareActivity : BaseActivity() {
                     .setTitle("警告")
                     .setMessage("即将导入课程数据，这会将原有课程信息清空，确定导入吗？")
                     .setPositiveButton("确定") { _, _ ->
-                        val timeMap = TreeMap<String, String>()
-                        timeMap["1"] = timeList[0]
-                        timeMap["2"] = timeList[1]
-                        timeMap["3"] = timeList[2]
-                        timeMap["4"] = timeList[3]
-                        timeMap["5"] = timeList[4]
+                        val timeMap = TreeMap<Int, String>()
+                        for ((index, value) in timeList.withIndex()) {
+                            timeMap[index + 1] = value
+                        }
                         if (!DateUtils.isDataLegitimate(timeMap, this)) {
                             Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                             return@setPositiveButton
                         }
-                        if (App.sharedPreferences.edit()
-                                        .putString("1", timeList[0])
-                                        .putString("2", timeList[1])
-                                        .putString("3", timeList[2])
-                                        .putString("4", timeList[3])
-                                        .putString("5", timeList[4])
-                                        .commit()) {
+                        val edit = App.sharedPreferences.edit()
+                        for ((index, value) in timeList.withIndex()) {
+                            edit.putString((index + 1).toString(), value)
+                        }
+                        if (edit.commit()) {
                             DateUtils.refreshTimeList()
                         } else {
                             Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()

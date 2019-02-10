@@ -38,7 +38,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     private lateinit var msg: String
     private var classSchedule = 5
-    private var timeMap: TreeMap<String, String> = TreeMap()
+    private var timeMap: TreeMap<Int, String> = TreeMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeChangeUtil.changeTheme(this)
@@ -59,17 +59,17 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
             App.sharedPreferences.edit().putString("3", "12:55-14:25").commit()
             App.sharedPreferences.edit().putString("4", "14:40-16:10").commit()
             App.sharedPreferences.edit().putString("5", "17:30-20:00").commit()
-            App.sharedPreferences.edit().putString("6", "12:00-12:01").commit()
-            App.sharedPreferences.edit().putString("7", "12:00-12:01").commit()
-            App.sharedPreferences.edit().putString("8", "12:00-12:01").commit()
-            App.sharedPreferences.edit().putString("9", "12:00-12:01").commit()
-            App.sharedPreferences.edit().putString("10", "12:00-12:01").commit()
-            App.sharedPreferences.edit().putString("11", "12:00-12:01").commit()
-            App.sharedPreferences.edit().putString("12", "12:00-12:01").commit()
+            App.sharedPreferences.edit().putString("6", "20:05-20:08").commit()
+            App.sharedPreferences.edit().putString("7", "20:10-20:15").commit()
+            App.sharedPreferences.edit().putString("8", "20:18-20:20").commit()
+            App.sharedPreferences.edit().putString("9", "20:30-20:35").commit()
+            App.sharedPreferences.edit().putString("10", "20:40-20:45").commit()
+            App.sharedPreferences.edit().putString("11", "20:50-21:01").commit()
+            App.sharedPreferences.edit().putString("12", "21:10-21:15").commit()
         }
         timeMap.clear()
         for (i in 1..classSchedule) {
-            timeMap[i.toString()] = App.sharedPreferences.getString(i.toString(), "12:00-12:01")!!
+            timeMap[i] = App.sharedPreferences.getString(i.toString(), "12:00-12:01")!!
         }
     }
 
@@ -79,7 +79,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
     private fun setText(key: String = "") {
         if (key == "") {
             for (i in 1..classSchedule) {
-                val a = timeMap[i.toString()]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val a = timeMap[i]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 getOneClass(i.toString(), a[0], a[1])
             }
         } else {
@@ -87,8 +87,8 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
             val down = ll.findViewWithTag<RelativeLayout>("$key-x")
             val upView: AppCompatTextView = up.getChildAt(1) as AppCompatTextView
             val downView: AppCompatTextView = down.getChildAt(1) as AppCompatTextView
-            upView.text = timeMap[key]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-            downView.text = timeMap[key]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+            upView.text = timeMap[key.toInt()]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+            downView.text = timeMap[key.toInt()]!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         }
     }
 
@@ -125,8 +125,8 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
     }
 
     private fun getOneClass(classText: CharSequence, upTime: CharSequence, downTime: CharSequence) {
-        val up = getOneRowRelativeLayout("第${classText}节上课", upTime, View.OnClickListener { onViewClicked("$classText-s", it) })
-        val down = getOneRowRelativeLayout("第${classText}节下课", downTime, View.OnClickListener { onViewClicked("$classText-x", it) })
+        val up = getOneRowRelativeLayout("第${classText}节上课", upTime, View.OnClickListener { onViewClicked("$classText-s") })
+        val down = getOneRowRelativeLayout("第${classText}节下课", downTime, View.OnClickListener { onViewClicked("$classText-x") })
         up.tag = "$classText-s"
         down.tag = "$classText-x"
         ll.addView(up)
@@ -209,7 +209,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
     private fun updateSharedPreferences() {
         val edit = App.sharedPreferences.edit()
         for ((key, value) in timeMap) {
-            edit.putString(key, value)
+            edit.putString(key.toString(), value)
         }
         edit.apply()
         DateUtils.refreshTimeList()
@@ -220,7 +220,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
 
     }
 
-    private fun onViewClicked(id: String, view: View) {
+    private fun onViewClicked(id: String) {
         this.msg = id
         showTimePickerDialog()
     }
@@ -236,7 +236,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         } else {
             stringBuilder.append("下课")
         }
-        val timePickerDialog = getTimePickerDialog(type[1], timeMap[type[0]]!!)
+        val timePickerDialog = getTimePickerDialog(type[1], timeMap[type[0].toInt()]!!)
         timePickerDialog.title = stringBuilder.toString()
         timePickerDialog.show(fragmentManager, "TimePickerDialog")
     }
@@ -285,7 +285,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
                 m = "0$m"
             }
             val time = "$h:$m"
-            val s = timeMap[typeInfo[0]] ?: return
+            val s = timeMap[typeInfo[0].toInt()] ?: return
             if ("" != s) {
                 val insertStr: String = if (CLASS_UP == typeInfo[1]) {
                     time + "-" + s.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
@@ -293,7 +293,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
                     s.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] + "-" + time
                 }
                 Log.d(TAG, "insert :$insertStr")
-                timeMap[typeInfo[0]] = insertStr
+                timeMap[typeInfo[0].toInt()] = insertStr
                 setText(typeInfo[0])
             }
         }
