@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.jaeger.library.StatusBarUtil
-import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.activity_login.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -171,7 +170,6 @@ class LoginActivity : BaseActivity() {
                     .show()
         } catch (e: Exception) {
             Log.e(TAG, " ", e)
-            CrashReport.postCatchedException(e)
             Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
         }
     }
