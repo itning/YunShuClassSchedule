@@ -20,16 +20,19 @@
         <item>上课前3分钟</item>
         <item>上课前5分钟</item>
         <item>上课前10分钟</item>
+        <item>上课前30分钟</item>
     </string-array>
     <string-array name="entries_values_class_reminder_up_time">
         <item>1</item>
         <item>3</item>
         <item>5</item>
         <item>10</item>
+        <item>30</item>
     </string-array>
     <!--选择下课提醒通知发出时间-->
     <string-array name="entries_list_class_reminder_down_time">
         <item>下课前1分钟</item>
+        <item>下课前3分钟</item>
         <item>下课前5分钟</item>
         <item>下课前10分钟</item>
         <item>下课前30分钟</item>
@@ -37,6 +40,7 @@
     <string-array name="entries_values_class_reminder_down_time">
         <item>1</item>
         <item>3</item>
+        <item>5</item>
         <item>10</item>
         <item>30</item>
     </string-array>
@@ -44,12 +48,14 @@
     <string-array name="entries_list_phone_mute_before_time">
         <item>上课时</item>
         <item>上课前1分钟</item>
+        <item>上课前3分钟</item>
         <item>上课前5分钟</item>
         <item>上课前10分钟</item>
     </string-array>
     <string-array name="entries_values_phone_mute_before_time">
         <item>0</item>
         <item>1</item>
+        <item>3</item>
         <item>5</item>
         <item>10</item>
     </string-array>
@@ -57,12 +63,14 @@
     <string-array name="entries_list_phone_mute_after_time">
         <item>下课时</item>
         <item>下课前1分钟</item>
+        <item>下课前3分钟</item>
         <item>下课前5分钟</item>
         <item>下课前10分钟</item>
     </string-array>
     <string-array name="entries_values_phone_mute_after_time">
         <item>0</item>
         <item>1</item>
+        <item>3</item>
         <item>5</item>
         <item>10</item>
     </string-array>
