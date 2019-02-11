@@ -285,13 +285,13 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
         for (classSchedule in classScheduleList) {
             val timeArray = defaultTimeList[classSchedule.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             if (phoneMuteStatus) {
-                initIntent(upTimeList, downTimeList, classSchedule, timeArray, phoneMuteBeforeTime, phoneMuteAfterTime, "phone_mute", true, true)
+                initIntent(upTimeList, downTimeList, classSchedule, timeArray, phoneMuteBeforeTime, phoneMuteAfterTime, "phone_mute", haveBefore = true, haveAfter = true)
             }
             if (classReminderUpStatus) {
-                initIntent(upTimeList, downTimeList, classSchedule, timeArray, classReminderUpTime, 0, "class_reminder_up", true, false)
+                initIntent(upTimeList, downTimeList, classSchedule, timeArray, classReminderUpTime, 0, "class_reminder_up", haveBefore = true, haveAfter = false)
             }
             if (classReminderDownStatus) {
-                initIntent(upTimeList, downTimeList, classSchedule, timeArray, 0, classReminderDownTime, "class_reminder_down", false, true)
+                initIntent(upTimeList, downTimeList, classSchedule, timeArray, 0, classReminderDownTime, "class_reminder_down", haveBefore = false, haveAfter = true)
             }
         }
     }

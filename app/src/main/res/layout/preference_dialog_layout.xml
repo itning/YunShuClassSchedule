@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="ifContentScrolls">
@@ -25,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="-4dp"
             android:layout_marginEnd="-4dp"
-            android:inputType="number" />
+            android:inputType="number"
+            tools:ignore="Autofill,LabelFor" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
