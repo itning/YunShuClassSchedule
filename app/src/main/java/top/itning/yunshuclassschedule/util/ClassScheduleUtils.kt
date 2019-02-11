@@ -8,6 +8,7 @@ import android.util.Log
 import android.util.SparseIntArray
 import android.view.Gravity
 import android.view.View
+import android.view.View.INVISIBLE
 import android.widget.TextView
 import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
@@ -55,7 +56,7 @@ object ClassScheduleUtils {
      * @param gridLayout        [GridLayout]
      * @param activity          [Activity]
      */
-    fun loadingView(classScheduleList: List<ClassSchedule>?, @NonNull gridLayout: GridLayout, @NonNull clickListener: ClassScheduleItemLongClickListener, @NonNull activity: Activity) {
+    fun loadingView(classScheduleList: List<ClassSchedule>?, @NonNull gridLayout: GridLayout, @NonNull headerGridLayout: GridLayout, @NonNull clickListener: ClassScheduleItemLongClickListener, @NonNull activity: Activity) {
         val classSection = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
         initColorArray(activity)
         initFontSize()
@@ -66,7 +67,8 @@ object ClassScheduleUtils {
         gridLayout.columnCount = 8
         //行
         gridLayout.rowCount = classSection + 1
-        gridLayout.removeViews(8, gridLayout.childCount - 8)
+        gridLayout.removeAllViews()
+        initHeaderGridLayout(activity, classSection, headerGridLayout)
         for (i in 0 until classSection) {
             setFirstRow(activity, i, gridLayout)
             for (j in 0 until CLASS_WEEK) {
@@ -91,6 +93,22 @@ object ClassScheduleUtils {
         }
     }
 
+    private fun initHeaderGridLayout(activity: Activity, classSection: Int, headerGridLayout: GridLayout) {
+        val textView = TextView(activity)
+        val text = if (classSection > 9) {
+            "00"
+        } else {
+            "0"
+        }
+        textView.text = text
+        val rowSpec = GridLayout.spec(0, 1.0f)
+        val columnSpec = GridLayout.spec(0, 1.0f)
+        val params = GridLayout.LayoutParams(rowSpec, columnSpec)
+        params.setGravity(Gravity.CENTER)
+        textView.visibility = INVISIBLE
+        headerGridLayout.addView(textView, params)
+    }
+
     /**
      * 设置第一列的信息
      * @param activity    上下文
@@ -103,7 +121,7 @@ object ClassScheduleUtils {
         val rowSpec = GridLayout.spec(i + 1, 1.0f)
         val columnSpec = GridLayout.spec(0, 1.0f)
         val params = GridLayout.LayoutParams(rowSpec, columnSpec)
-        params.setGravity(Gravity.CENTER_VERTICAL)
+        params.setGravity(Gravity.CENTER)
         gridLayout.addView(textView, params)
     }
 

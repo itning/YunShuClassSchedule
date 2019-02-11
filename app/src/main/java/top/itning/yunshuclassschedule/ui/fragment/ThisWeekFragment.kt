@@ -51,7 +51,7 @@ class ThisWeekFragment : Fragment() {
                 .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
                 .toMutableList()
         clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST)
-        ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
+        ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, gl_header, clickListener, requireActivity())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ class ThisWeekFragment : Fragment() {
                         .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
                         .toMutableList()
                 clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST)
-                ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
+                ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, gl_header, clickListener, requireActivity())
             }
             ConstantPool.Int.APP_COLOR_CHANGE -> {
                 clickListener.updateBtnBackgroundTintList()
@@ -87,7 +87,7 @@ class ThisWeekFragment : Fragment() {
                         .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
                         .toMutableList()
                 clickListener = ClassScheduleItemLongClickListener(requireActivity(), classScheduleList, COPY_LIST)
-                ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, clickListener, requireActivity())
+                ClassScheduleUtils.loadingView(classScheduleList, schedule_gridlayout, gl_header, clickListener, requireActivity())
             }
             else -> {
             }
