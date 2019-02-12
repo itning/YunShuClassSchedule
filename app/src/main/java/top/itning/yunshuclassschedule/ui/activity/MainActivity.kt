@@ -127,7 +127,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     .setView(appCompatSpinner)
                     .setPositiveButton("确定") { _, _ ->
                         if (appCompatSpinner.selectedItem.toString() != tempNumberOfWeek) {
-                            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, appCompatSpinner.selectedItem.toString()))
+                            tempNumberOfWeek = appCompatSpinner.selectedItem.toString()
+                            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
                         }
                     }
                     .show()
