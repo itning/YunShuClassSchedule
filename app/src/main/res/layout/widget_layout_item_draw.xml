@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="325dp"
+    android:layout_height="60dp">
+
+    <View
+        android:id="@+id/view_progress"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_toEndOf="@id/view_left"
+        android:background="#D8FFFFFF"
+        android:visibility="invisible" />
+
+    <View
+        android:id="@+id/view_left"
+        android:layout_width="6dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="#D8FFFFFF"
+        android:visibility="invisible" />
+
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_gravity="fill_horizontal"
+        android:background="#80FFFFFF"
+        android:visibility="invisible" />
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="fill_horizontal"
+        android:background="#80FFFFFF"
+        android:visibility="invisible" />
+
+    <FrameLayout
+        android:id="@+id/fl_no"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/view_left">
+
+        <View
+            android:id="@+id/view_center"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="#fff" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <top.itning.yunshuclassschedule.ui.view.RoundBackChange
+                android:id="@+id/round"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:scaleType="centerInside"
+                app:self_color="@color/colorAccent" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/fl_no">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="计算机网络技术" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            tools:text="A201" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            tools:ignore="RelativeOverlap"
+            tools:text="08:20-09:50" />
+    </RelativeLayout>
+</RelativeLayout>
