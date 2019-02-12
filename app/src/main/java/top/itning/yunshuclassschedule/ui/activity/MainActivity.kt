@@ -127,9 +127,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     .setView(appCompatSpinner)
                     .setPositiveButton("确定") { _, _ ->
                         if (appCompatSpinner.selectedItem.toString() != tempNumberOfWeek) {
-                            tempNumberOfWeek = appCompatSpinner.selectedItem.toString()
-                            toolbar.title = "第${tempNumberOfWeek}周"
-                            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, tempNumberOfWeek))
+                            EventBus.getDefault().post(EventEntity(ConstantPool.Int.CLASS_WEEK_CHANGE, appCompatSpinner.selectedItem.toString()))
                         }
                     }
                     .show()
