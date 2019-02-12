@@ -27,7 +27,7 @@ import java.util.*
  * @author itning
  */
 class ToadyRemoteViewsFactory(val context: Context, val intent: Intent?) : RemoteViewsService.RemoteViewsFactory {
-    lateinit var orderListBySection: MutableList<ClassSchedule>
+    private var orderListBySection = mutableListOf<ClassSchedule>()
     var width: Int = 0
     var height: Int = 0
     private val daoSession = (context.applicationContext as App).daoSession
