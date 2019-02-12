@@ -11,8 +11,8 @@ android {
         applicationId "top.itning.yunshuclassschedule"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 50
-        versionName "2.4.5-BETA"
+        versionCode 51
+        versionName "2.4.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -63,7 +63,7 @@ dependencies {
     /*https://github.com/greenrobot/greenDAO*/
     implementation 'org.greenrobot:greendao:3.2.2'
     /*https://bugly.qq.com*/
-    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation 'com.tencent.bugly:crashreport:2.8.6'
     /*https://github.com/kizitonwose/colorpreference*/
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.6'
     /*https://github.com/zhihu/Matisse*/
