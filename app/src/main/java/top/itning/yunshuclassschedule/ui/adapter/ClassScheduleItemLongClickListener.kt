@@ -174,6 +174,9 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
                 stringBuilder.append(i).append("-")
             }
         }
+        if (stringBuilder.isEmpty()) {
+            return ""
+        }
         return stringBuilder.substring(0, stringBuilder.length - 1)
     }
 
@@ -252,9 +255,12 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
                 tvname.setText(copyList[0])
                 tvlocation.setText(copyList[1])
                 tvteacher.setText(copyList[2])
-                copyList[3].split("-").forEach { i ->
-                    val materialCheckBox = autoWrapLineLayout.getChildAt(i.toInt()) as MaterialCheckBox
-                    materialCheckBox.isChecked = true
+                val s = copyList[3]
+                if (s != "") {
+                    s.split("-").forEach { i ->
+                        val materialCheckBox = autoWrapLineLayout.getChildAt(i.toInt()) as MaterialCheckBox
+                        materialCheckBox.isChecked = true
+                    }
                 }
                 Toast.makeText(activity, "已粘贴", Toast.LENGTH_SHORT).show()
             }

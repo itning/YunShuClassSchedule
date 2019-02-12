@@ -77,7 +77,12 @@ class TodayRecyclerViewAdapter(
         holder.tvName.text = classSchedule.name
         holder.tvLocation.text = classSchedule.location
         holder.tvTime.text = DateUtils.timeList[classSchedule.section - 1]
-        holder.round.setBackColor(colorArray[showColorList[position]])
+        if (position >= showColorList.size) {
+            val number = Random().nextInt(colorArray.size)
+            holder.round.setBackColor(colorArray[number])
+        } else {
+            holder.round.setBackColor(colorArray[showColorList[position]])
+        }
         //显示设置可见性
         holder.flNo.visibility = View.VISIBLE
         holder.viewBottom.visibility = View.INVISIBLE
