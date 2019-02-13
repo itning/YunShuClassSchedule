@@ -86,42 +86,13 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onCreate() {
         Log.d(TAG, "on Create")
         EventBus.getDefault().register(this)
-        startForegroundServer()
+        ClassScheduleUtils.startForegroundServer(this, TAG)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         initData()
         super.onCreate()
-    }
-
-    /**
-     * 开启前台服务
-     */
-    private fun startForegroundServer() {
-        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-            return
-        }
-        Log.d(TAG, "start Foreground Server")
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_LAUNCHER)
-        //用ComponentName得到class对象
-        intent.component = ComponentName(this, MainActivity::class.java)
-        // 关键的一步，设置启动模式，两种情况
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-        val pendingIntent = PendingIntent.getActivity(this, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = NotificationCompat.Builder(this, "foreground_service")
-                .setContentTitle("云舒课表")
-                .setContentText("提醒服务正在运行")
-                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                .setSmallIcon(R.drawable.notification_icon)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.logo))
-                .setDefaults(Notification.DEFAULT_LIGHTS)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-        val notification = builder.build()
-        startForeground(111, notification)
     }
 
     override fun onDestroy() {
@@ -395,7 +366,7 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == FOREGROUND_SERVICE_STATUS) {
             if (sharedPreferences.getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-                startForegroundServer()
+                ClassScheduleUtils.startForegroundServer(this, TAG)
             } else {
                 stopForeground(true)
             }

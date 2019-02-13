@@ -1,7 +1,13 @@
 package top.itning.yunshuclassschedule.util
 
 import android.app.Activity
+import android.app.Notification
+import android.app.PendingIntent
+import android.app.Service
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Point
 import android.util.Log
@@ -14,13 +20,17 @@ import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
 import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.gridlayout.widget.GridLayout
+import androidx.preference.PreferenceManager
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
+import top.itning.yunshuclassschedule.ui.activity.MainActivity
 import top.itning.yunshuclassschedule.ui.adapter.ClassScheduleItemLongClickListener
+import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import java.text.ParseException
 import java.util.*
 
@@ -351,5 +361,34 @@ object ClassScheduleUtils {
         } catch (e: Exception) {
             return ""
         }
+    }
+
+    /**
+     * 开启前台服务
+     */
+    fun startForegroundServer(service: Service, tag: String) {
+        if (!PreferenceManager.getDefaultSharedPreferences(service).getBoolean(SettingsFragment.FOREGROUND_SERVICE_STATUS, true)) {
+            return
+        }
+        Log.d(tag, "start Foreground Server")
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        //用ComponentName得到class对象
+        intent.component = ComponentName(service, MainActivity::class.java)
+        // 关键的一步，设置启动模式，两种情况
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+        val pendingIntent = PendingIntent.getActivity(service, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val builder = NotificationCompat.Builder(service, "foreground_service")
+                .setContentTitle("云舒课表")
+                .setContentText("提醒服务正在运行")
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(service.resources, R.mipmap.logo))
+                .setDefaults(Notification.DEFAULT_LIGHTS)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+        val notification = builder.build()
+        service.startForeground(111, notification)
     }
 }

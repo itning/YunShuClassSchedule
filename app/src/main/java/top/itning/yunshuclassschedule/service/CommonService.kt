@@ -1,27 +1,29 @@
 package top.itning.yunshuclassschedule.service
 
 import android.annotation.TargetApi
-import android.app.*
-import android.content.*
-import android.graphics.BitmapFactory
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.NonNull
-import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.App
 import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.receiver.TimeTickReceiver
-import top.itning.yunshuclassschedule.ui.activity.MainActivity
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.FOREGROUND_SERVICE_STATUS
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment.Companion.NOW_WEEK_NUM
+import top.itning.yunshuclassschedule.util.ClassScheduleUtils
 import top.itning.yunshuclassschedule.util.DateUtils.getNextMondayOfTimeInMillis
 
 /**
@@ -39,7 +41,7 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         initNotificationChannel()
-        startForegroundServer()
+        ClassScheduleUtils.startForegroundServer(this, TAG)
         val filter = IntentFilter()
         filter.addAction(Intent.ACTION_TIME_TICK)
         //设置了系统时区
@@ -69,35 +71,6 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
             importance = NotificationManager.IMPORTANCE_NONE
             createNotificationChannel(channelId, channelName, importance, false)
         }
-    }
-
-    /**
-     * 开启前台服务
-     */
-    private fun startForegroundServer() {
-        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-            return
-        }
-        Log.d(TAG, "start Foreground Server")
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_LAUNCHER)
-        //用ComponentName得到class对象
-        intent.component = ComponentName(this, MainActivity::class.java)
-        // 关键的一步，设置启动模式，两种情况
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-        val pendingIntent = PendingIntent.getActivity(this, 88, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = NotificationCompat.Builder(this, "foreground_service")
-                .setContentTitle("云舒课表")
-                .setContentText("提醒服务正在运行")
-                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                .setSmallIcon(R.drawable.notification_icon)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.logo))
-                .setDefaults(Notification.DEFAULT_LIGHTS)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-        val notification = builder.build()
-        startForeground(111, notification)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -165,7 +138,7 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == FOREGROUND_SERVICE_STATUS) {
             if (sharedPreferences.getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
-                startForegroundServer()
+                ClassScheduleUtils.startForegroundServer(this, TAG)
             } else {
                 stopForeground(true)
             }
