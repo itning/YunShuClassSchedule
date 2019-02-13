@@ -6,6 +6,7 @@ import android.app.Service
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.IBinder
 import android.util.Log
@@ -27,7 +28,9 @@ import java.util.*
  *
  * @author itning
  */
-class TodayWidgetService : Service() {
+class TodayWidgetService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onBind(intent: Intent?): IBinder? {
         throw UnsupportedOperationException("Not yet implemented")
     }
@@ -35,6 +38,8 @@ class TodayWidgetService : Service() {
     override fun onCreate() {
         Log.d(TAG, "on Create")
         EventBus.getDefault().register(this)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         startForegroundServer()
         super.onCreate()
     }
@@ -47,6 +52,7 @@ class TodayWidgetService : Service() {
     override fun onDestroy() {
         Log.d(TAG, "on Destroy")
         EventBus.getDefault().unregister(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
         super.onDestroy()
     }
 
@@ -93,6 +99,16 @@ class TodayWidgetService : Service() {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
         val notification = builder.build()
         startForeground(111, notification)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        if (key == SettingsFragment.FOREGROUND_SERVICE_STATUS) {
+            if (sharedPreferences.getBoolean(SettingsFragment.FOREGROUND_SERVICE_STATUS, true)) {
+                startForegroundServer()
+            } else {
+                stopForeground(true)
+            }
+        }
     }
 
     companion object {
