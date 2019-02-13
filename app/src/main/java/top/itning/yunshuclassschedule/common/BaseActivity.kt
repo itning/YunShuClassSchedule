@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.service.CommonService
 import top.itning.yunshuclassschedule.service.RemindService
+import top.itning.yunshuclassschedule.service.TodayWidgetService
 
 /**
  * Base App Activity
@@ -20,6 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         startService(Intent(this, CommonService::class.java))
         startService(Intent(this, RemindService::class.java))
+        startService(Intent(this, TodayWidgetService::class.java))
     }
 
     /**

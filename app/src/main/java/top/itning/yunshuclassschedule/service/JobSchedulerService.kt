@@ -19,10 +19,12 @@ class JobSchedulerService : JobService() {
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(FOREGROUND_SERVICE_STATUS, true)) {
                 startForegroundService(Intent(this, CommonService::class.java))
                 startForegroundService(Intent(this, RemindService::class.java))
+                startForegroundService(Intent(this, TodayWidgetService::class.java))
             }
         } else {
             startService(Intent(this, CommonService::class.java))
             startService(Intent(this, RemindService::class.java))
+            startService(Intent(this, TodayWidgetService::class.java))
         }
         jobFinished(params, false)
         return true
