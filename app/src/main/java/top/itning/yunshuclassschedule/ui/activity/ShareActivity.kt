@@ -203,7 +203,7 @@ class ShareActivity : BaseActivity() {
             val dataEntity = Gson().fromJson(inputAsString, DataEntity::class.java)
             val classScheduleList = dataEntity.classScheduleList
             val timeList = dataEntity.timeList
-            if (classScheduleList == null || classScheduleList.isEmpty() || timeList == null || timeList.isEmpty() || timeList.size != TIME_LIST_SIZE) {
+            if (classScheduleList == null || classScheduleList.isEmpty() || timeList == null || timeList.isEmpty()) {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                 return
             }
@@ -250,7 +250,6 @@ class ShareActivity : BaseActivity() {
     companion object {
         private const val TAG = "ShareActivity"
         const val FILE_SELECT_CODE = 1
-        const val TIME_LIST_SIZE = 5
         private const val WRITE_REQUEST_CODE = 2
     }
 }

@@ -21,7 +21,6 @@ import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.DataEntity
 import top.itning.yunshuclassschedule.entity.EventEntity
 import top.itning.yunshuclassschedule.ui.activity.ShareActivity.Companion.FILE_SELECT_CODE
-import top.itning.yunshuclassschedule.ui.activity.ShareActivity.Companion.TIME_LIST_SIZE
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
 import top.itning.yunshuclassschedule.util.DateUtils
 import top.itning.yunshuclassschedule.util.DateUtils.getNextMondayOfTimeInMillis
@@ -129,7 +128,7 @@ class LoginActivity : BaseActivity() {
             val dataEntity = Gson().fromJson(inputAsString, DataEntity::class.java)
             val classScheduleList = dataEntity.classScheduleList
             val timeList = dataEntity.timeList
-            if (classScheduleList == null || classScheduleList.isEmpty() || timeList == null || timeList.isEmpty() || timeList.size != TIME_LIST_SIZE) {
+            if (classScheduleList == null || classScheduleList.isEmpty() || timeList == null || timeList.isEmpty()) {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                 return
             }
