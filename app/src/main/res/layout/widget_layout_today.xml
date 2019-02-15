@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="今天没有课"
+        android:text="@string/widget_today_none_class"
         android:textColor="#ffffff"
         android:textSize="20sp"
         android:textStyle="bold" />

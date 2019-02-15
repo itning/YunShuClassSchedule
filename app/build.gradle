@@ -69,12 +69,12 @@ dependencies {
     /*https://github.com/zhihu/Matisse*/
     implementation 'com.zhihu.android:matisse:0.5.2-beta4'
     /*https://github.com/bumptech/glide*/
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
     /*https://github.com/laobie/StatusBarUtil*/
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     /*https://github.com/wdullaer/MaterialDateTimePicker*/
-    implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
+    implementation 'com.wdullaer:materialdatetimepicker:4.1.2'
     /*https://github.com/jhy/jsoup*/
     implementation 'org.jsoup:jsoup:1.11.3'
     /*https://github.com/Ereza/CustomActivityOnCrash*/
@@ -89,7 +89,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-}
-repositories {
-    mavenCentral()
 }

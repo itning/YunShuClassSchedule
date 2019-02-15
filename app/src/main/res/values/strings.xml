@@ -58,4 +58,5 @@
     <string name="dialog_class_schedule_all">全部选择</string>
     <string name="dialog_class_schedule_clear">清空选择</string>
     <string name="dialog_class_schedule_range">区间</string>
+    <string name="widget_today_none_class">今天没有课</string>
 </resources>

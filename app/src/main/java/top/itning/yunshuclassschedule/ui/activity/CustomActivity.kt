@@ -221,7 +221,7 @@ class CustomActivity : BaseActivity(), TimePickerDialog.OnTimeSetListener {
         }
         val timePickerDialog = getTimePickerDialog(type[1], timeMap[type[0].toInt()]!!)
         timePickerDialog.title = stringBuilder.toString()
-        timePickerDialog.show(fragmentManager, "TimePickerDialog")
+        timePickerDialog.show(supportFragmentManager, "TimePickerDialog")
     }
 
     /**
