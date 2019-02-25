@@ -208,10 +208,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onStart() {
         val fragment = supportFragmentManager.findFragmentById(R.id.frame_container)
         if (fragment == null || fragment is ClassScheduleFragment) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
-                    .commitAllowingStateLoss()
+            if (supportFragmentManager.beginTransaction().isEmpty) {
+                supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
+                        .commitAllowingStateLoss()
+            }
         }
         //设置主标题
         toolbar.title = ACTION_BAR_TITLE_FORMAT.format(Date())
