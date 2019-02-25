@@ -54,6 +54,14 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 true
             }
             nowWeekNumEditTextPreference = findPreference(NOW_WEEK_NUM)
+            nowWeekNumEditTextPreference.setOnPreferenceChangeListener { _, newValue ->
+                if (newValue.toString() == "" || (Integer.valueOf(newValue.toString())) > 50) {
+                    Toast.makeText(requireContext(), "设置的值必须大于1且小于50", Toast.LENGTH_LONG).show()
+                    false
+                } else {
+                    true
+                }
+            }
             nowWeekNumEditTextPreference.summary = "第${prefs.getString(NOW_WEEK_NUM, "1")}周"
         } else {
             val key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT)
