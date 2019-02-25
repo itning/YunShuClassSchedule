@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.tencent.bugly.crashreport.CrashReport
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.entity.ClassSchedule
 import top.itning.yunshuclassschedule.ui.view.RoundBackChange
@@ -29,7 +31,7 @@ class TodayRecyclerViewAdapter(
         /**
          * 列表数据集合
          */
-        @param:NonNull private val scheduleList: List<ClassSchedule>?,
+        @param:NonNull private val scheduleList: List<ClassSchedule>,
         /**
          * [Context]
          */
@@ -73,7 +75,12 @@ class TodayRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d(TAG, "onBindViewHolder pos->$position")
-        val classSchedule = scheduleList!![position]
+        if (position >= scheduleList.size) {
+            scheduleList.forEach { Log.e(TAG, it.toString()) }
+            CrashReport.postCatchedException(Throwable("onBindViewHolder scheduleList.size ${scheduleList.size}"))
+            Toast.makeText(context, "内部数据错误,请联系开发者", Toast.LENGTH_LONG).show()
+        }
+        val classSchedule = scheduleList[position]
         holder.tvName.text = classSchedule.name
         holder.tvLocation.text = classSchedule.location
         holder.tvTime.text = DateUtils.timeList[classSchedule.section - 1]
@@ -109,7 +116,7 @@ class TodayRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int {
-        return scheduleList?.size ?: 0
+        return scheduleList.size
     }
 
     class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
