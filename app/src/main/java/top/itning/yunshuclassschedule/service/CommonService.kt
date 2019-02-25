@@ -95,12 +95,24 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
                 Toast.makeText(this, eventEntity.msg, Toast.LENGTH_LONG).show()
             }
             ConstantPool.Int.TIME_TICK_CHANGE -> {
-                if (isNewWeek()) {
+                val currentTimeMillis = System.currentTimeMillis()
+                if (isNewWeek(currentTimeMillis)) {
                     val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-                    val i = defaultSharedPreferences.getString(NOW_WEEK_NUM, "1")!!.toInt() + 1
-                    Log.e(TAG, i.toString())
+                    var i = defaultSharedPreferences.getString(NOW_WEEK_NUM, "1")!!.toInt()
+                    var lastTimeMillis = App.sharedPreferences.getLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), currentTimeMillis)
+                    while (true) {
+                        if (currentTimeMillis > lastTimeMillis) {
+                            Log.d(TAG, "currentTimeMillis > nextMondayOfTimeInMillis is true")
+                            val nextMondayOfTimeInMillis = getNextMondayOfTimeInMillis(lastTimeMillis)
+                            lastTimeMillis = nextMondayOfTimeInMillis
+                            i++
+                            continue
+                        }
+                        break
+                    }
+                    Log.d(TAG, "Set week num $i")
                     if (defaultSharedPreferences.edit().putString(NOW_WEEK_NUM, i.toString()).commit()) {
-                        App.sharedPreferences.edit().putLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), getNextMondayOfTimeInMillis()).apply()
+                        App.sharedPreferences.edit().putLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), lastTimeMillis).apply()
                     }
                 }
             }
@@ -113,10 +125,11 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
     /**
      * 检查是不是新的一周
      */
-    private fun isNewWeek(): Boolean {
-        val currentTimeMillis = System.currentTimeMillis()
+    private fun isNewWeek(currentTimeMillis: Long): Boolean {
         val lastTimeMillis = App.sharedPreferences.getLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), currentTimeMillis)
-        return currentTimeMillis > lastTimeMillis
+        val isNewWeek = currentTimeMillis > lastTimeMillis
+        Log.d(TAG, "Is new week ? $isNewWeek")
+        return isNewWeek
     }
 
     /**

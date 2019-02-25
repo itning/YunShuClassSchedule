@@ -265,8 +265,12 @@ object DateUtils {
                 .show()
     }
 
-    fun getNextMondayOfTimeInMillis(): Long {
+    /**
+     * 获取下周星期一的时间毫秒数
+     */
+    fun getNextMondayOfTimeInMillis(currentTimeMillis: Long = System.currentTimeMillis()): Long {
         val c = Calendar.getInstance()
+        c.timeInMillis = currentTimeMillis
         var dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1
         if (dayOfWeek == 0) {
             dayOfWeek = 7
