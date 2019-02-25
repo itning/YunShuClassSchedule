@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
@@ -227,6 +228,15 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
             val timeList = DateUtils.timeList
             val tempList = ArrayList<ClassSchedule>()
             for (c in classScheduleList) {
+                val nowSection = c.section - 1
+                if (nowSection >= timeList.size) {
+                    timeList.forEach { Log.e(TAG, it) }
+                    CrashReport.postCatchedException(Throwable("obsoleteClear failure: nowSection $nowSection timeList.size $timeList.size"))
+                    Toast.makeText(this, "清理缓存数组失败", Toast.LENGTH_SHORT).show()
+                    tempList.clear()
+                    tempList.addAll(classScheduleList)
+                    break
+                }
                 val timeArray = timeList[c.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val endTime = DateUtils.DF.parse(timeArray[1]).time
                 val nowTime = DateUtils.DF.parse(DateUtils.DF.format(Date())).time
