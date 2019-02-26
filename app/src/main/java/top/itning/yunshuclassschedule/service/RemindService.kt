@@ -231,7 +231,7 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
                 val nowSection = c.section - 1
                 if (nowSection >= timeList.size) {
                     timeList.forEach { Log.e(TAG, it) }
-                    CrashReport.postCatchedException(Throwable("obsoleteClear failure: nowSection $nowSection timeList.size $timeList.size"))
+                    CrashReport.postCatchedException(Throwable("obsoleteClear failure: nowSection $nowSection timeList.size ${timeList.size}"))
                     Toast.makeText(this, "清理缓存数组失败", Toast.LENGTH_SHORT).show()
                     tempList.clear()
                     tempList.addAll(classScheduleList)
@@ -264,6 +264,13 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
         upTimeList.clear()
         downTimeList.clear()
         for (classSchedule in classScheduleList) {
+            val nowSection = classSchedule.section - 1
+            if (nowSection >= defaultTimeList.size) {
+                defaultTimeList.forEach { Log.e(TAG, it) }
+                CrashReport.postCatchedException(Throwable("initTimeList failure: nowSection $nowSection defaultTimeList.size ${defaultTimeList.size}"))
+                Toast.makeText(this, "初始化时间数据失败", Toast.LENGTH_SHORT).show()
+                break
+            }
             val timeArray = defaultTimeList[classSchedule.section - 1].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             if (phoneMuteStatus) {
                 initIntent(upTimeList, downTimeList, classSchedule, timeArray, phoneMuteBeforeTime, phoneMuteAfterTime, "phone_mute", haveBefore = true, haveAfter = true)
