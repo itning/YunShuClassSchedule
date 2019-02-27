@@ -207,6 +207,18 @@ class ShareActivity : BaseActivity() {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                 return
             }
+            val timeListSize = timeList.size
+            val classScheduleMaxSection = classScheduleList.map { it.section }.max() ?: 12
+            if (timeListSize > 12 || classScheduleMaxSection > 12) {
+                Toast.makeText(this, "最大课程数为12节课，解析失败", Toast.LENGTH_LONG).show()
+                return
+            }
+            Log.d(TAG, "classScheduleMaxSection: $classScheduleMaxSection timeListSize: $timeListSize")
+            val section = if (timeListSize < classScheduleMaxSection) {
+                classScheduleMaxSection
+            } else {
+                timeListSize
+            }
             AlertDialog.Builder(this)
                     .setTitle("警告")
                     .setMessage("即将导入课程数据，这会将原有课程信息清空，确定导入吗？")
@@ -234,7 +246,14 @@ class ShareActivity : BaseActivity() {
                         classScheduleList.forEach { classScheduleDao.insert(it) }
                         EventBus.getDefault().post(EventEntity(ConstantPool.Int.TIME_TICK_CHANGE, ""))
                         if (classScheduleList.size.toLong() == classScheduleDao.count()) {
-                            Toast.makeText(this, "导入成功", Toast.LENGTH_LONG).show()
+                            if (App.sharedPreferences.edit()
+                                            .putInt(ConstantPool.Str.CLASS_SECTION.get(), section)
+                                            .commit()) {
+                                DateUtils.refreshTimeList()
+                                Toast.makeText(this, "导入成功", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(this, "写入课程节数失败,请重试", Toast.LENGTH_LONG).show()
+                            }
                         } else {
                             Toast.makeText(this, "写入数据库失败,请重试", Toast.LENGTH_LONG).show()
                         }

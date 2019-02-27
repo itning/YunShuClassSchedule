@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import top.itning.yunshuclassschedule.R
 import top.itning.yunshuclassschedule.common.App
+import top.itning.yunshuclassschedule.common.ConstantPool
 import top.itning.yunshuclassschedule.entity.ClassSchedule
 import top.itning.yunshuclassschedule.entity.ClassScheduleDao
 import top.itning.yunshuclassschedule.ui.fragment.setting.SettingsFragment
@@ -49,6 +50,7 @@ class ToadyRemoteViewsFactory(val context: Context, val intent: Intent?) : Remot
     override fun onDataSetChanged() {
         Log.d(TAG, "onDataSetChanged")
         val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
+        val section = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
         orderListBySection = ClassScheduleUtils
                 .orderListBySection(daoSession
                         .classScheduleDao
@@ -56,6 +58,7 @@ class ToadyRemoteViewsFactory(val context: Context, val intent: Intent?) : Remot
                         .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                         .list()
                         .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                        .filter { it.section <= section }
                         .toMutableList())
 
     }

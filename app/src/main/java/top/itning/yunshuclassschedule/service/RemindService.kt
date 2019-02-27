@@ -212,12 +212,14 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
         Log.d(TAG, "init class schedule list data")
         val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
         val daoSession = (application as App).daoSession
+        val section = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
         classScheduleList = daoSession
                 .classScheduleDao
                 .queryBuilder()
                 .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                 .list()
                 .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                .filter { it.section <= section }
                 .toMutableList()
         Log.d(TAG, "init class schedule list size:" + classScheduleList.size)
     }

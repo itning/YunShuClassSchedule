@@ -219,6 +219,7 @@ class TodayFragment : Fragment() {
     private fun initClassScheduleListData() {
         val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
         val daoSession = (requireActivity().application as App).daoSession
+        val section = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
         classScheduleList = ClassScheduleUtils
                 .orderListBySection(daoSession
                         .classScheduleDao
@@ -226,6 +227,7 @@ class TodayFragment : Fragment() {
                         .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                         .list()
                         .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                        .filter { it.section <= section }
                         .toMutableList())
     }
 

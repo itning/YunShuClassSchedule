@@ -56,10 +56,12 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
         @CheckResult
         get() {
             val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
+            val section = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
             return classScheduleDao
                     .queryBuilder()
                     .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                     .list()
+                    .filter { it.section <= section }
                     .any { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
         }
 
@@ -143,11 +145,13 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
         @CheckResult
         get() {
             val nowWeekNum = (PreferenceManager.getDefaultSharedPreferences(this).getString(SettingsFragment.NOW_WEEK_NUM, "1")!!.toInt() - 1).toString()
+            val section = App.sharedPreferences.getInt(ConstantPool.Str.CLASS_SECTION.get(), 5)
             val classScheduleList = classScheduleDao
                     .queryBuilder()
                     .where(ClassScheduleDao.Properties.Week.eq(DateUtils.week))
                     .list()
                     .filter { ClassScheduleUtils.isThisWeekOfClassSchedule(it, nowWeekNum) }
+                    .filter { it.section <= section }
                     .toMutableList()
             classScheduleList.sortWith(Comparator { a, b -> Integer.compare(a.section, b.section) })
             return classScheduleList
