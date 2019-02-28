@@ -11,8 +11,8 @@ android {
         applicationId "top.itning.yunshuclassschedule"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 57
-        versionName "2.5.1"
+        versionCode 58
+        versionName "2.5.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {

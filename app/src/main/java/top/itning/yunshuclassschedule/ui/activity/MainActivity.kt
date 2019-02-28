@@ -208,10 +208,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onStart() {
         val fragment = supportFragmentManager.findFragmentById(R.id.frame_container)
         if (fragment == null || fragment is ClassScheduleFragment) {
-            if (supportFragmentManager.beginTransaction().isEmpty) {
+            val classScheduleFragment = fragmentSparseArray.get(R.id.nav_class_schedule)
+            if (classScheduleFragment.isAdded) {
                 supportFragmentManager
                         .beginTransaction()
-                        .add(R.id.frame_container, fragmentSparseArray.get(R.id.nav_class_schedule))
+                        .show(classScheduleFragment)
+            } else {
+                supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.frame_container, classScheduleFragment)
                         .commitAllowingStateLoss()
             }
         }
