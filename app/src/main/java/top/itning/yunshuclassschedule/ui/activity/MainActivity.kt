@@ -164,6 +164,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         drawerSwitch.setOnCheckedChangeListener { _, _ -> ThemeChangeUtil.changeNightMode(this) }
         nav_view.setNavigationItemSelectedListener(this)
         App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), Calendar.getInstance().get(Calendar.DATE)).apply()
+        if (App.sharedPreferences.getBoolean(ConstantPool.Str.ADD_GROUP_DIALOG_STATE.get(), true)) {
+            AlertDialog.Builder(this)
+                    .setTitle("建议")
+                    .setMessage("加入反馈交流群？")
+                    .setPositiveButton("立即加入") { _, _ ->
+                        val intent = Intent()
+                        intent.data = Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DHh8H9ozRSxWd6evU4lUK8fe-4Lfnshg4")
+                        try {
+                            startActivity(intent)
+                        } catch (e: Exception) {
+                            Toast.makeText(this, "未安装手Q或安装的版本不支持", Toast.LENGTH_LONG).show()
+                        } finally {
+                            App.sharedPreferences.edit().putBoolean(ConstantPool.Str.ADD_GROUP_DIALOG_STATE.get(), false).apply()
+                        }
+                    }
+                    .setNegativeButton("不再提示") { _, _ ->
+                        App.sharedPreferences.edit().putBoolean(ConstantPool.Str.ADD_GROUP_DIALOG_STATE.get(), false).apply()
+                    }
+                    .show()
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

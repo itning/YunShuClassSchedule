@@ -39,7 +39,11 @@ class ConstantPool {
         /**
          * 每天课程节数
          */
-        CLASS_SECTION("class_section");
+        CLASS_SECTION("class_section"),
+        /**
+         * 加入反馈群
+         */
+        ADD_GROUP_DIALOG_STATE("add_group_dialog_state");
 
         fun get(): String {
             return value
