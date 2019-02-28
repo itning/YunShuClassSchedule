@@ -180,11 +180,6 @@
                 android:data="https://www.coolapk.com/apk/top.itning.yunshuclassschedule" />
         </Preference>
         <Preference
-            android:title="捐赠"
-            app:iconSpaceReserved="false">
-            <intent android:action="top.itning.yunshuclassschedule.MONEY" />
-        </Preference>
-        <Preference
             android:title="关于"
             app:iconSpaceReserved="false">
             <intent android:action="top.itning.yunshuclassschedule.ABOUT" />

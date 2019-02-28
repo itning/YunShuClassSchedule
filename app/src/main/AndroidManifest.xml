@@ -82,15 +82,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.MoneyActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="top.itning.yunshuclassschedule.MONEY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.activity.CustomActivity"
             android:screenOrientation="portrait">
             <intent-filter>
