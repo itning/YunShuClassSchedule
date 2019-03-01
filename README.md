@@ -45,5 +45,6 @@ Android的开源课程表应用
 - [statusbarutil](https://github.com/laobie/StatusBarUtil)
 - [materialdatetimepicker](https://github.com/wdullaer/MaterialDateTimePicker)
 - [jsoup](https://github.com/jhy/jsoup)
-- [bubbleseekbar](https://github.com/wdullaer/MaterialDateTimePicker)
 - [customactivityoncrash](https://github.com/Ereza/CustomActivityOnCrash)
+- [RangeSeekBar](https://github.com/Jay-Goo/RangeSeekBar)
+- [taptargetview](https://github.com/KeepSafe/TapTargetView)

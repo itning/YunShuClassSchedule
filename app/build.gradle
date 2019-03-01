@@ -11,8 +11,8 @@ android {
         applicationId "top.itning.yunshuclassschedule"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 58
-        versionName "2.5.2"
+        versionCode 59
+        versionName "2.5.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -83,6 +83,8 @@ dependencies {
     implementation 'cn.wolfspider:autowraplinelayout:1.0.1'
     /*https://github.com/Jay-Goo/RangeSeekBar*/
     implementation 'com.github.Jay-Goo:RangeSeekBar:2.0.6'
+    /*https://github.com/KeepSafe/TapTargetView*/
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

@@ -31,6 +31,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.navigation.NavigationView
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
@@ -91,6 +93,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         EventBus.getDefault().register(this)
         initData()
         initView()
+        newUserStudy()
     }
 
     /**
@@ -164,6 +167,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         drawerSwitch.setOnCheckedChangeListener { _, _ -> ThemeChangeUtil.changeNightMode(this) }
         nav_view.setNavigationItemSelectedListener(this)
         App.sharedPreferences.edit().putInt(ConstantPool.Str.LAST_DATE.get(), Calendar.getInstance().get(Calendar.DATE)).apply()
+    }
+
+    /**
+     * 新用户引导
+     */
+    private fun newUserStudy() {
         if (App.sharedPreferences.getBoolean(ConstantPool.Str.ADD_GROUP_DIALOG_STATE.get(), true)) {
             AlertDialog.Builder(this)
                     .setTitle("建议")
@@ -183,6 +192,29 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         App.sharedPreferences.edit().putBoolean(ConstantPool.Str.ADD_GROUP_DIALOG_STATE.get(), false).apply()
                     }
                     .show()
+        }
+        if (App.sharedPreferences.getBoolean(ConstantPool.Str.NEW_USER_IS_STUDY.get(), false)) {
+            return
+        }
+        var toolbarTitle: TextView? = null
+        for (i in 0..toolbar.childCount) {
+            val child = toolbar.getChildAt(i)
+            if (child is TextView) {
+                toolbarTitle = child
+                break
+            }
+        }
+        if (toolbarTitle != null) {
+            TapTargetView.showFor(this, TapTarget.forView(toolbarTitle, "长按时间标题可以跳转到其它周，在其它周按一次标题即可回到当前周")
+                    .outerCircleColor(R.color.colorAccent)
+                    .targetRadius(80),
+                    object : TapTargetView.Listener() {
+                        override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
+                            App.sharedPreferences.edit().putBoolean(ConstantPool.Str.NEW_USER_IS_STUDY.get(), true).apply()
+                            super.onTargetDismissed(view, userInitiated)
+                        }
+                    }
+            )
         }
     }
 

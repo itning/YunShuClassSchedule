@@ -43,7 +43,11 @@ class ConstantPool {
         /**
          * 加入反馈群
          */
-        ADD_GROUP_DIALOG_STATE("add_group_dialog_state");
+        ADD_GROUP_DIALOG_STATE("add_group_dialog_state"),
+        /**
+         * 是否已经引导过
+         */
+        NEW_USER_IS_STUDY("new_user_is_study");
 
         fun get(): String {
             return value
