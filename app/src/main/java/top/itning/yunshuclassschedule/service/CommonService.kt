@@ -110,6 +110,9 @@ class CommonService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
                         }
                         break
                     }
+                    if (i > 50) {
+                        i = 1
+                    }
                     Log.d(TAG, "Set week num $i")
                     if (defaultSharedPreferences.edit().putString(NOW_WEEK_NUM, i.toString()).commit()) {
                         App.sharedPreferences.edit().putLong(ConstantPool.Str.NEXT_WEEK_OF_MONDAY.get(), lastTimeMillis).apply()
