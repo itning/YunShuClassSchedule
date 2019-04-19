@@ -199,7 +199,7 @@ class CourseInfoService : Service(), SharedPreferences.OnSharedPreferenceChangeL
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d(TAG, "on Start Command")
-        return Service.START_REDELIVER_INTENT
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {

@@ -162,7 +162,7 @@ class ShareActivity : BaseActivity() {
      * @param data [Intent]
      */
     private fun doExportFile(data: Intent) {
-        val uri = data.data ?: kotlin.run {
+        val uri = data.data ?: run {
             Toast.makeText(this, "导出失败", Toast.LENGTH_LONG).show()
             return
         }
@@ -189,13 +189,13 @@ class ShareActivity : BaseActivity() {
      * @param data [Intent]
      */
     private fun doImportFile(data: Intent) {
-        val uri = data.data ?: kotlin.run {
+        val uri = data.data ?: run {
             Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
             return
         }
         Log.d(TAG, "File Uri: $uri")
         try {
-            val openInputStream = contentResolver.openInputStream(uri) ?: kotlin.run {
+            val openInputStream = contentResolver.openInputStream(uri) ?: run {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                 return
             }

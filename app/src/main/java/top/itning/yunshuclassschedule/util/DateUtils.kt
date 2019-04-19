@@ -228,14 +228,14 @@ object DateUtils {
         for (entry in timeMap.entries) {
             val timeArray = entry.value.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             //检查每节课上下课时间合法性
-            if (DateUtils.isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
+            if (isTimeIintervalLegitimate(timeArray[0], timeArray[1])) {
                 Log.d(TAG, "error1: " + timeArray[0] + "-->" + timeArray[1])
                 showTimeErrorDialog(entry.key.toString(), 1, context)
                 return false
             }
             if (lastEntry != null && nowWeekNum != entry.key.toString()) {
                 val lastTimeArray = lastEntry.value.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (DateUtils.isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
+                if (isTimeIintervalLegitimate(lastTimeArray[1], timeArray[0])) {
                     Log.d(TAG, "error2: " + lastTimeArray[1] + "-->" + timeArray[0])
                     showTimeErrorDialog(lastEntry.key.toString(), 2, context)
                     return false

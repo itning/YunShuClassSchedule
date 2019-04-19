@@ -222,7 +222,7 @@ constructor(@param:NonNull private val activity: Activity, private val classSche
         tvlocation.text = null
         tvname.text = null
         tvteacher.text = null
-        if (classScheduleList != null && !classScheduleList.isEmpty()) {
+        if (classScheduleList != null && classScheduleList.isNotEmpty()) {
             selectClassSchedule = null
             classScheduleList.forEach {
                 if (it.section.toString() + "" == classSplit[0] && it.week.toString() + "" == classSplit[1]) {

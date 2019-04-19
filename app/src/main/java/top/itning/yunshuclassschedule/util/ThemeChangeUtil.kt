@@ -47,8 +47,8 @@ object ThemeChangeUtil {
      */
     @Synchronized
     fun changeNightMode(@NonNull activity: AppCompatActivity) {
-        ThemeChangeUtil.isChange = !ThemeChangeUtil.isChange
-        App.sharedPreferences.edit().putBoolean("night_mode", ThemeChangeUtil.isChange).apply()
+        isChange = !isChange
+        App.sharedPreferences.edit().putBoolean("night_mode", isChange).apply()
         activity.startActivity(Intent(activity, activity.javaClass))
         activity.finish()
     }
@@ -228,7 +228,7 @@ object ThemeChangeUtil {
      * @param textViews [TextView]
      */
     fun setTextViewsColorByTheme(@NonNull context: Context, @NonNull vararg textViews: TextView) {
-        val isChange = ThemeChangeUtil.isChange
+        val isChange = isChange
         val whiteColor = ContextCompat.getColor(context, android.R.color.white)
         val blackColor = ContextCompat.getColor(context, android.R.color.black)
         for (textView in textViews) {

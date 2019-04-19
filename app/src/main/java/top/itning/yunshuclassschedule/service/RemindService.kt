@@ -105,7 +105,7 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d(TAG, "on Start Command")
-        return Service.START_REDELIVER_INTENT
+        return START_REDELIVER_INTENT
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -154,7 +154,7 @@ class RemindService : Service(), SharedPreferences.OnSharedPreferenceChangeListe
         classReminderDownTime = sharedPreferences.getString(CLASS_REMINDER_DOWN_TIME, "1")!!.toInt()
         initClassScheduleList()
         obsoleteClear()
-        if (!classScheduleList.isEmpty()) {
+        if (classScheduleList.isNotEmpty()) {
             clearAlarm()
             initTimeList()
             initPendingIntentList()

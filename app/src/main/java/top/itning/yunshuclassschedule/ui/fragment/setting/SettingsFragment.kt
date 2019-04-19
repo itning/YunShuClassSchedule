@@ -64,8 +64,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
             nowWeekNumEditTextPreference.summary = "第${prefs.getString(NOW_WEEK_NUM, "1")}周"
         } else {
-            val key = bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT)
-            when (key) {
+            when (bundle.getString(ARG_PREFERENCE_ROOT)) {
                 "class_reminder" -> {
                     classReminderUpTime = findPreference(CLASS_REMINDER_UP_TIME)
                     classReminderDownTime = findPreference(CLASS_REMINDER_DOWN_TIME)
@@ -108,7 +107,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         if (bundle == null) {
             setPreferencesFromResource(R.xml.preference_settings, rootKey)
         } else {
-            setPreferencesFromResource(R.xml.preference_settings, bundle.getString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT))
+            setPreferencesFromResource(R.xml.preference_settings, bundle.getString(ARG_PREFERENCE_ROOT))
         }
     }
 

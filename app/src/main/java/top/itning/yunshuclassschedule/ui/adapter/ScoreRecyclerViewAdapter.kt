@@ -17,7 +17,7 @@ import top.itning.yunshuclassschedule.entity.Score
 class ScoreRecyclerViewAdapter(@param:NonNull private val scoreList: List<Score>) : RecyclerView.Adapter<ScoreRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ScoreRecyclerViewAdapter.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_score_rv, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_score_rv, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

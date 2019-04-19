@@ -115,12 +115,12 @@ class LoginActivity : BaseActivity() {
 
     private fun doImportFile(data: Intent) {
         try {
-            val uri = data.data ?: kotlin.run {
+            val uri = data.data ?: run {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                 return
             }
             Log.d(TAG, "File Uri: $uri")
-            val openInputStream = contentResolver.openInputStream(uri) ?: kotlin.run {
+            val openInputStream = contentResolver.openInputStream(uri) ?: run {
                 Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show()
                 return
             }

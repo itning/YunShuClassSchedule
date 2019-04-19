@@ -104,7 +104,7 @@ class ToadyRemoteViewsFactory(val context: Context, val intent: Intent?) : Remot
         relativeLayout.layout(0, 0, 0, 0)
         relativeLayout.draw(Canvas(bitmap))
 
-        val remoteViews = RemoteViews(context.packageName, top.itning.yunshuclassschedule.R.layout.widget_layout_item)
+        val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout_item)
         remoteViews.setBitmap(R.id.iv, "setImageBitmap", bitmap)
         return remoteViews
     }

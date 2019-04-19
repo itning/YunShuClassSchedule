@@ -426,7 +426,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == Activity.RESULT_OK) {
             val result = Matisse.obtainResult(data)
-            if (result != null && !result.isEmpty()) {
+            if (result != null && result.isNotEmpty()) {
                 Log.d(TAG, "the result uri:" + result[0].toString())
                 FileUtils.transferFile(this, result[0], "background_img")
             } else {
