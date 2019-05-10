@@ -40,9 +40,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         prefs.registerOnSharedPreferenceChangeListener(this)
         val bundle = arguments
         if (bundle == null) {
-            defaultShowMainFragmentListPreference = findPreference(DEFAULT_SHOW_MAIN_FRAGMENT)
+            defaultShowMainFragmentListPreference = findPreference(DEFAULT_SHOW_MAIN_FRAGMENT)!!
             defaultShowMainFragmentListPreference.summary = defaultShowMainFragmentListPreference.entry
-            val foregroundServiceStatus: Preference = findPreference<SwitchPreference>(FOREGROUND_SERVICE_STATUS)
+            val foregroundServiceStatus: Preference = findPreference<SwitchPreference>(FOREGROUND_SERVICE_STATUS)!!
             foregroundServiceStatus.setOnPreferenceChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     AlertDialog.Builder(requireContext()).setTitle("注意")
@@ -53,7 +53,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 }
                 true
             }
-            nowWeekNumEditTextPreference = findPreference(NOW_WEEK_NUM)
+            nowWeekNumEditTextPreference = findPreference(NOW_WEEK_NUM)!!
             nowWeekNumEditTextPreference.setOnPreferenceChangeListener { _, newValue ->
                 if (newValue.toString() == "" || (Integer.valueOf(newValue.toString())) > 50) {
                     Toast.makeText(requireContext(), "设置的值必须大于1且小于50", Toast.LENGTH_LONG).show()
@@ -66,15 +66,15 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         } else {
             when (bundle.getString(ARG_PREFERENCE_ROOT)) {
                 "class_reminder" -> {
-                    classReminderUpTime = findPreference(CLASS_REMINDER_UP_TIME)
-                    classReminderDownTime = findPreference(CLASS_REMINDER_DOWN_TIME)
+                    classReminderUpTime = findPreference(CLASS_REMINDER_UP_TIME)!!
+                    classReminderDownTime = findPreference(CLASS_REMINDER_DOWN_TIME)!!
                     classReminderUpTime.summary = classReminderUpTime.entry
                     classReminderDownTime.summary = classReminderDownTime.entry
                 }
                 "phone_mute" -> {
-                    phoneMuteBeforeTime = findPreference(PHONE_MUTE_BEFORE_TIME)
-                    phoneMuteAfterTime = findPreference(PHONE_MUTE_AFTER_TIME)
-                    val phoneMuteStatus = findPreference<SwitchPreference>(PHONE_MUTE_STATUS)
+                    phoneMuteBeforeTime = findPreference(PHONE_MUTE_BEFORE_TIME)!!
+                    phoneMuteAfterTime = findPreference(PHONE_MUTE_AFTER_TIME)!!
+                    val phoneMuteStatus = findPreference<SwitchPreference>(PHONE_MUTE_STATUS)!!
                     phoneMuteStatus.setOnPreferenceChangeListener { _, newValue ->
                         if (newValue as Boolean) {
                             val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
