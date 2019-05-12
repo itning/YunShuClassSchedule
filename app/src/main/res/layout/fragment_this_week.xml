@@ -1,108 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/schedule_gridlayout"
+        android:id="@+id/gl_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:columnCount="8"
-        app:orientation="vertical"
-        app:rowCount="6">
+        android:layout_height="wrap_content"
+        app:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_column="0"
-            app:layout_gravity="center_horizontal"
-            app:layout_row="0" />
-
-        <TextView
-            style="@style/week_first_column"
-            android:text="@string/week_course_1"
-            app:layout_column="0"
-            app:layout_gravity="center_vertical" />
-
-        <TextView
-            style="@style/week_first_column"
-            android:text="@string/week_course_2"
-            app:layout_column="0"
-            app:layout_gravity="center_vertical" />
-
-        <TextView
-            style="@style/week_first_column"
-            android:text="@string/week_course_3"
-            app:layout_column="0"
-            app:layout_gravity="center_vertical" />
-
-        <TextView
-            style="@style/week_first_column"
-            android:text="@string/week_course_4"
-            app:layout_column="0"
-            app:layout_gravity="center_vertical" />
-
-        <TextView
-            style="@style/week_first_column"
-            android:text="@string/week_course_5"
-            app:layout_column="0"
-            app:layout_gravity="center_vertical" />
-
-        <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_1"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="1"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
 
         <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_2"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="2"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
 
         <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_3"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="3"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
 
         <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_4"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="4"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
 
         <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_5"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="5"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
 
         <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_6"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="6"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
 
         <TextView
+            android:layout_margin="2dp"
             android:text="@string/week_7"
             android:textColor="@android:color/tertiary_text_dark"
             app:layout_column="7"
             app:layout_columnWeight="1"
-            app:layout_gravity="center"
+            app:layout_gravity="fill"
             app:layout_row="0" />
     </androidx.gridlayout.widget.GridLayout>
-</androidx.core.widget.NestedScrollView>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/schedule_gridlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

@@ -16,7 +16,7 @@ public class DataEntity {
 
     public DataEntity(App app) {
         classScheduleList = app.getDaoSession().getClassScheduleDao().loadAll();
-        timeList = DateUtils.getTimeList();
+        timeList = DateUtils.INSTANCE.getTimeList();
     }
 
     public List<ClassSchedule> getClassScheduleList() {

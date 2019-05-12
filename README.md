@@ -1,16 +1,19 @@
 # 云舒课表
 Android的开源课程表应用
 
-[![GitHub stars](https://img.shields.io/github/stars/itning/YunShuClassSchedule.svg?style=social&label=Stars)]()
-[![GitHub forks](https://img.shields.io/github/forks/itning/YunShuClassSchedule.svg?style=social&label=Fork)]()
-[![GitHub watchers](https://img.shields.io/github/watchers/itning/YunShuClassSchedule.svg?style=social&label=Watch)]()
-[![GitHub followers](https://img.shields.io/github/followers/itning.svg?style=social&label=Follow)]()
+[![GitHub stars](https://img.shields.io/github/stars/itning/YunShuClassSchedule.svg?style=social&label=Stars)](https://github.com/itning/YunShuClassSchedule/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/itning/YunShuClassSchedule.svg?style=social&label=Fork)](https://github.com/itning/YunShuClassSchedule/network/members)
+[![GitHub watchers](https://img.shields.io/github/watchers/itning/YunShuClassSchedule.svg?style=social&label=Watch)](https://github.com/itning/YunShuClassSchedule/watchers)
+[![GitHub followers](https://img.shields.io/github/followers/itning.svg?style=social&label=Follow)](https://github.com/itning?tab=followers)
 
+[![GitHub issues](https://img.shields.io/github/issues/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/issues)
 [![GitHub license](https://img.shields.io/github/license/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/itning/YunShuClassSchedule.svg)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/commits)
 [![GitHub release](https://img.shields.io/github/release/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/releases)
-[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/YunShuClassSchedule.svg)]()
-[![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
+[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule)
+[![HitCount](http://hits.dwyl.io/itning/YunShuClassSchedule.svg)](http://hits.dwyl.io/itning/YunShuClassSchedule)
+[![language](https://img.shields.io/badge/language-Kotlin-green.svg)](https://github.com/itning/YunShuClassSchedule)
+
 ## 下载
 [![Coolapk](https://github.com/itning/YunShuClassSchedule/blob/master/extra/coolapk.png)](https://www.coolapk.com/apk/top.itning.yunshuclassschedule)
 ## 功能
@@ -45,5 +48,6 @@ Android的开源课程表应用
 - [statusbarutil](https://github.com/laobie/StatusBarUtil)
 - [materialdatetimepicker](https://github.com/wdullaer/MaterialDateTimePicker)
 - [jsoup](https://github.com/jhy/jsoup)
-- [bubbleseekbar](https://github.com/wdullaer/MaterialDateTimePicker)
 - [customactivityoncrash](https://github.com/Ereza/CustomActivityOnCrash)
+- [RangeSeekBar](https://github.com/Jay-Goo/RangeSeekBar)
+- [taptargetview](https://github.com/KeepSafe/TapTargetView)
