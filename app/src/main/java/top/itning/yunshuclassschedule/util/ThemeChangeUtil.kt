@@ -93,6 +93,7 @@ object ThemeChangeUtil {
             val window = activity.window
             //设置状态栏透明
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.navigationBarColor = ContextCompat.getColor(activity, R.color.nightThemeColorPrimary)
         }
     }
 
