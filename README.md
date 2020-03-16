@@ -14,6 +14,11 @@ Android的开源课程表应用
 [![HitCount](http://hits.dwyl.io/itning/YunShuClassSchedule.svg)](http://hits.dwyl.io/itning/YunShuClassSchedule)
 [![language](https://img.shields.io/badge/language-Kotlin-green.svg)](https://github.com/itning/YunShuClassSchedule)
 
+## 不再维护
+
+该项目写的很烂，没有进行分层，业务逻辑基本上都在``activity``中，未来会将该项目重构为使用``jetpack``的项目。
+敬请期待。
+
 ## 下载
 [![Coolapk](https://github.com/itning/YunShuClassSchedule/blob/master/extra/coolapk.png)](https://www.coolapk.com/apk/top.itning.yunshuclassschedule)
 ## 功能
