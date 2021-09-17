@@ -11,7 +11,7 @@ Android的开源课程表应用
 [![GitHub last commit](https://img.shields.io/github/last-commit/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/commits)
 [![GitHub release](https://img.shields.io/github/release/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule/releases)
 [![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/YunShuClassSchedule.svg)](https://github.com/itning/YunShuClassSchedule)
-[![HitCount](http://hits.dwyl.io/itning/YunShuClassSchedule.svg)](http://hits.dwyl.io/itning/YunShuClassSchedule)
+![HitCount](https://hitcount.itning.top/?u=itning&r=YunShuClassSchedule)
 [![language](https://img.shields.io/badge/language-Kotlin-green.svg)](https://github.com/itning/YunShuClassSchedule)
 
 ## 不再维护
